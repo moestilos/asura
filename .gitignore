@@ -1,0 +1,30 @@
+# build artifacts
+dist/
+release/
+out/
+
+# deps
+node_modules/
+
+# python helpers (icon generation)
+.venv/
+__pycache__/
+*.pyc
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# local user state (never commit personal config)
+.asura/
+
+# logs
+*.log
+npm-debug.log*
+
+# env (just in case future)
+.env
+.env.local
+.env.*.local

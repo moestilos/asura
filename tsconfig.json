@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/main.ts", "src/preload.ts", "src/scanner.ts", "src/git.ts",
+    "src/actions.ts", "src/bots.ts", "src/config.ts", "src/notifications.ts",
+    "src/process-monitor.ts", "src/detail.ts"
+  ]
+}

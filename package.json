@@ -1,0 +1,42 @@
+{
+  "name": "asura",
+  "productName": "Asura",
+  "version": "0.2.0",
+  "description": "Asura — workspace phantom · synthwave dashboard for active dev projects + bots",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && electron .",
+    "dev": "tsc && electron .",
+    "dist": "tsc && electron-builder",
+    "dist:portable": "tsc && electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.moestilos.asura",
+    "productName": "Asura",
+    "directories": { "output": "release" },
+    "files": ["dist/**", "src/renderer/**", "assets/**", "package.json"],
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "assets/asura-pixel.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/asura-pixel.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/asura-pixel.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "electron": "^32.0.0",
+    "electron-builder": "^24.13.0",
+    "typescript": "^5.4.0"
+  }
+}

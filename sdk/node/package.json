@@ -1,0 +1,9 @@
+{
+  "name": "stackwatch-sdk",
+  "version": "0.1.0",
+  "description": "Tiny client to send bot/scraper progress to local StackWatch panel",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT",
+  "files": ["index.js", "index.d.ts", "README.md"]
+}
