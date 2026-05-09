@@ -5,7 +5,7 @@
 <title>Asura</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Audiowide&family=Major+Mono+Display&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Audiowide&family=Major+Mono+Display&family=Rajdhani:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Bangers&display=swap" rel="stylesheet" />
 <style>
 /* ════════════════════════════════════════════════════════
    STACKWATCH · SYNTHWAVE OUTRUN
@@ -301,6 +301,241 @@ body.is-light .pc-stack,
 body.is-light .pc-tags { background: transparent; }
 body.is-light .badge { background: var(--bg-2); }
 body.is-light .chip { background: var(--bg-2); }
+
+/* ═════════ PER-THEME PERSONALITY ═════════ */
+
+/* 01 BRUTALIST — flat, harsh borders, no gradients, no rounding */
+body.theme-brutalist .pcard {
+  border: 2px solid var(--ink-0);
+  border-radius: 0;
+  background: var(--bg-1);
+  box-shadow: 6px 6px 0 var(--ink-0);
+  transition: transform .12s, box-shadow .12s;
+}
+body.theme-brutalist .pcard:hover { transform: translate(-2px,-2px); box-shadow: 9px 9px 0 var(--ink-0); }
+body.theme-brutalist .pcard::before { display: none; }
+body.theme-brutalist .pcard::after { width: 6px; box-shadow: none; border-radius: 0; }
+body.theme-brutalist .pc-name {
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 800;
+}
+body.theme-brutalist .badge,
+body.theme-brutalist .chip {
+  border-radius: 0;
+  border-width: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+body.theme-brutalist .modal { border: 2px solid var(--ink-0); border-radius: 0; box-shadow: 8px 8px 0 var(--ink-0); }
+body.theme-brutalist .ab { border-right: 1.5px solid var(--ink-0); }
+
+/* 02 BLUEPRINT — drafting paper, dotted grid bg, technical */
+body.theme-blueprint {
+  background:
+    repeating-linear-gradient(0deg,  transparent 0 23px, rgba(92,242,255,.04) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, rgba(92,242,255,.04) 23px 24px),
+    var(--bg-0) !important;
+}
+body.theme-blueprint .pcard {
+  border: 1px dashed var(--accent, var(--cyan));
+  background: rgba(15,31,49,.7);
+  backdrop-filter: blur(2px);
+}
+body.theme-blueprint .pcard::before { background: linear-gradient(135deg, var(--cyan), var(--violet) 50%, var(--cyan)); opacity: .4; }
+body.theme-blueprint .pc-name { font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: .02em; }
+
+/* 03 SOLARPUNK — organic, rounded, paper grain */
+body.theme-solarpunk {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(216,162,59,.06), transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(90,138,58,.06), transparent 50%),
+    var(--bg-0) !important;
+}
+body.theme-solarpunk .pcard {
+  border-radius: 14px;
+  border: 1px solid var(--line-2);
+  box-shadow: 0 2px 0 var(--line-2);
+}
+body.theme-solarpunk .pcard::before { display: none; }
+body.theme-solarpunk .pcard::after { border-radius: 14px 0 0 14px; }
+body.theme-solarpunk .pc-name { font-family: 'Instrument Serif', 'Rajdhani', serif; font-style: italic; font-weight: 500; font-size: 22px; }
+body.theme-solarpunk .badge,
+body.theme-solarpunk .chip { border-radius: 12px; }
+body.theme-solarpunk .ab { border-radius: 0; }
+body.theme-solarpunk .modal { border-radius: 16px; }
+
+/* 04 VAPORWAVE — clinical white, RGB shift glitch shadow */
+body.theme-vaporwave .pcard {
+  background: var(--bg-1);
+  border: 1px solid var(--line-2);
+  box-shadow: 3px 0 0 rgba(0,224,255,.18), -3px 0 0 rgba(255,45,142,.18), 0 8px 24px rgba(0,0,0,.05);
+}
+body.theme-vaporwave .pcard::before { display: none; }
+body.theme-vaporwave .pc-name {
+  background: linear-gradient(90deg, var(--pink), var(--cyan), var(--violet)) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  font-style: italic;
+}
+body.theme-vaporwave .modal { box-shadow: 4px 0 0 rgba(0,224,255,.20), -4px 0 0 rgba(255,45,142,.20), 0 30px 60px rgba(0,0,0,.10); }
+
+/* 05 RISOGRAPH — paper grain + offset two-tone shadow */
+body.theme-risograph {
+  background:
+    radial-gradient(circle at 0 0, rgba(43,74,138,.05) 1px, transparent 1.5px) 0 0/3px 3px,
+    var(--bg-0) !important;
+}
+body.theme-risograph .pcard {
+  border: 1.5px solid var(--ink-0);
+  border-radius: 0;
+  background: var(--bg-1);
+  box-shadow: 4px 4px 0 var(--cyan), 8px 8px 0 var(--pink);
+}
+body.theme-risograph .pcard:hover { transform: translate(-1px,-1px); }
+body.theme-risograph .pcard::before { display: none; }
+body.theme-risograph .pc-name { font-family: 'Instrument Serif', serif; font-weight: 500; font-style: italic; }
+body.theme-risograph .modal { border: 1.5px solid var(--ink-0); border-radius: 0; box-shadow: 6px 6px 0 var(--cyan), 12px 12px 0 var(--pink); }
+
+/* 06 CYBERPUNK — neon outlines, scan lines, intense glow */
+body.theme-cyberpunk {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,43,214,.025) 2px 3px),
+    radial-gradient(ellipse 100% 50% at 50% 0%, rgba(255,43,214,.10), transparent 70%),
+    var(--bg-0) !important;
+}
+body.theme-cyberpunk .pcard {
+  border: 1px solid var(--pink);
+  background: rgba(13,13,20,.85);
+  box-shadow: 0 0 0 1px rgba(255,43,214,.20), inset 0 0 30px rgba(0,240,255,.05);
+}
+body.theme-cyberpunk .pcard:hover {
+  box-shadow: 0 0 0 1px var(--pink), 0 0 24px rgba(255,43,214,.40), inset 0 0 30px rgba(0,240,255,.08);
+}
+body.theme-cyberpunk .pcard::before { background: linear-gradient(135deg, var(--pink), var(--cyan)); opacity: .8; }
+body.theme-cyberpunk .pc-name {
+  text-shadow: 0 0 10px var(--pink), 0 0 20px rgba(255,43,214,.50);
+  letter-spacing: .03em;
+}
+
+/* 07 SUMI-E — minimal, brushy hairline, lots of whitespace */
+body.theme-sumie .pcard {
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--bg-1);
+  box-shadow: 0 1px 0 var(--line-2);
+  padding-top: 4px;
+}
+body.theme-sumie .pcard::before { display: none; }
+body.theme-sumie .pcard::after { width: 2px; opacity: .8; }
+body.theme-sumie .pc-name {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -.01em;
+}
+body.theme-sumie .pc-tags { padding-top: 6px; }
+body.theme-sumie .badge,
+body.theme-sumie .chip {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--ink-1);
+  background: transparent !important;
+  padding: 1px 0;
+  margin-right: 8px;
+}
+
+/* 08 MANGA — halftone dots bg, comic borders */
+body.theme-manga {
+  background:
+    radial-gradient(circle, rgba(0,0,0,.10) 1px, transparent 1.2px) 0 0/5px 5px,
+    var(--bg-0) !important;
+}
+body.theme-manga .pcard {
+  border: 2.5px solid var(--ink-0);
+  border-radius: 0;
+  background: var(--bg-1);
+  box-shadow: 5px 5px 0 var(--ink-0);
+}
+body.theme-manga .pcard:hover { transform: translate(-1px,-1px); box-shadow: 7px 7px 0 var(--ink-0); }
+body.theme-manga .pcard::before { display: none; }
+body.theme-manga .pcard::after { width: 0; }
+body.theme-manga .pc-name {
+  font-family: 'Bangers', 'Rajdhani', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  -webkit-text-stroke: 1px var(--ink-0);
+}
+body.theme-manga .badge,
+body.theme-manga .chip {
+  border: 2px solid var(--ink-0);
+  border-radius: 0;
+  font-weight: 800;
+}
+body.theme-manga .modal { border: 2.5px solid var(--ink-0); border-radius: 0; box-shadow: 8px 8px 0 var(--ink-0); }
+
+/* 09 RAIN — wet asphalt, blur reflections, lamp halos */
+body.theme-rain {
+  background:
+    radial-gradient(circle at 20% 80%, rgba(246,179,92,.10), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(122,216,255,.06), transparent 40%),
+    var(--bg-0) !important;
+}
+body.theme-rain .pcard {
+  border: 1px solid var(--line-2);
+  background: linear-gradient(180deg, rgba(20,34,48,.7), rgba(15,26,35,.92));
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.04);
+}
+body.theme-rain .pcard::before { background: linear-gradient(135deg, var(--sun), var(--cyan), var(--rust, var(--violet))); opacity: .5; }
+body.theme-rain .pc-name { color: var(--ink-0); text-shadow: 0 0 12px rgba(246,179,92,.30); }
+
+/* 10 AKIRA — high-contrast, blood drip, sharp angles */
+body.theme-akira {
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255,8,68,.12), transparent 70%),
+    var(--bg-0) !important;
+}
+body.theme-akira .pcard {
+  border: 1px solid var(--line-2);
+  background: var(--bg-1);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+body.theme-akira .pcard::before { background: linear-gradient(135deg, var(--pink), var(--cyan)); }
+body.theme-akira .pcard.s-active::after { box-shadow: 0 0 18px var(--pink), 0 0 30px rgba(255,8,68,.4); }
+body.theme-akira .pc-name {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 800;
+  text-shadow: 2px 0 0 rgba(255,8,68,.30);
+}
+
+/* 11 GHOST — terminal CRT, pure mono, scan lines */
+body.theme-ghost {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 1px, rgba(0,255,213,.025) 1px 2px),
+    var(--bg-0) !important;
+}
+body.theme-ghost .pcard {
+  border: 1px solid var(--cyan);
+  background: rgba(8,17,22,.92);
+  border-radius: 0;
+  box-shadow: 0 0 0 1px rgba(0,255,213,.10);
+}
+body.theme-ghost .pcard:hover { box-shadow: 0 0 0 1px var(--cyan), 0 0 16px rgba(0,255,213,.30); }
+body.theme-ghost .pcard::before { display: none; }
+body.theme-ghost .pc-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  letter-spacing: .04em;
+  text-transform: lowercase;
+}
+body.theme-ghost .pc-name::before { content: '> '; color: var(--cyan); opacity: .6; }
+body.theme-ghost .badge,
+body.theme-ghost .chip { border-radius: 0; font-family: 'JetBrains Mono', monospace; }
+body.theme-ghost .modal { border: 1px solid var(--cyan); border-radius: 0; box-shadow: 0 0 0 1px rgba(0,255,213,.20), 0 30px 80px rgba(0,0,0,.8); }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -715,11 +950,11 @@ body.theme-dark::after {
   pointer-events: none;
   transition: background .2s, box-shadow .2s;
 }
-.pcard.s-active::after  { background: linear-gradient(180deg, var(--cyan), var(--violet)); box-shadow: 0 0 14px rgba(92, 255, 255, .55); }
+.pcard.s-active::after  { background: linear-gradient(180deg, var(--cyan), var(--violet)); box-shadow: 0 0 14px var(--cyan-line); }
 .pcard.s-recent::after  { background: linear-gradient(180deg, var(--violet), var(--pink)); }
 .pcard.s-idle::after    { background: var(--sun);  opacity: .55; }
 .pcard.s-archived::after{ background: var(--ink-3); opacity: .35; }
-.pcard.fav::after       { background: linear-gradient(180deg, var(--sun), var(--pink)); box-shadow: 0 0 14px rgba(255, 140, 66, .55); }
+.pcard.fav::after       { background: linear-gradient(180deg, var(--sun), var(--pink)); box-shadow: 0 0 14px var(--amber-line); }
 .pcard::before {
   content: '';
   position: absolute; inset: 0;
@@ -1000,7 +1235,7 @@ body.theme-dark::after {
   transition: height .3s;
 }
 .pc-spark-bar.has   { background: linear-gradient(180deg, var(--pink), var(--violet)); }
-.pc-spark-bar.today { background: linear-gradient(180deg, var(--cyan), var(--pink)); box-shadow: 0 0 6px rgba(92, 255, 255, .55); }
+.pc-spark-bar.today { background: linear-gradient(180deg, var(--cyan), var(--pink)); box-shadow: 0 0 6px var(--cyan-line); }
 
 /* actions row */
 .pc-actions {
@@ -2429,7 +2664,15 @@ body, .root, .main { max-width: 100vw; }
 
 </style>
 </head>
-<body class="theme-dark">
+<body>
+<script>
+  /* anti-FOUC: aplica último tema cacheado antes del primer paint */
+  try {
+    var _t = localStorage.getItem('asura:theme') || 'synthwave';
+    var _light = ['brutalist','solarpunk','vaporwave','risograph','sumie','manga'].indexOf(_t) >= 0;
+    document.body.className = 'theme-' + _t + (_t === 'synthwave' ? ' theme-dark' : '') + (_light ? ' is-light' : '');
+  } catch(e) { document.body.className = 'theme-synthwave theme-dark'; }
+</script>
 <div class="root">
 
   <!-- Titlebar -->
@@ -2818,9 +3061,16 @@ body, .root, .main { max-width: 100vw; }
   async function setTheme(id) {
     const tid = normalizeTheme(id)
     applyTheme(tid)
+    try { localStorage.setItem('asura:theme', tid) } catch {}
+    const prev = config && config.theme
     if (config) config.theme = tid
-    await window.asura.setConfig({ theme: tid })
-    toast('tema: ' + (THEMES.find(x => x.id === tid) || {}).label)
+    try {
+      await window.asura.setConfig({ theme: tid })
+      toast('tema: ' + THEMES.find(x => x.id === tid).label)
+    } catch (e) {
+      if (config) config.theme = prev
+      toast('error guardando tema')
+    }
   }
 
   /* ═════════ Always-on-top ═════════ */

@@ -6,11 +6,16 @@ import os from 'os'
 const CONFIG_DIR  = path.join(os.homedir(), '.asura')
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json')
 
+export type ThemeId =
+  | 'synthwave' | 'brutalist' | 'blueprint' | 'solarpunk' | 'vaporwave'
+  | 'risograph' | 'cyberpunk' | 'sumie'      | 'manga'    | 'rain'
+  | 'akira'     | 'ghost'     | 'dark'       | 'light'
+
 export interface Config {
   favorites:        string[]              // project names pinned
   hidden:           string[]              // project names hidden
   alwaysOnTop:      boolean
-  theme:            string   // theme id: synthwave | brutalist | blueprint | … (12 themes)
+  theme:            ThemeId
   soundOnAlert:     boolean
   notifyOnBotDone:  boolean
   notifyOnBotStuck: boolean
