@@ -537,6 +537,290 @@ body.theme-ghost .badge,
 body.theme-ghost .chip { border-radius: 0; font-family: 'JetBrains Mono', monospace; }
 body.theme-ghost .modal { border: 1px solid var(--cyan); border-radius: 0; box-shadow: 0 0 0 1px rgba(0,255,213,.20), 0 30px 80px rgba(0,0,0,.8); }
 
+/* ═════════ ANIMATED BACKGROUNDS PER THEME ═════════ */
+#theme-fx {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: -10;
+  overflow: hidden;
+}
+#theme-fx .fx { position: absolute; inset: 0; opacity: 0; transition: opacity .4s; }
+/* synthwave keeps its native body::before/::after, no overlay */
+body.theme-synthwave #theme-fx { display: none; }
+
+/* ── 01 BRUTALIST: stamping grain + occasional red bar ── */
+body.theme-brutalist #theme-fx .fx-a {
+  opacity: 1;
+  background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(0,0,0,.03) 5px 6px);
+  animation: brut-shift 5s linear infinite;
+}
+body.theme-brutalist #theme-fx .fx-b {
+  opacity: 1;
+  height: 2px; top: 0;
+  background: var(--shock, #ff2d20);
+  animation: brut-bar 12s ease-in-out infinite;
+}
+body.theme-brutalist #theme-fx .fx-c {
+  opacity: 1;
+  background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,.08));
+}
+@keyframes brut-shift { to { background-position: 0 6px; } }
+@keyframes brut-bar {
+  0%,12%   { transform: translateY(-4px); opacity: .9; }
+  20%      { transform: translateY(40vh); opacity: .9; }
+  22%,100% { opacity: 0; }
+}
+
+/* ── 02 BLUEPRINT: drifting grid + plot pulse ── */
+body.theme-blueprint #theme-fx .fx-a {
+  opacity: 1;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, rgba(92,242,255,.07) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, rgba(92,242,255,.07) 23px 24px);
+  animation: bp-drift 30s linear infinite;
+}
+body.theme-blueprint #theme-fx .fx-b {
+  opacity: 1;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 119px, rgba(92,242,255,.10) 119px 120px),
+    repeating-linear-gradient(90deg, transparent 0 119px, rgba(92,242,255,.10) 119px 120px);
+}
+body.theme-blueprint #theme-fx .fx-c {
+  opacity: 1;
+  background: radial-gradient(circle at 50% 50%, rgba(92,242,255,.06), transparent 60%);
+  animation: bp-plot 6s ease-in-out infinite;
+}
+@keyframes bp-drift { to { background-position: 24px 24px, 24px 24px; } }
+@keyframes bp-plot { 0%,100% { transform: scale(1); opacity: .4; } 50% { transform: scale(1.2); opacity: .8; } }
+
+/* ── 03 SOLARPUNK: sun rays sweeping + drifting leaf shapes ── */
+body.theme-solarpunk #theme-fx .fx-a {
+  opacity: 1;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(216,162,59,.18), transparent 40%),
+    radial-gradient(circle at 75% 75%, rgba(90,138,58,.12), transparent 45%);
+  animation: sp-breathe 14s ease-in-out infinite;
+}
+body.theme-solarpunk #theme-fx .fx-b {
+  opacity: .9;
+  background: conic-gradient(from 220deg at 30% 0%, transparent 0deg, rgba(216,162,59,.10) 18deg, transparent 36deg);
+  animation: sp-rays 22s linear infinite;
+  transform-origin: 30% 0%;
+}
+body.theme-solarpunk #theme-fx .fx-c {
+  opacity: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><g fill='%235a8a3a' opacity='.18'><path d='M30 20 Q40 5 55 20 Q40 35 30 20 M150 60 Q160 45 175 60 Q160 75 150 60 M70 130 Q80 115 95 130 Q80 145 70 130 M170 160 Q180 145 195 160 Q180 175 170 160'/></g></svg>");
+  animation: sp-drift 40s linear infinite;
+}
+@keyframes sp-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes sp-rays    { to { transform: rotate(20deg); } }
+@keyframes sp-drift   { from { background-position: 0 0; } to { background-position: 200px 200px; } }
+
+/* ── 04 VAPORWAVE: perspective grid + sun rising + gradient shift ── */
+body.theme-vaporwave #theme-fx .fx-a {
+  opacity: 1;
+  background: linear-gradient(180deg, rgba(255,45,142,0) 50%, rgba(255,45,142,.10) 75%, rgba(122,45,255,.18) 100%);
+  animation: vw-shift 6s ease-in-out infinite alternate;
+}
+body.theme-vaporwave #theme-fx .fx-b {
+  opacity: 1;
+  bottom: 0; top: auto; height: 50%;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 60px, rgba(0,224,255,.18) 60px 61px),
+    repeating-linear-gradient(90deg,  transparent 0 60px, rgba(255,45,142,.14) 60px 61px);
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: bottom;
+  animation: vw-grid 4s linear infinite;
+}
+body.theme-vaporwave #theme-fx .fx-c {
+  opacity: 1;
+  width: 360px; height: 360px;
+  left: 50%; top: 30%;
+  inset: auto;
+  margin-left: -180px;
+  background: radial-gradient(circle, rgba(255,45,142,.50), rgba(122,45,255,.30) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: vw-sun 10s ease-in-out infinite;
+}
+@keyframes vw-shift { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(20deg); } }
+@keyframes vw-grid  { to { background-position: 0 60px, 60px 0; } }
+@keyframes vw-sun   { 0%,100% { transform: translateY(0) scale(1); opacity: .6; } 50% { transform: translateY(-12px) scale(1.04); opacity: .9; } }
+
+/* ── 05 RISOGRAPH: shifting paper grain + RGB jiggle ── */
+body.theme-risograph #theme-fx .fx-a {
+  opacity: 1;
+  background: radial-gradient(circle, rgba(43,74,138,.10) 1px, transparent 1.5px) 0 0/3px 3px;
+  animation: riso-grain 1s steps(4) infinite;
+}
+body.theme-risograph #theme-fx .fx-b {
+  opacity: .6;
+  background: radial-gradient(circle, rgba(210,59,42,.08) 1px, transparent 1.5px) 1px 1px/4px 4px;
+  animation: riso-grain2 1.3s steps(4) infinite reverse;
+}
+body.theme-risograph #theme-fx .fx-c {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(216,162,59,.05), transparent 60%);
+}
+@keyframes riso-grain  { 0% { background-position: 0 0; } 25% { background-position: 1px 0; } 50% { background-position: 1px 1px; } 75% { background-position: 0 1px; } 100% { background-position: 0 0; } }
+@keyframes riso-grain2 { 0% { background-position: 0 0; } 25% { background-position: 2px 1px; } 50% { background-position: 2px 2px; } 75% { background-position: 1px 2px; } 100% { background-position: 1px 1px; } }
+
+/* ── 06 CYBERPUNK: scan lines + falling neon code lines + flicker ── */
+body.theme-cyberpunk #theme-fx .fx-a {
+  opacity: 1;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,43,214,.04) 2px 3px),
+    radial-gradient(ellipse 100% 50% at 50% 0%, rgba(255,43,214,.18), transparent 70%);
+  animation: cp-flicker 4s steps(20) infinite;
+}
+body.theme-cyberpunk #theme-fx .fx-b {
+  opacity: .9;
+  background:
+    linear-gradient(180deg, transparent 0%, var(--cyan) 50%, transparent 100%) 10% 0/2px 120px no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--pink) 50%, transparent 100%) 35% 0/2px 80px  no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--cyan) 50%, transparent 100%) 60% 0/1px 100px no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--pink) 50%, transparent 100%) 85% 0/2px 140px no-repeat;
+  animation: cp-rain 2.4s linear infinite;
+}
+body.theme-cyberpunk #theme-fx .fx-c {
+  opacity: .5;
+  background: repeating-linear-gradient(0deg, transparent 0 60px, rgba(0,240,255,.05) 60px 62px);
+  animation: cp-scan 12s linear infinite;
+}
+@keyframes cp-flicker {
+  0%,100% { opacity: 1; } 8% { opacity: .85; } 9% { opacity: 1; } 30% { opacity: .9; } 31% { opacity: 1; }
+}
+@keyframes cp-rain { from { background-position-y: -160px, -90px, -110px, -160px; } to { background-position-y: 100vh, 100vh, 100vh, 100vh; } }
+@keyframes cp-scan { to { background-position: 0 100vh; } }
+
+/* ── 07 SUMI-E: floating sakura petals + ink wash drift ── */
+body.theme-sumie #theme-fx .fx-a {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%,  rgba(31,26,20,.08), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 90% 100%, rgba(31,26,20,.10), transparent 60%);
+  animation: sumi-wash 18s ease-in-out infinite;
+}
+body.theme-sumie #theme-fx .fx-b {
+  opacity: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='%23d97a98' opacity='.45'><circle cx='40' cy='30' r='3'/><circle cx='180' cy='80' r='2'/><circle cx='250' cy='160' r='3'/><circle cx='90' cy='200' r='2'/><circle cx='220' cy='250' r='2.5'/><circle cx='30' cy='270' r='2'/></g></svg>");
+  animation: sumi-petals 30s linear infinite;
+}
+body.theme-sumie #theme-fx .fx-c {
+  opacity: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><g fill='%23d97a98' opacity='.30'><circle cx='150' cy='110' r='2'/><circle cx='320' cy='200' r='2.5'/><circle cx='60' cy='320' r='2'/></g></svg>");
+  animation: sumi-petals2 45s linear infinite;
+}
+@keyframes sumi-wash    { 0%,100% { opacity: .7; } 50% { opacity: 1; } }
+@keyframes sumi-petals  { from { background-position: 0 -300px; } to { background-position: 50px 100vh; } }
+@keyframes sumi-petals2 { from { background-position: 0 -400px; } to { background-position: -80px 100vh; } }
+
+/* ── 08 MANGA: speed lines + halftone dots scrolling + shock burst ── */
+body.theme-manga #theme-fx .fx-a {
+  opacity: 1;
+  background: radial-gradient(circle, rgba(0,0,0,.18) 1.2px, transparent 1.4px) 0 0/5px 5px;
+  animation: manga-dots 8s linear infinite;
+}
+body.theme-manga #theme-fx .fx-b {
+  opacity: .35;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, transparent 0 4deg, rgba(0,0,0,.10) 4deg 5deg);
+  animation: manga-spin 60s linear infinite;
+}
+body.theme-manga #theme-fx .fx-c {
+  opacity: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255,31,31,.40), transparent 30%);
+  animation: manga-shock 7s ease-out infinite;
+}
+@keyframes manga-dots  { to { background-position: 5px 5px; } }
+@keyframes manga-spin  { to { transform: rotate(360deg); } }
+@keyframes manga-shock {
+  0%,80% { opacity: 0; transform: scale(.5); }
+  82%    { opacity: .8; transform: scale(.8); }
+  85%    { opacity: 0; transform: scale(1.4); }
+  100%   { opacity: 0; transform: scale(1.4); }
+}
+
+/* ── 09 RAIN: falling raindrops + lamp halo flicker + ripples ── */
+body.theme-rain #theme-fx .fx-a {
+  opacity: 1;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(246,179,92,.18), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(122,216,255,.10), transparent 35%);
+  animation: rain-lamp 5s ease-in-out infinite;
+}
+body.theme-rain #theme-fx .fx-b {
+  opacity: .85;
+  background-image:
+    linear-gradient(180deg, transparent 0%, rgba(122,216,255,.55) 50%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(122,216,255,.40) 50%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(122,216,255,.55) 50%, transparent 100%);
+  background-size: 1px 16px, 1px 22px, 1px 12px;
+  background-position: 10% 0, 35% 0, 70% 0;
+  background-repeat: repeat-y, repeat-y, repeat-y;
+  animation: rain-fall 0.6s linear infinite;
+}
+body.theme-rain #theme-fx .fx-c {
+  opacity: .6;
+  background-image:
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,.30) 50%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,.25) 50%, transparent 100%);
+  background-size: 1px 18px, 1px 14px;
+  background-position: 22% 0, 55% 0;
+  background-repeat: repeat-y, repeat-y;
+  animation: rain-fall2 0.4s linear infinite;
+}
+@keyframes rain-lamp  { 0%,100% { opacity: .9; } 47% { opacity: .9; } 50% { opacity: .6; } 53% { opacity: .9; } }
+@keyframes rain-fall  { from { background-position-y: -16px, -22px, -12px; } to { background-position-y: 16px, 22px, 12px; } }
+@keyframes rain-fall2 { from { background-position-y: -18px, -14px; } to { background-position-y: 18px, 14px; } }
+
+/* ── 10 AKIRA: pulsing red core + falling katakana + light streaks ── */
+body.theme-akira #theme-fx .fx-a {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,8,68,.30), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 50%,  rgba(255,8,68,.10), transparent 60%);
+  animation: akira-pulse 2.6s ease-in-out infinite;
+}
+body.theme-akira #theme-fx .fx-b {
+  opacity: .6;
+  background-image:
+    linear-gradient(180deg, transparent, var(--cyan) 50%, transparent),
+    linear-gradient(180deg, transparent, var(--pink) 50%, transparent);
+  background-size: 2px 200px, 2px 150px;
+  background-position: 15% 0, 80% 0;
+  background-repeat: no-repeat;
+  animation: akira-streak 2s linear infinite;
+}
+body.theme-akira #theme-fx .fx-c {
+  opacity: .4;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,8,68,.05) 2px 3px);
+}
+@keyframes akira-pulse  { 0%,100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.05); opacity: 1; } }
+@keyframes akira-streak { from { background-position-y: -200px, -150px; } to { background-position-y: 100vh, 100vh; } }
+
+/* ── 11 GHOST: CRT scan lines moving + horizontal noise band + flicker ── */
+body.theme-ghost #theme-fx .fx-a {
+  opacity: 1;
+  background: repeating-linear-gradient(0deg, transparent 0 1px, rgba(0,255,213,.06) 1px 2px);
+  animation: ghost-scan 6s linear infinite;
+}
+body.theme-ghost #theme-fx .fx-b {
+  opacity: .5;
+  height: 80px;
+  inset: auto 0 auto 0;
+  background: linear-gradient(180deg, transparent, rgba(0,255,213,.08) 50%, transparent);
+  animation: ghost-band 4s linear infinite;
+}
+body.theme-ghost #theme-fx .fx-c {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 50%, transparent 60%, rgba(0,0,0,.45));
+  animation: ghost-flicker 7s steps(40) infinite;
+}
+@keyframes ghost-scan    { to { background-position: 0 4px; } }
+@keyframes ghost-band    { from { top: -80px; } to { top: 100vh; } }
+@keyframes ghost-flicker { 0%,100% { opacity: 1; } 50% { opacity: .96; } 51% { opacity: 1; } }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -2666,13 +2950,18 @@ body, .root, .main { max-width: 100vw; }
 </head>
 <body>
 <script>
-  /* anti-FOUC: aplica último tema cacheado antes del primer paint */
   try {
     var _t = localStorage.getItem('asura:theme') || 'synthwave';
     var _light = ['brutalist','solarpunk','vaporwave','risograph','sumie','manga'].indexOf(_t) >= 0;
     document.body.className = 'theme-' + _t + (_t === 'synthwave' ? ' theme-dark' : '') + (_light ? ' is-light' : '');
   } catch(e) { document.body.className = 'theme-synthwave theme-dark'; }
 </script>
+<div id="theme-fx" aria-hidden="true">
+  <div class="fx fx-a"></div>
+  <div class="fx fx-b"></div>
+  <div class="fx fx-c"></div>
+  <div class="fx fx-d"></div>
+</div>
 <div class="root">
 
   <!-- Titlebar -->
