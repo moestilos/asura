@@ -20,6 +20,7 @@ export interface Config {
   workspaceRoots:   string[]
   alertsHistory:    AlertEntry[]
   projectFirstSeen: Record<string, number> // for "new project" detection
+  dismissedNew:     string[]              // project names whose "nuevo" badge user dismissed
   projectActivity:  Record<string, number> // ms accumulated tracking
   snoozedUntil:     Record<string, number> // alertKey -> ts
   installedAt:      number                  // first ever launch ts — projects firstSeen near this aren't "new"
@@ -48,6 +49,7 @@ const DEFAULTS: Config = {
   workspaceRoots:   [],
   alertsHistory:    [],
   projectFirstSeen: {},
+  dismissedNew:     [],
   projectActivity:  {},
   snoozedUntil:     {},
   installedAt:      0,
@@ -71,6 +73,7 @@ export async function loadConfig(): Promise<Config> {
       workspaceRoots:   Array.isArray(data.workspaceRoots) ? data.workspaceRoots : [],
       alertsHistory:    Array.isArray(data.alertsHistory) ? data.alertsHistory : [],
       projectFirstSeen: data.projectFirstSeen || {},
+      dismissedNew:     Array.isArray(data.dismissedNew) ? data.dismissedNew : [],
       projectActivity:  data.projectActivity  || {},
       snoozedUntil:     data.snoozedUntil     || {},
       installedAt:      data.installedAt || Date.now(),
@@ -121,6 +124,13 @@ export function toggleHidden(name: string): boolean {
 export function recordProjectActivity(name: string, deltaMs: number) {
   cache.projectActivity[name] = (cache.projectActivity[name] || 0) + deltaMs
   scheduleSave()
+}
+
+export function dismissNewBadge(name: string) {
+  if (!cache.dismissedNew.includes(name)) {
+    cache.dismissedNew.push(name)
+    scheduleSave()
+  }
 }
 
 export function markProjectFirstSeen(name: string) {

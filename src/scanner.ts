@@ -398,7 +398,8 @@ export async function scanWorkspace(workspaceRoot: string): Promise<Project[]> {
     const cfg2 = getConfig()
     const firstSeen = cfg2.projectFirstSeen[name] || Date.now()
     /* "new" only if firstSeen was recorded after install + 60s grace (so first-ever scan doesn't mark all) */
-    const isNew = firstSeen > (cfg2.installedAt + 60_000) &&
+    const isNew = !cfg2.dismissedNew.includes(name) &&
+                  firstSeen > (cfg2.installedAt + 60_000) &&
                   (Date.now() - firstSeen) < 24 * 60 * 60 * 1000
 
     return {

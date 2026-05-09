@@ -5,7 +5,7 @@ import { runAction, ActionKind, setAlwaysOnTop } from './actions'
 import { startBotDaemon, stopBotDaemon, getBotList, clearBot } from './bots'
 import {
   loadConfig, getConfig, setConfig, toggleFavorite, toggleHidden,
-  recordProjectActivity, addAlert, clearAlerts,
+  recordProjectActivity, addAlert, clearAlerts, dismissNewBadge,
 } from './config'
 import { setNotifyWindow, notify } from './notifications'
 import { getDetail } from './detail'
@@ -213,6 +213,7 @@ ipcMain.handle('set-config',     async (_e, patch) => {
 })
 ipcMain.handle('toggle-favorite',async (_e, name: string) => { const v = toggleFavorite(name); refresh(); return v })
 ipcMain.handle('toggle-hidden',  async (_e, name: string) => { const v = toggleHidden(name); refresh(); return v })
+ipcMain.handle('dismiss-new',    async (_e, name: string) => { dismissNewBadge(name); refresh(); return true })
 ipcMain.handle('clear-alerts',   async () => { clearAlerts(); win?.webContents.send('config-update', getConfig()); return 'cleared' })
 
 ipcMain.handle('always-on-top',  async (_e, on: boolean) => {

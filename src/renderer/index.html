@@ -592,9 +592,11 @@ body.theme-dark::after {
   margin-top: 2px;
 }
 .pc-new-tag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   margin-left: 8px;
-  padding: 1px 6px;
+  padding: 1px 4px 1px 6px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   letter-spacing: .12em;
@@ -603,7 +605,21 @@ body.theme-dark::after {
   color: #06030c;
   font-weight: 700;
   vertical-align: middle;
+  cursor: default;
 }
+.pc-new-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  opacity: .7;
+  transition: opacity .12s, background .12s;
+}
+.pc-new-x:hover { opacity: 1; background: rgba(6, 3, 12, .25); }
 
 /* badges row (DEV, BOT, dirty count) */
 .pc-badges {
@@ -1296,6 +1312,128 @@ body.theme-dark::after {
 .dt-commit-msg { flex: 1; color: var(--ink-1); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dt-commit-time { color: var(--ink-2); flex-shrink: 0; font-size: 9.5px; }
 .dt-file { color: var(--ink-1); padding: 2px 0; }
+
+/* detail header — description, stack, links */
+.dt-head {
+  padding: 10px 12px 12px;
+  background: linear-gradient(135deg, rgba(255, 60, 160, .06), rgba(124, 70, 255, .06));
+  border: 1px solid var(--line-2);
+  border-left: 2px solid var(--cyan);
+  margin-bottom: 14px;
+}
+.dt-desc {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  color: var(--ink-1);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.dt-meta-strip {
+  display: flex; flex-wrap: wrap; gap: 6px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-2);
+}
+.dt-meta-strip b { color: var(--cyan); font-weight: 500; }
+.dt-meta-strip a { color: var(--pink); text-decoration: none; }
+.dt-meta-strip a:hover { text-decoration: underline; }
+
+/* two-column grid */
+.dt-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 720px) { .dt-cols { grid-template-columns: 1fr; } }
+
+/* hot files — bar list */
+.dt-hot {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.dt-hot-row {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+}
+.dt-hot-path {
+  flex: 1;
+  color: var(--ink-1);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.dt-hot-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+.dt-hot-n {
+  color: var(--ink-2);
+  min-width: 22px;
+  text-align: right;
+}
+
+/* authors */
+.dt-author {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  padding: 4px 0;
+}
+.dt-author-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #06030c;
+  font-family: 'Rajdhani', sans-serif;
+}
+.dt-author-name { flex: 1; color: var(--ink-1); }
+.dt-author-n {
+  color: var(--cyan);
+  font-size: 10px;
+}
+
+/* tags */
+.dt-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 8px;
+  margin: 0 4px 4px 0;
+  background: rgba(20, 8, 40, .55);
+  border: 1px solid var(--line-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+}
+.dt-tag-ts { color: var(--ink-2); font-size: 9px; }
+
+/* lines diff bar */
+.dt-diff {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  margin-top: 6px;
+}
+.dt-diff-add  { color: #00d97e; }
+.dt-diff-del  { color: var(--pink); }
+.dt-diff-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--line-2);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+}
+.dt-diff-bar > span { display: block; height: 100%; }
+.dt-diff-bar .a { background: #00d97e; }
+.dt-diff-bar .r { background: var(--pink); }
+
+.dt-empty {
+  color: var(--ink-2);
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-style: italic;
+}
 .empty {
   text-align: center;
   padding: 30px;
@@ -2525,6 +2663,21 @@ body, .root, .main { max-width: 100vw; }
   }
 
   /* ═════════ Drill-in detail modal ═════════ */
+  function authorColor(name) {
+    let h = 0
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0
+    const palette = ['#5cffff', '#ff3ca0', '#ffb15a', '#9d6cff', '#00d97e', '#f9a825']
+    return palette[h % palette.length]
+  }
+  function initials(name) {
+    return name.split(/[\s.@-]+/).filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase() || '?'
+  }
+  function fmtDateAbs(ms) {
+    if (!ms) return ''
+    const d = new Date(ms)
+    return d.toISOString().slice(0, 10)
+  }
+
   async function openDetailModal(name) {
     const proj = projects.find(p => p.name === name)
     if (!proj) return
@@ -2532,63 +2685,129 @@ body, .root, .main { max-width: 100vw; }
     const detail = await window.asura.getDetail(name)
     if (!detail) { document.getElementById('modal-body').innerHTML = '<div class="empty">No detalles disponibles</div>'; return }
 
+    /* ── HEAD: description + meta strip ── */
+    const metaBits = []
+    if (proj.git.branch)        metaBits.push('<span><b>' + escapeHtml(proj.git.branch) + '</b></span>')
+    if (detail.packageVersion)  metaBits.push('<span>v<b>' + escapeHtml(detail.packageVersion) + '</b></span>')
+    if (detail.license)         metaBits.push('<span>' + escapeHtml(detail.license) + '</span>')
+    if (detail.repoSizeMb !== null) metaBits.push('<span><b>' + detail.repoSizeMb + '</b> MB</span>')
+    if (detail.branches > 1)    metaBits.push('<span><b>' + detail.branches + '</b> ramas</span>')
+    if (proj.prodUrl)           metaBits.push('<span><a href="' + escapeAttr(proj.prodUrl) + '" onclick="event.preventDefault();window.asura.action(\'open-dev-url\',\'' + escapeAttr(name) + '\',\'' + escapeAttr(proj.prodUrl) + '\')">↗ producción</a></span>')
+    if (detail.remoteUrl)       metaBits.push('<span><a href="' + escapeAttr(detail.remoteUrl) + '" onclick="event.preventDefault();window.asura.action(\'open-dev-url\',\'' + escapeAttr(name) + '\',\'' + escapeAttr(detail.remoteUrl) + '\')">↗ repo</a></span>')
+
+    const headHtml =
+      '<div class="dt-head">' +
+        (detail.description ? '<div class="dt-desc">' + escapeHtml(detail.description) + '</div>' : '') +
+        (metaBits.length ? '<div class="dt-meta-strip">' + metaBits.join('') + '</div>' : '') +
+      '</div>'
+
+    /* ── STATS ── */
+    const totalCommits14 = detail.commitsByDay.reduce((a,b)=>a+b,0)
     const stats = []
-    stats.push('<div class="dt-stat"><div class="dt-stat-l">commits 14d</div><div class="dt-stat-v">' + detail.commitsByDay.reduce((a,b)=>a+b,0) + '</div></div>')
-    stats.push('<div class="dt-stat"><div class="dt-stat-l">todos</div><div class="dt-stat-v ' + (detail.todoCount > 50 ? 'amber' : '') + '">' + detail.todoCount + '</div></div>')
+    stats.push('<div class="dt-stat"><div class="dt-stat-l">commits 14d</div><div class="dt-stat-v">' + totalCommits14 + '</div></div>')
+    if (detail.branchAge !== null) {
+      stats.push('<div class="dt-stat"><div class="dt-stat-l">edad repo</div><div class="dt-stat-v">' + detail.branchAge + 'd</div></div>')
+    }
+    stats.push('<div class="dt-stat"><div class="dt-stat-l">todos/fixme</div><div class="dt-stat-v ' + (detail.todoCount > 50 ? 'amber' : '') + '">' + detail.todoCount + '</div></div>')
     if (detail.envMissing.length) {
       stats.push('<div class="dt-stat"><div class="dt-stat-l">env faltantes</div><div class="dt-stat-v red">' + detail.envMissing.length + '</div></div>')
     }
-    if (detail.packageVersion) {
-      stats.push('<div class="dt-stat"><div class="dt-stat-l">versión</div><div class="dt-stat-v" style="font-size:12px">' + escapeHtml(detail.packageVersion) + '</div></div>')
+    if (proj.git.dirtyCount > 0) {
+      stats.push('<div class="dt-stat"><div class="dt-stat-l">sin commit</div><div class="dt-stat-v amber">' + proj.git.dirtyCount + '</div></div>')
     }
-    if (detail.branchAge !== null) {
-      stats.push('<div class="dt-stat"><div class="dt-stat-l">branch edad</div><div class="dt-stat-v">' + detail.branchAge + 'd</div></div>')
+    if (detail.lastBuildAt) {
+      stats.push('<div class="dt-stat"><div class="dt-stat-l">build ' + escapeHtml(detail.buildArtifact || '') + '</div><div class="dt-stat-v" style="font-size:11px">' + relTime(detail.lastBuildAt) + '</div></div>')
     }
 
+    /* ── DIFF BAR ── */
+    let diffHtml = ''
+    if (detail.linesAdded30d > 0 || detail.linesRemoved30d > 0) {
+      const tot = detail.linesAdded30d + detail.linesRemoved30d
+      const aPct = (detail.linesAdded30d / tot) * 100
+      const rPct = 100 - aPct
+      diffHtml =
+        '<div class="dt-diff">' +
+          '<span class="dt-diff-add">+' + detail.linesAdded30d.toLocaleString() + '</span>' +
+          '<div class="dt-diff-bar"><span class="a" style="width:' + aPct + '%"></span><span class="r" style="width:' + rPct + '%"></span></div>' +
+          '<span class="dt-diff-del">−' + detail.linesRemoved30d.toLocaleString() + '</span>' +
+        '</div>'
+    }
+
+    /* ── HOT FILES ── */
+    const maxHot = Math.max(1, ...detail.hotFiles.map(f => f.changes))
+    const hotHtml = detail.hotFiles.length
+      ? '<div class="dt-hot">' + detail.hotFiles.map(f =>
+          '<div class="dt-hot-row" title="' + escapeAttr(f.path) + '">' +
+            '<span class="dt-hot-path">' + escapeHtml(f.path) + '</span>' +
+            '<span class="dt-hot-bar" style="width:' + (8 + (f.changes / maxHot) * 60) + 'px"></span>' +
+            '<span class="dt-hot-n">' + f.changes + '</span>' +
+          '</div>').join('') + '</div>'
+      : '<div class="dt-empty">Sin cambios últimos 30d</div>'
+
+    /* ── AUTHORS ── */
+    const authorsHtml = detail.topAuthors.length
+      ? detail.topAuthors.map(a =>
+          '<div class="dt-author">' +
+            '<span class="dt-author-dot" style="background:' + authorColor(a.name) + '">' + escapeHtml(initials(a.name)) + '</span>' +
+            '<span class="dt-author-name">' + escapeHtml(a.name) + '</span>' +
+            '<span class="dt-author-n">' + a.commits + '</span>' +
+          '</div>').join('')
+      : '<div class="dt-empty">Sin commits últimos 90d</div>'
+
+    /* ── TAGS ── */
+    const tagsHtml = detail.tags.length
+      ? '<div>' + detail.tags.map(t =>
+          '<span class="dt-tag">' + escapeHtml(t.name) + (t.ts ? '<span class="dt-tag-ts">' + fmtDateAbs(t.ts) + '</span>' : '') + '</span>').join('') + '</div>'
+      : '<div class="dt-empty">Sin tags</div>'
+
+    /* ── SCRIPTS ── */
     const scriptsHtml = detail.scripts.length
       ? '<div class="dt-scripts">' + detail.scripts.map(s =>
           '<button class="dt-script-btn" onclick="doAction(\'run-script\',\'' + escapeAttr(name) + '\',\'' + escapeAttr(s.name) + '\')">' +
             '<div class="dt-script-name">▶ ' + escapeHtml(s.name) + '</div>' +
             '<div class="dt-script-cmd">' + escapeHtml(s.cmd) + '</div>' +
           '</button>').join('') + '</div>'
-      : '<div style="color:var(--tx-3);font-size:11px">Sin scripts en package.json</div>'
+      : '<div class="dt-empty">Sin scripts en package.json</div>'
 
+    /* ── COMMITS ── */
     const commitsHtml = detail.recentCommits.length
       ? '<div class="dt-commits">' + detail.recentCommits.map(c =>
-          '<div class="dt-commit">' +
+          '<div class="dt-commit" title="' + escapeAttr(c.author + ' · ' + new Date(c.ts).toLocaleString()) + '">' +
             '<span class="dt-commit-hash">' + escapeHtml(c.hash) + '</span>' +
             '<span class="dt-commit-msg">' + escapeHtml(c.msg) + '</span>' +
             '<span class="dt-commit-time">' + relTime(c.ts) + '</span>' +
           '</div>').join('') + '</div>'
-      : '<div style="color:var(--tx-3);font-size:11px">Sin commits</div>'
+      : '<div class="dt-empty">Sin commits</div>'
 
+    /* ── DIRTY FILES ── */
     const filesHtml = detail.filesModifiedToday.length
       ? '<div class="dt-files">' + detail.filesModifiedToday.map(f =>
           '<div class="dt-file">' + escapeHtml(f) + '</div>').join('') + '</div>'
-      : '<div style="color:var(--tx-3);font-size:11px">Sin cambios sin commit</div>'
+      : '<div class="dt-empty">Working tree limpio</div>'
 
     const envMissingHtml = detail.envMissing.length
-      ? '<div style="margin-top:12px;padding:10px 12px;background:var(--red-soft);border:1px solid var(--red-line);border-radius:6px;font-size:11px;color:var(--red)">⚠ Vars faltantes en .env: <code>' + detail.envMissing.join(', ') + '</code></div>'
+      ? '<div style="margin-top:8px;padding:10px 12px;background:var(--red-soft);border:1px solid var(--red-line);font-size:11px;color:var(--red)">⚠ Vars faltantes en .env: <code>' + escapeHtml(detail.envMissing.join(', ')) + '</code></div>'
       : ''
 
-    document.getElementById('modal-body').innerHTML = `
-      <div class="dt-section">
-        <div class="dt-stats">${stats.join('')}</div>
-        ${envMissingHtml}
-      </div>
-      <div class="dt-section">
-        <h4>Scripts package.json</h4>
-        ${scriptsHtml}
-      </div>
-      <div class="dt-section">
-        <h4>Commits recientes</h4>
-        ${commitsHtml}
-      </div>
-      <div class="dt-section">
-        <h4>Sin commit (${detail.filesModifiedToday.length})</h4>
-        ${filesHtml}
-      </div>
-    `
+    document.getElementById('modal-body').innerHTML =
+      headHtml +
+      '<div class="dt-section">' +
+        '<div class="dt-stats">' + stats.join('') + '</div>' +
+        diffHtml +
+        envMissingHtml +
+      '</div>' +
+      '<div class="dt-cols">' +
+        '<div>' +
+          '<div class="dt-section"><h4>Archivos calientes 30d</h4>' + hotHtml + '</div>' +
+          '<div class="dt-section"><h4>Contributors 90d</h4>' + authorsHtml + '</div>' +
+          (detail.tags.length ? '<div class="dt-section"><h4>Tags</h4>' + tagsHtml + '</div>' : '') +
+        '</div>' +
+        '<div>' +
+          '<div class="dt-section"><h4>Commits recientes</h4>' + commitsHtml + '</div>' +
+          '<div class="dt-section"><h4>Sin commit (' + detail.filesModifiedToday.length + ')</h4>' + filesHtml + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="dt-section"><h4>Scripts package.json</h4>' + scriptsHtml + '</div>'
   }
 
   /* ═════════ Bot helpers ═════════ */
@@ -2831,7 +3050,9 @@ body, .root, .main { max-width: 100vw; }
 
     const pathHtml = p.name.includes('/') ? '<div class="pc-path">' + escapeHtml(p.name) + '</div>' : ''
     const displayName = p.name.includes('/') ? p.name.split('/').pop() : p.name
-    const newTag = p.isNew ? '<span class="pc-new-tag">nuevo</span>' : ''
+    const newTag = p.isNew
+      ? '<span class="pc-new-tag">nuevo<span class="pc-new-x" title="quitar" onclick="event.stopPropagation();window.asura.dismissNew(\'' + escapeAttr(p.name) + '\')">×</span></span>'
+      : ''
 
     const metaRows = []
     if (p.git.branch) {

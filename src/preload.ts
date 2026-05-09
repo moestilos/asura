@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld('asura', {
   setConfig:        (patch: any) => ipcRenderer.invoke('set-config', patch),
   toggleFavorite:   (name: string) => ipcRenderer.invoke('toggle-favorite', name),
   toggleHidden:     (name: string) => ipcRenderer.invoke('toggle-hidden', name),
+  dismissNew:       (name: string) => ipcRenderer.invoke('dismiss-new', name),
   alwaysOnTop:      (on: boolean) => ipcRenderer.invoke('always-on-top', on),
   clearAlerts:      ()        => ipcRenderer.invoke('clear-alerts'),
   onConfigUpdate:   (cb: (c: any) => void) =>
