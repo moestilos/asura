@@ -729,22 +729,32 @@ body.theme-blueprint #theme-fx .fx-c { display: none; }
 @keyframes bp-drift { to { background-position: 24px 24px, 24px 24px; } }
 @keyframes bp-plot { 0%,100% { transform: scale(1); opacity: .4; } 50% { transform: scale(1.2); opacity: .8; } }
 
-/* ── 03 SOLARPUNK · sol cálido esquina + 1 capa hojas drift sutil ── */
+/* ── 03 SOLARPUNK · cuaderno cuadrícula + sol sutil esquina ── */
 body.theme-solarpunk #theme-fx .fx-a {
   opacity: 1;
   background:
-    radial-gradient(circle 360px at 80% 18%, rgba(216,162,59,.32), rgba(216,162,59,.08) 60%, transparent 80%);
-  animation: sp-breathe 16s ease-in-out infinite;
+    /* mayor 100px — guía marcada */
+    repeating-linear-gradient(0deg,  transparent 0 99px, rgba(58,74,44,.12) 99px 100px),
+    repeating-linear-gradient(90deg, transparent 0 99px, rgba(58,74,44,.12) 99px 100px),
+    /* fina 20px — cuadrícula cuaderno */
+    repeating-linear-gradient(0deg,  transparent 0 19px, rgba(58,74,44,.06) 19px 20px),
+    repeating-linear-gradient(90deg, transparent 0 19px, rgba(58,74,44,.06) 19px 20px);
+  animation: sp-grid 24s ease-in-out infinite alternate;
 }
-body.theme-solarpunk #theme-fx .fx-b { display: none; }
+body.theme-solarpunk #theme-fx .fx-b {
+  opacity: 1;
+  inset: 0 auto 0 80px;
+  width: 2px;
+  background: rgba(193,89,58,.35);
+  box-shadow: 0 0 6px rgba(193,89,58,.2);
+}
 body.theme-solarpunk #theme-fx .fx-c {
   opacity: 1;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><g fill='%235a8a3a' opacity='.16'><path d='M30 20 Q40 5 55 20 Q40 35 30 20 M170 80 Q180 65 195 80 Q180 95 170 80 M90 180 Q100 165 115 180 Q100 195 90 180'/></g></svg>");
-  animation: sp-drift 80s linear infinite;
+  background: radial-gradient(circle 380px at 88% 14%, rgba(216,162,59,.22), rgba(216,162,59,.05) 60%, transparent 80%);
+  animation: sp-breathe 14s ease-in-out infinite;
 }
-@keyframes sp-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-@keyframes sp-rays    { to { transform: rotate(20deg); } }
-@keyframes sp-drift   { from { background-position: 0 0; } to { background-position: 200px 200px; } }
+@keyframes sp-grid    { 0% { transform: translate(0,0); } 100% { transform: translate(2px,2px); } }
+@keyframes sp-breathe { 0%,100% { opacity: .85; } 50% { opacity: 1; } }
 
 /* ── 04 VAPORWAVE · sol radial + grid horizontal sutil ── */
 body.theme-vaporwave #theme-fx .fx-a {
