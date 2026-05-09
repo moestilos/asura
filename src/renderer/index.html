@@ -296,7 +296,7 @@ body.is-light .modal { border: 1px solid var(--line-2); }
 body.is-light .tb,
 body.is-light .toolbar,
 body.is-light .tabs { background: var(--bg-2); border-color: var(--line-2); }
-body.is-light .main { background: var(--bg-0); }
+body.is-light .main { background: transparent; }
 body.is-light .pc-stack,
 body.is-light .pc-tags { background: transparent; }
 body.is-light .badge { background: var(--bg-2); color: var(--tx-1); border-color: var(--line-2); }
@@ -681,33 +681,31 @@ body.theme-ghost .modal { border: 1px solid var(--cyan); border-radius: 0; box-s
   pointer-events: none;
   z-index: -10;
   overflow: hidden;
+  isolation: isolate;
 }
-#theme-fx .fx { position: absolute; inset: 0; opacity: 0; transition: opacity .4s; }
+#theme-fx .fx {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity .4s;
+  will-change: transform, background-position;
+}
+/* global cap — never let fx overpower content */
+body:not(.theme-synthwave) #theme-fx { opacity: .85; }
 /* synthwave keeps its native body::before/::after, no overlay */
 body.theme-synthwave #theme-fx { display: none; }
 
-/* ── 01 BRUTALIST: stamping grain + occasional red bar ── */
+/* ── 01 BRUTALIST: paper grain + vignette (sin flash) ── */
 body.theme-brutalist #theme-fx .fx-a {
   opacity: 1;
-  background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(0,0,0,.03) 5px 6px);
+  background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(0,0,0,.025) 5px 6px);
   animation: brut-shift 5s linear infinite;
 }
-body.theme-brutalist #theme-fx .fx-b {
-  opacity: 1;
-  height: 2px; top: 0;
-  background: var(--shock, #ff2d20);
-  animation: brut-bar 12s ease-in-out infinite;
-}
+body.theme-brutalist #theme-fx .fx-b { display: none; }
 body.theme-brutalist #theme-fx .fx-c {
   opacity: 1;
-  background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,.08));
+  background: radial-gradient(circle at 50% 50%, transparent 65%, rgba(0,0,0,.10));
 }
 @keyframes brut-shift { to { background-position: 0 6px; } }
-@keyframes brut-bar {
-  0%,12%   { transform: translateY(-4px); opacity: .9; }
-  20%      { transform: translateY(40vh); opacity: .9; }
-  22%,100% { opacity: 0; }
-}
 
 /* ── 02 BLUEPRINT: drifting grid + plot pulse ── */
 body.theme-blueprint #theme-fx .fx-a {
@@ -723,28 +721,13 @@ body.theme-blueprint #theme-fx .fx-b {
     repeating-linear-gradient(0deg, transparent 0 119px, rgba(92,242,255,.10) 119px 120px),
     repeating-linear-gradient(90deg, transparent 0 119px, rgba(92,242,255,.10) 119px 120px);
 }
-body.theme-blueprint #theme-fx .fx-c {
-  opacity: 1;
-  background: radial-gradient(circle at 50% 50%, rgba(92,242,255,.06), transparent 60%);
-  animation: bp-plot 6s ease-in-out infinite;
-}
+body.theme-blueprint #theme-fx .fx-c { display: none; }
 @keyframes bp-drift { to { background-position: 24px 24px, 24px 24px; } }
 @keyframes bp-plot { 0%,100% { transform: scale(1); opacity: .4; } 50% { transform: scale(1.2); opacity: .8; } }
 
-/* ── 03 SOLARPUNK: sun rays sweeping + drifting leaf shapes ── */
-body.theme-solarpunk #theme-fx .fx-a {
-  opacity: 1;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(216,162,59,.18), transparent 40%),
-    radial-gradient(circle at 75% 75%, rgba(90,138,58,.12), transparent 45%);
-  animation: sp-breathe 14s ease-in-out infinite;
-}
-body.theme-solarpunk #theme-fx .fx-b {
-  opacity: .9;
-  background: conic-gradient(from 220deg at 30% 0%, transparent 0deg, rgba(216,162,59,.10) 18deg, transparent 36deg);
-  animation: sp-rays 22s linear infinite;
-  transform-origin: 30% 0%;
-}
+/* ── 03 SOLARPUNK: leaf drift + escena hero (fx-d) ── */
+body.theme-solarpunk #theme-fx .fx-a { display: none; }
+body.theme-solarpunk #theme-fx .fx-b { display: none; }
 body.theme-solarpunk #theme-fx .fx-c {
   opacity: 1;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><g fill='%235a8a3a' opacity='.18'><path d='M30 20 Q40 5 55 20 Q40 35 30 20 M150 60 Q160 45 175 60 Q160 75 150 60 M70 130 Q80 115 95 130 Q80 145 70 130 M170 160 Q180 145 195 160 Q180 175 170 160'/></g></svg>");
@@ -811,14 +794,12 @@ body.theme-cyberpunk #theme-fx .fx-a {
   animation: cp-flicker 4s steps(20) infinite;
 }
 body.theme-cyberpunk #theme-fx .fx-b {
-  opacity: .9;
-  background:
-    linear-gradient(180deg, transparent 0%, var(--cyan) 50%, transparent 100%) 10% 0/2px 120px no-repeat,
-    linear-gradient(180deg, transparent 0%, var(--pink) 50%, transparent 100%) 35% 0/2px 80px  no-repeat,
-    linear-gradient(180deg, transparent 0%, var(--cyan) 50%, transparent 100%) 60% 0/1px 100px no-repeat,
-    linear-gradient(180deg, transparent 0%, var(--pink) 50%, transparent 100%) 85% 0/2px 140px no-repeat;
-  animation: cp-rain 2.4s linear infinite;
+  opacity: 1;
+  bottom: 0; top: auto; height: 240px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='240' viewBox='0 0 1400 240' preserveAspectRatio='xMidYMax slice'><g fill='%2307070c'><rect x='0' y='100' width='90' height='140'/><rect x='100' y='60' width='70' height='180'/><rect x='180' y='130' width='110' height='110'/><rect x='300' y='40' width='60' height='200'/><rect x='370' y='90' width='90' height='150'/><rect x='470' y='70' width='80' height='170'/><rect x='560' y='110' width='100' height='130'/><rect x='670' y='30' width='70' height='210'/><rect x='750' y='80' width='90' height='160'/><rect x='850' y='120' width='80' height='120'/><rect x='940' y='50' width='60' height='190'/><rect x='1010' y='95' width='110' height='145'/><rect x='1130' y='75' width='90' height='165'/><rect x='1230' y='40' width='70' height='200'/><rect x='1310' y='115' width='90' height='125'/></g><g fill='%2300f0ff' fill-opacity='.9'><rect x='15' y='130' width='4' height='5'/><rect x='30' y='150' width='4' height='5'/><rect x='115' y='90' width='4' height='5'/><rect x='205' y='160' width='4' height='5'/><rect x='495' y='110' width='4' height='5'/><rect x='770' y='120' width='4' height='5'/><rect x='1040' y='140' width='4' height='5'/></g><g fill='%23ff2bd6' fill-opacity='.9'><rect x='205' y='180' width='4' height='5'/><rect x='580' y='150' width='4' height='5'/><rect x='970' y='90' width='4' height='5'/><rect x='1140' y='110' width='4' height='5'/></g><g fill='%23d4ff00' fill-opacity='.9'><rect x='320' y='80' width='4' height='5'/><rect x='1330' y='150' width='4' height='5'/></g></svg>") center bottom/cover no-repeat;
+  animation: cp-skyline 6s ease-in-out infinite;
 }
+@keyframes cp-skyline { 0%,100% { filter: brightness(1) hue-rotate(0); } 50% { filter: brightness(1.18) hue-rotate(8deg); } }
 body.theme-cyberpunk #theme-fx .fx-c {
   opacity: .5;
   background: repeating-linear-gradient(0deg, transparent 0 60px, rgba(0,240,255,.05) 60px 62px);
@@ -830,24 +811,19 @@ body.theme-cyberpunk #theme-fx .fx-c {
 @keyframes cp-rain { from { background-position-y: -160px, -90px, -110px, -160px; } to { background-position-y: 100vh, 100vh, 100vh, 100vh; } }
 @keyframes cp-scan { to { background-position: 0 100vh; } }
 
-/* ── 07 SUMI-E: floating sakura petals + ink wash drift ── */
+/* ── 07 SUMI-E: Mt. Fuji + sol rojo + sakura cayendo ── */
 body.theme-sumie #theme-fx .fx-a {
   opacity: 1;
-  background:
-    radial-gradient(ellipse 60% 40% at 20% 0%,  rgba(31,26,20,.08), transparent 60%),
-    radial-gradient(ellipse 70% 50% at 90% 100%, rgba(31,26,20,.10), transparent 60%);
-  animation: sumi-wash 18s ease-in-out infinite;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900' preserveAspectRatio='xMidYMax slice'><defs><radialGradient id='sun' cx='50%25' cy='50%25'><stop offset='0%25' stop-color='%23b3201f' stop-opacity='.55'/><stop offset='65%25' stop-color='%23b3201f' stop-opacity='.10'/><stop offset='100%25' stop-color='%23b3201f' stop-opacity='0'/></radialGradient></defs><circle cx='340' cy='240' r='160' fill='url(%23sun)'/><circle cx='340' cy='240' r='52' fill='%23b3201f' fill-opacity='.65'/><path d='M0,720 L460,420 L530,460 L600,440 L670,470 L1400,720 L1400,900 L0,900 Z' fill='%231f1a14' fill-opacity='.30'/><path d='M0,820 L390,580 L480,620 L570,600 L650,640 L1400,820 L1400,900 L0,900 Z' fill='%231f1a14' fill-opacity='.55'/></svg>") center bottom/cover no-repeat;
+  animation: sumi-breathe 22s ease-in-out infinite;
 }
+@keyframes sumi-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 body.theme-sumie #theme-fx .fx-b {
   opacity: 1;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='%23d97a98' opacity='.45'><circle cx='40' cy='30' r='3'/><circle cx='180' cy='80' r='2'/><circle cx='250' cy='160' r='3'/><circle cx='90' cy='200' r='2'/><circle cx='220' cy='250' r='2.5'/><circle cx='30' cy='270' r='2'/></g></svg>");
   animation: sumi-petals 30s linear infinite;
 }
-body.theme-sumie #theme-fx .fx-c {
-  opacity: 1;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><g fill='%23d97a98' opacity='.30'><circle cx='150' cy='110' r='2'/><circle cx='320' cy='200' r='2.5'/><circle cx='60' cy='320' r='2'/></g></svg>");
-  animation: sumi-petals2 45s linear infinite;
-}
+body.theme-sumie #theme-fx .fx-c { display: none; }
 @keyframes sumi-wash    { 0%,100% { opacity: .7; } 50% { opacity: 1; } }
 @keyframes sumi-petals  { from { background-position: 0 -300px; } to { background-position: 50px 100vh; } }
 @keyframes sumi-petals2 { from { background-position: 0 -400px; } to { background-position: -80px 100vh; } }
@@ -865,8 +841,8 @@ body.theme-manga #theme-fx .fx-b {
 }
 body.theme-manga #theme-fx .fx-c {
   opacity: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(255,31,31,.40), transparent 30%);
-  animation: manga-shock 7s ease-out infinite;
+  background: radial-gradient(circle 220px at 88% 12%, rgba(255,31,31,.30), transparent 60%);
+  animation: manga-shock 11s ease-out infinite;
 }
 @keyframes manga-dots  { to { background-position: 5px 5px; } }
 @keyframes manga-spin  { to { transform: rotate(360deg); } }
@@ -959,42 +935,33 @@ body.theme-ghost #theme-fx .fx-c {
 @keyframes ghost-band    { from { top: -80px; } to { top: 100vh; } }
 @keyframes ghost-flicker { 0%,100% { opacity: 1; } 50% { opacity: .96; } 51% { opacity: 1; } }
 
-/* ═════════ ELABORATE THEME FX — fx-d layer additions ═════════ */
+/* ═════════ ELABORATE THEME FX — fx-d hero scenes per theme ═════════ */
 
-/* 01 brutalist · vertical tick marks left edge + corner cursor blink */
+/* 01 brutalist · masivo X rojo diagonal (signal) + cursor stamp */
 body.theme-brutalist #theme-fx .fx-d {
   opacity: 1;
   background:
-    repeating-linear-gradient(180deg, transparent 0 19px, var(--ink-0) 19px 20px) 0 0/3px 100% no-repeat,
-    radial-gradient(circle 6px at calc(100% - 32px) calc(100% - 32px), var(--ink-0) 50%, transparent 51%);
-  animation: brut-cursor 1.1s steps(2) infinite;
+    linear-gradient(135deg, transparent 47%, rgba(255,45,32,.18) 49%, rgba(255,45,32,.18) 51%, transparent 53%),
+    linear-gradient(45deg,  transparent 47%, rgba(255,45,32,.10) 49%, rgba(255,45,32,.10) 51%, transparent 53%),
+    repeating-linear-gradient(180deg, transparent 0 19px, rgba(10,10,10,.20) 19px 20px) 0 0/3px 100% no-repeat;
+  animation: brut-x 22s ease-in-out infinite;
 }
-@keyframes brut-cursor {
-  0%,49% { background-color: transparent; }
-  50%,100% { background-color: transparent; opacity: .55; }
-}
+@keyframes brut-x { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04) rotate(.6deg); } }
 
-/* 02 blueprint · radar sweep + tech blueprint glyphs drifting */
+/* 02 blueprint · schematic estática (engranaje + circuit + hex + plumbing) */
 body.theme-blueprint #theme-fx .fx-d {
   opacity: 1;
-  background:
-    conic-gradient(from 0deg at 80% 75%, transparent 0deg, rgba(92,242,255,.16) 6deg, transparent 30deg),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><g fill='none' stroke='%235cf2ff' stroke-width='.6' opacity='.20'><circle cx='80' cy='80' r='28'/><circle cx='80' cy='80' r='40'/><line x1='40' y1='80' x2='120' y2='80'/><line x1='80' y1='40' x2='80' y2='120'/><rect x='220' y='160' width='80' height='40'/><line x1='220' y1='180' x2='300' y2='180'/><circle cx='340' cy='340' r='18'/><line x1='320' y1='340' x2='360' y2='340'/></g></svg>");
-  animation: bp-radar 14s linear infinite, bp-glyph 90s linear infinite;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900'><g fill='none' stroke='%235cf2ff' stroke-width='1' opacity='.20'><circle cx='220' cy='220' r='90'/><circle cx='220' cy='220' r='75'/><circle cx='220' cy='220' r='60'/><g transform='translate(220,220)'><line x1='-95' y1='0' x2='95' y2='0'/><line x1='0' y1='-95' x2='0' y2='95'/><line x1='-67' y1='-67' x2='67' y2='67'/><line x1='-67' y1='67' x2='67' y2='-67'/></g><circle cx='220' cy='220' r='4' fill='%235cf2ff' fill-opacity='.6'/><rect x='850' y='150' width='240' height='160' rx='6'/><rect x='870' y='170' width='80' height='40'/><rect x='970' y='170' width='80' height='40'/><rect x='870' y='220' width='200' height='14'/><rect x='870' y='248' width='200' height='14'/><rect x='870' y='276' width='130' height='14'/><circle cx='1015' cy='285' r='6'/><line x1='850' y1='250' x2='830' y2='250'/><line x1='830' y1='250' x2='830' y2='450'/><line x1='830' y1='450' x2='1100' y2='450'/><circle cx='1100' cy='450' r='6'/><g transform='translate(380,620)'><polygon points='0,-40 35,-20 35,20 0,40 -35,20 -35,-20'/><polygon points='0,-26 22,-13 22,13 0,26 -22,13 -22,-13'/><line x1='0' y1='-60' x2='0' y2='-40'/><line x1='35' y1='-30' x2='52' y2='-40'/><line x1='35' y1='30'  x2='52' y2='40'/><line x1='0' y1='60' x2='0' y2='40'/><line x1='-35' y1='30' x2='-52' y2='40'/><line x1='-35' y1='-30' x2='-52' y2='-40'/></g><g transform='translate(1180,720)'><rect x='-50' y='-30' width='100' height='60'/><line x1='-50' y1='0' x2='50' y2='0'/><line x1='0' y1='-30' x2='0' y2='30'/><circle cx='0' cy='0' r='4'/></g><line x1='80' y1='800' x2='1300' y2='800' stroke-dasharray='8 4'/><text x='90' y='830' font-family='monospace' font-size='10' fill='%235cf2ff' opacity='.6'>SCALE 1:200</text><text x='1240' y='830' font-family='monospace' font-size='10' fill='%235cf2ff' opacity='.6'>REV.A</text></g></svg>") center center/cover no-repeat;
 }
-@keyframes bp-radar { to { background-position: 0 0, 0 0; transform: rotate(0deg); } }
-@keyframes bp-glyph { from { background-position: 0 0, 0 0; } to { background-position: 0 0, 400px 400px; } }
 
-/* 03 solarpunk · pollen specks + 2nd leaf wave */
+/* 03 solarpunk · ESCENA: colinas onduladas + sol grande + nubes pollen */
 body.theme-solarpunk #theme-fx .fx-d {
   opacity: 1;
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='%23d8a23b' opacity='.55'><circle cx='30' cy='40' r='1.2'/><circle cx='110' cy='80' r='1'/><circle cx='200' cy='150' r='1.4'/><circle cx='250' cy='40' r='1'/><circle cx='80' cy='220' r='1.2'/><circle cx='180' cy='270' r='1'/></g></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><g fill='%233e6b2c' opacity='.20'><path d='M50 20 Q60 5 75 20 Q60 35 50 20 M180 110 Q190 95 205 110 Q190 125 180 110 M40 180 Q50 165 65 180 Q50 195 40 180'/></g></svg>");
-  animation: sp-pollen 60s linear infinite, sp-drift2 55s linear infinite;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900' preserveAspectRatio='none'><defs><radialGradient id='sun' cx='50%' cy='50%'><stop offset='0%' stop-color='%23d8a23b' stop-opacity='.85'/><stop offset='60%' stop-color='%23d8a23b' stop-opacity='.40'/><stop offset='100%' stop-color='%23d8a23b' stop-opacity='0'/></radialGradient></defs><circle cx='1180' cy='180' r='180' fill='url(%23sun)'/><circle cx='1180' cy='180' r='65' fill='%23d8a23b' fill-opacity='.7'/><path d='M0,720 C200,640 380,720 580,680 C800,640 980,750 1200,710 C1300,690 1400,720 1400,720 L1400,900 L0,900 Z' fill='%235a8a3a' fill-opacity='.30'/><path d='M0,790 C220,740 420,820 640,780 C860,750 1040,830 1260,800 C1340,790 1400,810 1400,810 L1400,900 L0,900 Z' fill='%233e6b2c' fill-opacity='.50'/><g fill='%23f7efdc' fill-opacity='.40'><ellipse cx='280' cy='240' rx='80' ry='18'/><ellipse cx='320' cy='250' rx='60' ry='14'/><ellipse cx='720' cy='160' rx='100' ry='20'/><ellipse cx='760' cy='170' rx='70' ry='16'/></g></svg>") center bottom/cover no-repeat;
+  animation: sp-scene 30s ease-in-out infinite alternate;
 }
-@keyframes sp-pollen { from { background-position: 0 0, 0 0; } to { background-position: 30px -100vh, 0 0; } }
-@keyframes sp-drift2 { from { background-position: 0 0, 0 0; } to { background-position: 0 0, -150px 240px; } }
+@keyframes sp-scene { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-12px) scale(1.03); } }
 
 /* 04 vaporwave · floating triangles + grain dust */
 body.theme-vaporwave #theme-fx .fx-d {
@@ -1046,40 +1013,32 @@ body.theme-sumie #theme-fx .fx-d {
 }
 @keyframes sumi-bigpetal { from { background-position: 0 -600px, 0 0; } to { background-position: 80px 100vh, 0 0; } }
 
-/* 08 manga · vertical panel slashes + KAPOW burst occasional */
+/* 08 manga · panel slashes diagonales + halftone gradient bottom */
 body.theme-manga #theme-fx .fx-d {
   opacity: 1;
   background:
-    repeating-linear-gradient(80deg, transparent 0 60px, rgba(0,0,0,.04) 60px 62px),
-    radial-gradient(circle at 25% 30%, rgba(255,31,31,.18) 0%, transparent 12%),
-    radial-gradient(circle at 75% 70%, rgba(255,214,10,.22) 0%, transparent 14%);
-  animation: manga-slash 18s linear infinite, manga-flash 9s ease-in-out infinite;
+    repeating-linear-gradient(80deg, transparent 0 90px, rgba(0,0,0,.04) 90px 92px),
+    linear-gradient(180deg, transparent 60%, rgba(0,0,0,.10) 100%);
+  animation: manga-slash 22s linear infinite;
 }
-@keyframes manga-slash { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 120px 0, 0 0, 0 0; } }
-@keyframes manga-flash {
-  0%,80% { background-color: transparent; }
-  81%    { filter: brightness(1.4); }
-  84%    { filter: brightness(1); }
-  100%   { filter: brightness(1); }
-}
+@keyframes manga-slash { from { background-position: 0 0, 0 0; } to { background-position: 120px 0, 0 0; } }
 
-/* 09 rain · lightning flash periodic + 3rd raindrop wave + puddle ripples bottom */
+/* 09 rain · puddle reflections bottom + relámpago localizado arriba */
 body.theme-rain #theme-fx .fx-d {
   opacity: 1;
   background:
-    radial-gradient(ellipse 60% 8% at 30% 96%, rgba(122,216,255,.15), transparent 60%),
-    radial-gradient(ellipse 40% 6% at 70% 98%, rgba(246,179,92,.18), transparent 60%),
-    linear-gradient(180deg, transparent 0%, rgba(255,255,255,.10) 30%, transparent 100%);
-  animation: rain-lightning 11s ease-in-out infinite, rain-ripple 4s ease-in-out infinite;
+    radial-gradient(ellipse 60% 8% at 30% 96%, rgba(122,216,255,.20), transparent 65%),
+    radial-gradient(ellipse 45% 6% at 72% 98%, rgba(246,179,92,.22), transparent 65%),
+    radial-gradient(ellipse 35% 18% at 50% 8%, rgba(220,235,255,.15), transparent 70%);
+  animation: rain-lightning 13s steps(40) infinite;
 }
 @keyframes rain-lightning {
-  0%,90% { background-color: transparent; opacity: 1; }
-  91%    { background-color: rgba(255,255,255,.18); }
-  92%    { background-color: transparent; }
-  93%    { background-color: rgba(255,255,255,.30); }
-  94%,100% { background-color: transparent; }
+  0%,89%   { opacity: 1; }
+  90%      { opacity: 1.3; filter: brightness(1.6); }
+  91%      { opacity: 1;   filter: brightness(1); }
+  92%      { opacity: 1.4; filter: brightness(1.8); }
+  93%,100% { opacity: 1;   filter: brightness(1); }
 }
-@keyframes rain-ripple { 0%,100% { background-position: 0 0,0 0,0 0; } 50% { background-position: 0 -2px,0 -1px,0 0; } }
 
 /* 10 akira · sparks + light streak horizontal motorbike trails + intense red core */
 body.theme-akira #theme-fx .fx-d {
@@ -1096,26 +1055,14 @@ body.theme-akira #theme-fx .fx-d {
 @keyframes akira-bike  { from { background-position: -320px 35%, -240px 65%, 0 0; } to { background-position: 100vw 35%, 100vw 65%, 0 0; } }
 @keyframes akira-spark { from { background-position: -320px 35%, -240px 65%, 0 0; } to { background-position: -320px 35%, -240px 65%, 0 -400px; } }
 
-/* 11 ghost · cursor block bottom-left + horizontal glitch slice + boot text */
+/* 11 ghost · texto boot terminal scroll + tear horizontal */
 body.theme-ghost #theme-fx .fx-d {
   opacity: 1;
-  background:
-    linear-gradient(transparent, transparent) calc(20px) calc(100% - 36px)/8px 14px no-repeat,
-    radial-gradient(ellipse 100% 4% at 50% 30%, var(--cyan), transparent 70%),
-    radial-gradient(ellipse 100% 2% at 50% 60%, var(--cyan), transparent 70%);
-  animation: ghost-cursor 1s steps(2) infinite, ghost-tear 5s linear infinite;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800'><g font-family='monospace' font-size='11' fill='%2300ffd5' opacity='.40'><text x='20' y='20'>[boot] init kernel 4.0.7-asura</text><text x='20' y='40'>[ ok ] mounting /dev/sda1</text><text x='20' y='60'>[ ok ] starting daemon: scanner</text><text x='20' y='80'>[ ok ] starting daemon: bot-watcher</text><text x='20' y='100'>[ ok ] starting daemon: docker-bridge</text><text x='20' y='120'>[info] no container runtime</text><text x='20' y='140'>[ ok ] tray icon registered</text><text x='20' y='160'>[ ok ] http server :27315</text><text x='20' y='180'>[ ok ] ipc handler ready</text><text x='20' y='200'>[done] asura phantom online</text><text x='20' y='240'>$ scan workspace</text><text x='20' y='260'>found 15 projects · ok</text><text x='20' y='280'>parsed git logs · ok</text><text x='20' y='300'>cached commits · ok</text><text x='20' y='320'>$ _</text><text x='20' y='400'>[boot] init kernel 4.0.7-asura</text><text x='20' y='420'>[ ok ] mounting /dev/sda1</text><text x='20' y='440'>[ ok ] starting daemon: scanner</text></g></svg>");
+  background-repeat: repeat-y;
+  animation: ghost-scroll 40s linear infinite;
 }
-@keyframes ghost-cursor {
-  0%   { background-color: transparent; }
-  50%  { box-shadow: inset 20px calc(-36px) 0 0 var(--cyan); }
-  51%  { box-shadow: none; }
-  100% { background-color: transparent; }
-}
-@keyframes ghost-tear {
-  0%,90% { background-position: 20px calc(100% - 36px), 0 30%, 0 60%; opacity: 1; }
-  92%    { background-position: 20px calc(100% - 36px), 0 33%, 0 58%; opacity: .9; }
-  94%    { background-position: 20px calc(100% - 36px), 0 30%, 0 60%; opacity: 1; }
-}
+@keyframes ghost-scroll { from { background-position: 0 0; } to { background-position: 0 -800px; } }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2795,7 +2742,7 @@ body.theme-light .pc-name { color: var(--tx-0); background: none; -webkit-text-f
 body.theme-light .tb { background: var(--bg-1); }
 body.theme-light .tabs { background: var(--bg-2); }
 body.theme-light .toolbar { background: var(--bg-2); }
-body.theme-light .main { background: var(--bg-0); }
+body.theme-light .main { background: transparent; }
 body.theme-light .modal,
 body.theme-light .ctx-menu { background: #fff; color: var(--tx-1); }
 
