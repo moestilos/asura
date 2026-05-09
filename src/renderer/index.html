@@ -703,7 +703,10 @@ body.theme-brutalist #theme-fx .fx-a {
   background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(0,0,0,.025) 5px 6px);
   animation: brut-shift 5s linear infinite;
 }
-body.theme-brutalist #theme-fx .fx-b { display: none; }
+body.theme-brutalist #theme-fx .fx-b {
+  opacity: 1;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900'><g font-family='Helvetica,Arial Black,sans-serif' font-weight='900' fill='%230a0a0a' fill-opacity='.07'><text x='80' y='220' font-size='180' letter-spacing='-4'>WORK·</text><text x='80' y='400' font-size='180' letter-spacing='-4'>SHOP·</text><text x='80' y='580' font-size='180' letter-spacing='-4'>NOW.</text></g><g fill='%23ff2d20' fill-opacity='.10'><rect x='80' y='615' width='620' height='14'/></g><g font-family='monospace' font-size='14' fill='%230a0a0a' fill-opacity='.55'><text x='80' y='680'>ASURA · WORKSPACE PHANTOM · EDITORIAL EDITION</text><text x='80' y='700'>VOL.01 · ISSUE 047 · MAY 2026 · 15 PROJECTS · 1 OPERATOR</text></g></svg>") top left/auto no-repeat;
+}
 body.theme-brutalist #theme-fx .fx-c {
   opacity: 1;
   background: radial-gradient(circle at 50% 50%, transparent 65%, rgba(0,0,0,.10));
@@ -740,35 +743,60 @@ body.theme-solarpunk #theme-fx .fx-c {
 @keyframes sp-rays    { to { transform: rotate(20deg); } }
 @keyframes sp-drift   { from { background-position: 0 0; } to { background-position: 200px 200px; } }
 
-/* ── 04 VAPORWAVE: perspective grid + sun rising + gradient shift ── */
+/* ── 04 VAPORWAVE: outrun sunset — sol gigante con bands + checker grid + palmas ── */
 body.theme-vaporwave #theme-fx .fx-a {
   opacity: 1;
-  background: linear-gradient(180deg, rgba(255,45,142,0) 50%, rgba(255,45,142,.10) 75%, rgba(122,45,255,.18) 100%);
-  animation: vw-shift 6s ease-in-out infinite alternate;
+  background:
+    linear-gradient(180deg,
+      #ff80ab 0%,
+      #ff5e9a 18%,
+      #ff7eb3 30%,
+      #ffb38e 45%,
+      #ffd9a8 55%,
+      #f8e8e8 60%,
+      transparent 65%,
+      transparent 100%);
+  animation: vw-shift 8s ease-in-out infinite alternate;
 }
 body.theme-vaporwave #theme-fx .fx-b {
   opacity: 1;
-  bottom: 0; top: auto; height: 50%;
+  width: 520px; height: 520px;
+  inset: auto;
+  left: 50%; top: 6%;
+  margin-left: -260px;
   background:
-    repeating-linear-gradient(180deg, transparent 0 60px, rgba(0,224,255,.18) 60px 61px),
-    repeating-linear-gradient(90deg,  transparent 0 60px, rgba(255,45,142,.14) 60px 61px);
-  transform: perspective(500px) rotateX(60deg);
-  transform-origin: bottom;
-  animation: vw-grid 4s linear infinite;
+    radial-gradient(circle, rgba(255,45,142,.95) 0%, rgba(255,140,66,.85) 26%, rgba(122,45,255,.55) 55%, transparent 70%);
+  border-radius: 50%;
+  -webkit-mask:
+    linear-gradient(180deg, black 56%, transparent 100%),
+    repeating-linear-gradient(180deg, black 0 18px, transparent 18px 22px);
+  -webkit-mask-composite: source-in;
+  mask:
+    linear-gradient(180deg, black 56%, transparent 100%),
+    repeating-linear-gradient(180deg, black 0 18px, transparent 18px 22px);
+  mask-composite: intersect;
+  animation: vw-sun 12s ease-in-out infinite;
+  filter: drop-shadow(0 0 60px rgba(255,45,142,.5));
 }
 body.theme-vaporwave #theme-fx .fx-c {
   opacity: 1;
-  width: 360px; height: 360px;
-  left: 50%; top: 30%;
-  inset: auto;
-  margin-left: -180px;
-  background: radial-gradient(circle, rgba(255,45,142,.50), rgba(122,45,255,.30) 50%, transparent 70%);
-  border-radius: 50%;
-  animation: vw-sun 10s ease-in-out infinite;
+  bottom: 0; top: auto; height: 60%;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(122,45,255,.35) 100%),
+    repeating-linear-gradient(180deg, transparent 0 60px, rgba(0,224,255,.55) 60px 62px),
+    repeating-linear-gradient(90deg,  transparent 0 60px, rgba(255,45,142,.40) 60px 62px);
+  transform: perspective(550px) rotateX(62deg);
+  transform-origin: bottom;
+  animation: vw-grid 3.5s linear infinite;
 }
-@keyframes vw-shift { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(20deg); } }
-@keyframes vw-grid  { to { background-position: 0 60px, 60px 0; } }
-@keyframes vw-sun   { 0%,100% { transform: translateY(0) scale(1); opacity: .6; } 50% { transform: translateY(-12px) scale(1.04); opacity: .9; } }
+body.theme-vaporwave #theme-fx .fx-d {
+  opacity: 1;
+  bottom: 32%; top: auto; height: 220px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='220' viewBox='0 0 1400 220' preserveAspectRatio='xMidYMax slice'><g fill='%23120428' opacity='.7'><path d='M120 220 L120 100 Q115 70 100 60 Q90 50 85 35 Q88 28 95 32 Q92 22 100 18 Q108 22 105 32 Q112 28 115 35 Q110 50 100 60 Q115 70 130 90 L130 220 Z'/><circle cx='80' cy='28' r='10'/><circle cx='115' cy='25' r='9'/><circle cx='90' cy='42' r='9'/><circle cx='118' cy='42' r='8'/><path d='M1240 220 L1240 105 Q1235 75 1220 65 Q1210 55 1205 40 Q1208 33 1215 37 Q1212 27 1220 23 Q1228 27 1225 37 Q1232 33 1235 40 Q1230 55 1220 65 Q1235 75 1250 95 L1250 220 Z'/><circle cx='1200' cy='33' r='10'/><circle cx='1235' cy='30' r='9'/><circle cx='1210' cy='47' r='9'/><circle cx='1238' cy='47' r='8'/></g></svg>") center bottom/cover no-repeat;
+}
+@keyframes vw-shift { 0% { filter: hue-rotate(0deg) saturate(1); } 100% { filter: hue-rotate(15deg) saturate(1.15); } }
+@keyframes vw-grid  { to { background-position: 0 0, 0 62px, 62px 0; } }
+@keyframes vw-sun   { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.03); } }
 
 /* ── 05 RISOGRAPH: shifting paper grain + RGB jiggle ── */
 body.theme-risograph #theme-fx .fx-a {
@@ -783,7 +811,7 @@ body.theme-risograph #theme-fx .fx-b {
 }
 body.theme-risograph #theme-fx .fx-c {
   opacity: 1;
-  background: linear-gradient(135deg, rgba(216,162,59,.05), transparent 60%);
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900' preserveAspectRatio='xMidYMax slice'><g><path d='M0,720 L260,500 L380,580 L520,460 L680,540 L840,420 L1000,520 L1180,440 L1400,560 L1400,900 L0,900 Z' fill='%232b4a8a' fill-opacity='.30'/><path d='M-3,723 L257,503 L377,583 L517,463 L677,543 L837,423 L997,523 L1177,443 L1397,563 L1397,903 L-3,903 Z' fill='%23d23b2a' fill-opacity='.20'/></g><g fill='%232a8a7a' fill-opacity='.30'><circle cx='160' cy='760' r='10'/><circle cx='340' cy='810' r='8'/><circle cx='620' cy='790' r='12'/><circle cx='890' cy='830' r='9'/><circle cx='1180' cy='760' r='11'/></g></svg>") center bottom/cover no-repeat;
 }
 @keyframes riso-grain  { 0% { background-position: 0 0; } 25% { background-position: 1px 0; } 50% { background-position: 1px 1px; } 75% { background-position: 0 1px; } 100% { background-position: 0 0; } }
 @keyframes riso-grain2 { 0% { background-position: 0 0; } 25% { background-position: 2px 1px; } 50% { background-position: 2px 2px; } 75% { background-position: 1px 2px; } 100% { background-position: 1px 1px; } }
@@ -826,7 +854,10 @@ body.theme-sumie #theme-fx .fx-b {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='%23d97a98' opacity='.45'><circle cx='40' cy='30' r='3'/><circle cx='180' cy='80' r='2'/><circle cx='250' cy='160' r='3'/><circle cx='90' cy='200' r='2'/><circle cx='220' cy='250' r='2.5'/><circle cx='30' cy='270' r='2'/></g></svg>");
   animation: sumi-petals 30s linear infinite;
 }
-body.theme-sumie #theme-fx .fx-c { display: none; }
+body.theme-sumie #theme-fx .fx-c {
+  opacity: 1;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900'><g fill='%231f1a14' opacity='.32'><path d='M-20 80 Q60 90 120 130 Q180 175 240 200' stroke='%231f1a14' stroke-width='3' fill='none' opacity='.55'/><circle cx='30' cy='80' r='4'/><circle cx='55' cy='90' r='3'/><circle cx='90' cy='110' r='4'/><circle cx='130' cy='140' r='3'/></g><g fill='%23d97a98' opacity='.85'><circle cx='35' cy='75' r='5'/><circle cx='40' cy='85' r='4'/><circle cx='65' cy='85' r='4'/><circle cx='95' cy='105' r='5'/><circle cx='105' cy='118' r='4'/><circle cx='135' cy='135' r='4'/><circle cx='150' cy='145' r='5'/><circle cx='180' cy='165' r='4'/><circle cx='210' cy='185' r='5'/></g></svg>") top left/auto no-repeat;
+}
 @keyframes sumi-wash    { 0%,100% { opacity: .7; } 50% { opacity: 1; } }
 @keyframes sumi-petals  { from { background-position: 0 -300px; } to { background-position: 50px 100vh; } }
 @keyframes sumi-petals2 { from { background-position: 0 -400px; } to { background-position: -80px 100vh; } }
@@ -844,8 +875,8 @@ body.theme-manga #theme-fx .fx-b {
 }
 body.theme-manga #theme-fx .fx-c {
   opacity: 0;
-  background: radial-gradient(circle 220px at 88% 12%, rgba(255,31,31,.30), transparent 60%);
-  animation: manga-shock 11s ease-out infinite;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='-160 -160 320 320'><polygon points='0,-150 22,-50 100,-110 50,-30 150,-25 50,5 110,80 25,40 35,140 0,55 -35,140 -25,40 -110,80 -50,5 -150,-25 -50,-30 -100,-110 -22,-50' fill='%23ffd60a' stroke='%230a0a0a' stroke-width='4'/><text x='0' y='12' text-anchor='middle' font-family='Bangers,Impact,sans-serif' font-size='38' fill='%23ff1f1f' stroke='%230a0a0a' stroke-width='1.5'>KAPOW</text></svg>") 88% 14%/180px 180px no-repeat;
+  animation: manga-shock 13s ease-out infinite;
 }
 @keyframes manga-dots  { to { background-position: 5px 5px; } }
 @keyframes manga-spin  { to { transform: rotate(360deg); } }
@@ -889,31 +920,43 @@ body.theme-rain #theme-fx .fx-c {
 @keyframes rain-fall  { from { background-position-y: -16px, -22px, -12px; } to { background-position-y: 16px, 22px, 12px; } }
 @keyframes rain-fall2 { from { background-position-y: -18px, -14px; } to { background-position-y: 18px, 14px; } }
 
-/* ── 10 AKIRA: pulsing red core + falling katakana + light streaks ── */
+/* ── 10 AKIRA: explosión nuclear — shockwaves + Neo-Tokyo skyline + sparks ── */
 body.theme-akira #theme-fx .fx-a {
   opacity: 1;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,8,68,.30), transparent 70%),
-    radial-gradient(ellipse 40% 30% at 50% 50%,  rgba(255,8,68,.10), transparent 60%);
-  animation: akira-pulse 2.6s ease-in-out infinite;
+    radial-gradient(circle 600px at 50% 55%, rgba(255,8,68,.55) 0%, rgba(255,242,0,.18) 22%, rgba(255,8,68,.10) 45%, transparent 70%),
+    radial-gradient(ellipse 100% 60% at 50% 100%, rgba(255,8,68,.40), transparent 70%);
+  animation: akira-pulse 3.2s ease-in-out infinite;
+  filter: blur(.5px);
 }
 body.theme-akira #theme-fx .fx-b {
-  opacity: .6;
-  background-image:
-    linear-gradient(180deg, transparent, var(--cyan) 50%, transparent),
-    linear-gradient(180deg, transparent, var(--pink) 50%, transparent);
-  background-size: 2px 200px, 2px 150px;
-  background-position: 15% 0, 80% 0;
-  background-repeat: no-repeat;
-  animation: akira-streak 2s linear infinite;
+  opacity: 1;
+  bottom: 0; top: auto; height: 220px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='220' viewBox='0 0 1400 220' preserveAspectRatio='xMidYMax slice'><g fill='%230a0716'><polygon points='0,220 0,140 80,140 80,90 130,90 130,140 200,140 200,60 280,60 280,40 320,40 320,140 400,140 400,100 460,100 460,140 540,140 540,80 600,80 600,40 660,40 660,140 740,140 740,110 820,110 820,50 880,50 880,140 960,140 960,90 1040,90 1040,140 1120,140 1120,60 1200,60 1200,30 1240,30 1240,140 1320,140 1320,100 1400,100 1400,220'/></g><g fill='%23ff0844' fill-opacity='.85'><rect x='15' y='160' width='3' height='4'/><rect x='42' y='180' width='3' height='4'/><rect x='95' y='110' width='3' height='4'/><rect x='220' y='90' width='3' height='4'/><rect x='350' y='80' width='3' height='4'/><rect x='495' y='115' width='3' height='4'/><rect x='620' y='70' width='3' height='4'/><rect x='770' y='120' width='3' height='4'/><rect x='890' y='90' width='3' height='4'/><rect x='1040' y='130' width='3' height='4'/><rect x='1180' y='80' width='3' height='4'/><rect x='1340' y='130' width='3' height='4'/></g><g fill='%2300f0ff' fill-opacity='.85'><rect x='180' y='150' width='3' height='4'/><rect x='420' y='130' width='3' height='4'/><rect x='680' y='100' width='3' height='4'/><rect x='950' y='115' width='3' height='4'/></g></svg>") center bottom/cover no-repeat;
 }
 body.theme-akira #theme-fx .fx-c {
-  opacity: .4;
-  background:
-    repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,8,68,.05) 2px 3px);
+  opacity: 1;
+  border-radius: 50%;
+  width: 240px; height: 240px;
+  inset: auto;
+  left: 50%; top: 55%;
+  margin: -120px 0 0 -120px;
+  border: 2px solid var(--pink);
+  box-shadow: 0 0 30px rgba(255,8,68,.6);
+  animation: akira-wave 4s cubic-bezier(.2,.7,.3,1) infinite;
 }
-@keyframes akira-pulse  { 0%,100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.05); opacity: 1; } }
-@keyframes akira-streak { from { background-position-y: -200px, -150px; } to { background-position-y: 100vh, 100vh; } }
+body.theme-akira #theme-fx .fx-d {
+  opacity: 1;
+  border-radius: 50%;
+  width: 240px; height: 240px;
+  inset: auto;
+  left: 50%; top: 55%;
+  margin: -120px 0 0 -120px;
+  border: 2px solid var(--cyan);
+  animation: akira-wave 4s cubic-bezier(.2,.7,.3,1) 1.4s infinite;
+}
+@keyframes akira-pulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
+@keyframes akira-wave  { 0% { transform: scale(.3); opacity: 1; } 100% { transform: scale(7); opacity: 0; } }
 
 /* ── 11 GHOST: CRT scan lines moving + horizontal noise band + flicker ── */
 body.theme-ghost #theme-fx .fx-a {
@@ -1043,20 +1086,7 @@ body.theme-rain #theme-fx .fx-d {
   93%,100% { opacity: 1;   filter: brightness(1); }
 }
 
-/* 10 akira · sparks + light streak horizontal motorbike trails + intense red core */
-body.theme-akira #theme-fx .fx-d {
-  opacity: 1;
-  background-image:
-    linear-gradient(90deg, transparent, var(--cyan) 50%, transparent),
-    linear-gradient(90deg, transparent, var(--pink) 50%, transparent),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><g fill='%23ff0844' opacity='.7'><circle cx='40' cy='80' r='1'/><circle cx='200' cy='150' r='1.2'/><circle cx='340' cy='220' r='1'/><circle cx='80' cy='320' r='1'/><circle cx='280' cy='380' r='1.4'/></g></svg>");
-  background-size: 320px 1px, 240px 2px, 400px 400px;
-  background-position: -320px 35%, -240px 65%, 0 0;
-  background-repeat: no-repeat, no-repeat, repeat;
-  animation: akira-bike 3.5s linear infinite, akira-spark 6s linear infinite;
-}
-@keyframes akira-bike  { from { background-position: -320px 35%, -240px 65%, 0 0; } to { background-position: 100vw 35%, 100vw 65%, 0 0; } }
-@keyframes akira-spark { from { background-position: -320px 35%, -240px 65%, 0 0; } to { background-position: -320px 35%, -240px 65%, 0 -400px; } }
+/* 10 akira fx-d definido arriba como segundo shockwave */
 
 /* 11 ghost · texto boot terminal scroll + tear horizontal */
 body.theme-ghost #theme-fx .fx-d {
