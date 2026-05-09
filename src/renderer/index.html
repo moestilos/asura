@@ -471,16 +471,29 @@ body.theme-dark::after {
 /* ─── Project Card ─────────────────────────────────── */
 .pcard {
   position: relative;
-  background: var(--bg-card-2);
   background: linear-gradient(180deg, rgba(40, 16, 72, .85), rgba(20, 8, 40, .92));
-  display: grid;
-  grid-template-rows: auto auto auto auto auto;
-  gap: 0;
+  display: flex;
+  flex-direction: column;
   padding: 0;
   cursor: pointer;
   isolation: isolate;
   transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s;
+  overflow: hidden;
 }
+.pcard::after {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--ink-3);
+  z-index: 1;
+  pointer-events: none;
+  transition: background .2s, box-shadow .2s;
+}
+.pcard.s-active::after  { background: linear-gradient(180deg, var(--cyan), var(--violet)); box-shadow: 0 0 14px rgba(92, 255, 255, .55); }
+.pcard.s-recent::after  { background: linear-gradient(180deg, var(--violet), var(--pink)); }
+.pcard.s-idle::after    { background: var(--sun);  opacity: .55; }
+.pcard.s-archived::after{ background: var(--ink-3); opacity: .35; }
+.pcard.fav::after       { background: linear-gradient(180deg, var(--sun), var(--pink)); box-shadow: 0 0 14px rgba(255, 140, 66, .55); }
 .pcard::before {
   content: '';
   position: absolute; inset: 0;
@@ -541,14 +554,13 @@ body.theme-dark::after {
 /* top row: status dot + title + path */
 .pc-top {
   display: flex; align-items: flex-start; gap: 10px;
-  padding: 12px 40px 8px 14px;
-  border-bottom: 1px solid rgba(255, 46, 147, .15);
+  padding: 11px 40px 4px 16px;
 }
 .pc-stat-dot {
   width: 8px; height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 7px;
+  margin-top: 8px;
   background: var(--ink-2);
   box-shadow: 0 0 0 2px rgba(20, 8, 40, .8);
 }
@@ -565,13 +577,17 @@ body.theme-dark::after {
 .pc-name {
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
-  font-size: 22px;
-  line-height: 1.1;
+  font-size: 20px;
+  line-height: 1.15;
   color: var(--ink-0);
   letter-spacing: .01em;
   word-break: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 .pcard.s-active .pc-name {
   background: linear-gradient(90deg, var(--ink-0), var(--cyan));
@@ -621,7 +637,16 @@ body.theme-dark::after {
 }
 .pc-new-x:hover { opacity: 1; background: rgba(6, 3, 12, .25); }
 
-/* badges row (DEV, BOT, dirty count) */
+/* unified tag row: stack chips + status badges together */
+.pc-tags {
+  display: flex; gap: 5px;
+  padding: 4px 14px 6px 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.pc-tags:empty { display: none; }
+
+/* legacy compat */
 .pc-badges {
   display: flex; gap: 6px;
   padding: 6px 14px 4px;
@@ -629,14 +654,15 @@ body.theme-dark::after {
 }
 .badge {
   display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 8px;
+  padding: 2px 7px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
-  letter-spacing: .12em;
+  letter-spacing: .1em;
   text-transform: uppercase;
   border: 1px solid var(--line-2);
   background: rgba(20, 8, 40, .5);
   color: var(--ink-1);
+  border-radius: 2px;
 }
 .badge svg { width: 10px; height: 10px; }
 .badge.dev   { color: var(--cyan); border-color: var(--cyan); background: rgba(92, 255, 255, .08); text-shadow: 0 0 6px rgba(92, 255, 255, .5); }
@@ -670,13 +696,14 @@ body.theme-dark::after {
 }
 .chip {
   display: inline-block;
-  padding: 2px 8px;
+  padding: 2px 7px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 9.5px;
   letter-spacing: .04em;
   background: rgba(40, 16, 72, .55);
   border: 1px solid var(--line-2);
   color: var(--ink-0);
+  border-radius: 2px;
 }
 .chip[data-s="Next.js"i],
 .chip[data-s*="next"i]    { color: var(--cyan); border-color: var(--cyan); background: rgba(92, 255, 255, .06); }
@@ -695,11 +722,13 @@ body.theme-dark::after {
 
 /* meta rows (branch, commit) */
 .pc-meta {
-  padding: 8px 14px;
-  border-top: 1px dashed rgba(160, 50, 255, .25);
+  padding: 8px 14px 8px 16px;
+  border-top: 1px solid rgba(255, 46, 147, .08);
   display: flex; flex-direction: column;
-  gap: 5px;
+  gap: 4px;
+  flex: 1;
 }
+.pc-meta:empty { display: none; padding: 0; border: 0; }
 .pc-meta-row {
   display: flex; align-items: center; gap: 8px;
   font-family: 'JetBrains Mono', monospace;
@@ -731,50 +760,41 @@ body.theme-dark::after {
   flex-shrink: 0;
 }
 
-/* commit sparkline (14d bar chart) */
+/* commit sparkline (14d bar chart) — always rendered */
 .pc-spark {
   display: flex; align-items: flex-end; gap: 2px;
-  height: 22px;
-  padding: 4px 14px 6px;
-  border-top: 1px dashed rgba(160, 50, 255, .25);
+  height: 18px;
+  padding: 2px 14px 4px 16px;
 }
 .pc-spark-bar {
   flex: 1;
-  background: var(--ink-3);
-  min-height: 1px;
+  background: rgba(255, 46, 147, .08);
+  min-height: 2px;
+  border-radius: 1px;
   transition: height .3s;
 }
 .pc-spark-bar.has   { background: linear-gradient(180deg, var(--pink), var(--violet)); }
 .pc-spark-bar.today { background: linear-gradient(180deg, var(--cyan), var(--pink)); box-shadow: 0 0 6px rgba(92, 255, 255, .55); }
-.pc-spark-empty {
-  padding: 6px 14px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9.5px;
-  color: var(--ink-3);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  border-top: 1px dashed rgba(160, 50, 255, .25);
-}
 
 /* actions row */
 .pc-actions {
   display: flex;
   gap: 0;
-  border-top: 1px solid var(--line-2);
-  background: rgba(10, 4, 20, .65);
+  border-top: 1px solid rgba(255, 46, 147, .12);
+  background: rgba(8, 3, 16, .55);
 }
 .ab {
   flex: 1;
   border: 0;
-  border-right: 1px solid var(--line-2);
+  border-right: 1px solid rgba(255, 46, 147, .08);
   background: transparent;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
   font-size: 10.5px;
-  letter-spacing: .2em;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--ink-1);
-  padding: 9px 8px;
+  color: var(--ink-2);
+  padding: 7px 8px;
   cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   gap: 6px;
@@ -796,10 +816,10 @@ body.theme-dark::after {
   text-shadow: none;
 }
 .ab.icon-only {
-  flex: 0 0 38px;
-  padding: 9px 0;
+  flex: 0 0 34px;
+  padding: 7px 0;
 }
-.ab.icon-only svg { width: 14px; height: 14px; }
+.ab.icon-only svg { width: 13px; height: 13px; }
 .ab.icon-only:last-of-type { border-right: 0; }
 
 /* ─── Bots tab ─────────────────────────────────────── */
@@ -3050,18 +3070,19 @@ body, .root, .main { max-width: 100vw; }
   }
 
   function projectCard(p) {
-    const stackHtml = (p.stack || []).slice(0, 5).map(s =>
-      '<span class="chip" data-s="' + escapeAttr(s) + '">' + escapeHtml(s) + '</span>').join('')
-
-    const badges = []
-    if (p.devPort)            badges.push('<span class="badge dev" title="dev server vivo">DEV :' + p.devPort + '</span>')
+    /* unified tags row: prod link + dev port + bot + dirty + stack chips */
+    const tags = []
     if (p.prodUrl) {
       const host = (() => { try { return new URL(p.prodUrl).host } catch { return p.prodUrl } })()
-      badges.push('<span class="badge prod" title="abrir en navegador · ' + escapeAttr(p.prodUrl) + '" onclick="event.stopPropagation();doAction(\'open-dev-url\',\'' + escapeAttr(p.name) + '\',\'' + escapeAttr(p.prodUrl) + '\')">' + ICO.open + ' ' + escapeHtml(host) + '</span>')
+      tags.push('<span class="badge prod" title="abrir en navegador · ' + escapeAttr(p.prodUrl) + '" onclick="event.stopPropagation();doAction(\'open-dev-url\',\'' + escapeAttr(p.name) + '\',\'' + escapeAttr(p.prodUrl) + '\')">' + ICO.open + ' ' + escapeHtml(host) + '</span>')
     }
-    if (p.hasBots)            badges.push('<span class="badge bot" title="proyecto con bots">' + ICO.bot + 'BOT</span>')
-    if (p.git.dirtyCount > 0) badges.push('<span class="badge dirty" title="' + p.git.dirtyCount + ' archivos sin commit">' + ICO.diff + p.git.dirtyCount + '</span>')
-    const badgesHtml = badges.length ? '<div class="pc-badges">' + badges.join('') + '</div>' : ''
+    if (p.devPort)            tags.push('<span class="badge dev" title="dev server vivo">DEV :' + p.devPort + '</span>')
+    if (p.git.dirtyCount > 0) tags.push('<span class="badge dirty" title="' + p.git.dirtyCount + ' archivos sin commit">' + ICO.diff + p.git.dirtyCount + '</span>')
+    if (p.hasBots)            tags.push('<span class="badge bot" title="proyecto con bots">' + ICO.bot + 'BOT</span>')
+    for (const s of (p.stack || []).slice(0, 5)) {
+      tags.push('<span class="chip" data-s="' + escapeAttr(s) + '">' + escapeHtml(s) + '</span>')
+    }
+    const tagsHtml = tags.length ? '<div class="pc-tags">' + tags.join('') + '</div>' : ''
 
     let aheadBehindHtml = ''
     if (p.git.ahead || p.git.behind) {
@@ -3095,9 +3116,7 @@ body, .root, .main { max-width: 100vw; }
         '</div>')
     }
 
-    const sparkline = (p.commitsByDay && p.commitsByDay.some(c => c > 0))
-      ? commitSparkSvg(p.commitsByDay)
-      : '<div class="pc-spark-empty">sin commits 14d</div>'
+    const sparkline = commitSparkSvg(p.commitsByDay || new Array(14).fill(0))
 
     const actions = []
     /* primary action: prefer live dev > prod > editor */
@@ -3133,8 +3152,7 @@ body, .root, .main { max-width: 100vw; }
             pathHtml +
           '</div>' +
         '</div>' +
-        badgesHtml +
-        (stackHtml ? '<div class="pc-stack">' + stackHtml + '</div>' : '') +
+        tagsHtml +
         '<div class="pc-meta">' + metaRows.join('') + '</div>' +
         sparkline +
         '<div class="pc-actions">' + actions.join('') + '</div>' +
