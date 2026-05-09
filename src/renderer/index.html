@@ -61,20 +61,246 @@
   --sh-3: 0 18px 48px rgba(0, 0, 0, .65);
 }
 
+/* legacy alias — old config "light" maps to vaporwave */
 body.theme-light {
-  --bg-0: #f8f4fc;
-  --bg-1: #ffffff;
-  --bg-2: #faf5fe;
-  --bg-3: #f3eafa;
-  --bg-4: #ebdef4;
-  --line-0: rgba(160, 50, 255, .12);
-  --line-1: rgba(160, 50, 255, .22);
-  --tx-0: #1a0428;
-  --tx-1: #3a1f4a;
-  --tx-2: #5b3d72;
-  --tx-3: #7d6090;
-  --tx-4: #b39ec3;
+  --bg-0: #fafafa; --bg-1: #ffffff; --bg-2: #f1eef6; --bg-3: #e8e3f0; --bg-4: #dad3e6;
+  --line-0: rgba(26,26,26,.06); --line-1: rgba(26,26,26,.14);
+  --tx-0:#0a0a0a; --tx-1:#5b5566; --tx-2:#a39ab0; --tx-3:#c5bdd0; --tx-4:#dad3e6;
 }
+
+/* ═════════ 12 THEMES ═════════ */
+
+/* 01 BRUTALIST — paper, ink, signal red */
+body.theme-brutalist {
+  --pink:#ff2d20; --cyan:#0a0a0a; --sun:#ff2d20; --violet:#5a5a55;
+  --ink-0:#0a0a0a; --ink-1:#5a5a55; --ink-2:#8a8a85; --ink-3:#a8a8a3;
+  --line:#0a0a0a; --line-2:#cfcdc6;
+  --bg-0:#f3f1ec; --bg-1:#ffffff; --bg-2:#e8e6df; --bg-3:#dcdad3; --bg-4:#cfcdc6;
+  --tx-0:#0a0a0a; --tx-1:#5a5a55; --tx-2:#8a8a85; --tx-3:#a8a8a3; --tx-4:#cfcdc6;
+  --bg-card:#ffffff; --bg-card-2:#f3f1ec;
+  --line-0: rgba(10,10,10,.10); --line-1: rgba(10,10,10,.22);
+  --green:#0a0a0a; --green-2:#0a0a0a; --amber:#ff2d20; --red:#ff2d20;
+  --green-soft: rgba(255,45,32,.10); --green-line: rgba(255,45,32,.40); --green-glow: rgba(255,45,32,.55);
+  --cyan-soft: rgba(10,10,10,.06); --cyan-line: rgba(10,10,10,.30);
+  --amber-soft: rgba(255,45,32,.12); --amber-line: rgba(255,45,32,.32);
+  --red-soft: rgba(255,45,32,.12); --red-line: rgba(255,45,32,.40);
+  --violet-soft: rgba(90,90,85,.10); --violet-line: rgba(90,90,85,.35);
+}
+
+/* 02 BLUEPRINT — deep blueprint cyan */
+body.theme-blueprint {
+  --pink:#5cf2ff; --cyan:#00d3ff; --sun:#ffd166; --violet:#7aa6cc;
+  --ink-0:#cfe7ff; --ink-1:#7aa6cc; --ink-2:#4d7aa3; --ink-3:#365a82;
+  --line:#1d3a59; --line-2:#2a527a;
+  --bg-0:#0a1726; --bg-1:#0f1f31; --bg-2:#142a40; --bg-3:#1a3552; --bg-4:#1f3f63;
+  --tx-0:#cfe7ff; --tx-1:#7aa6cc; --tx-2:#4d7aa3; --tx-3:#365a82; --tx-4:#1f3f63;
+  --bg-card: rgba(15,31,49,.85); --bg-card-2: rgba(20,42,64,.92);
+  --line-0: rgba(92,242,255,.12); --line-1: rgba(92,242,255,.28);
+  --green:#7af0c1; --green-2:#5ed8a0; --amber:#ffd166; --red:#ff6b8b;
+  --green-soft: rgba(92,242,255,.10); --green-line: rgba(92,242,255,.35); --green-glow: rgba(92,242,255,.55);
+  --cyan-soft: rgba(0,211,255,.10); --cyan-line: rgba(0,211,255,.32);
+  --amber-soft: rgba(255,209,102,.12); --amber-line: rgba(255,209,102,.32);
+  --red-soft: rgba(255,107,139,.12); --red-line: rgba(255,107,139,.35);
+  --violet-soft: rgba(122,166,204,.12); --violet-line: rgba(122,166,204,.35);
+}
+
+/* 03 SOLARPUNK — cream paper, moss, terra */
+body.theme-solarpunk {
+  --pink:#c1593a; --cyan:#5a8a3a; --sun:#d8a23b; --violet:#7fa9b8;
+  --ink-0:#2b3520; --ink-1:#5e6b48; --ink-2:#8a9670; --ink-3:#a8b390;
+  --line:#3a4a2c; --line-2:#6b7a4d;
+  --bg-0:#efe6d2; --bg-1:#f7efdc; --bg-2:#e3d8bf; --bg-3:#d4c8a8; --bg-4:#c5b893;
+  --tx-0:#2b3520; --tx-1:#5e6b48; --tx-2:#8a9670; --tx-3:#a8b390; --tx-4:#c5b893;
+  --bg-card:#f7efdc; --bg-card-2:#efe6d2;
+  --line-0: rgba(58,74,44,.10); --line-1: rgba(58,74,44,.22);
+  --green:#5a8a3a; --green-2:#3e6b2c; --amber:#d8a23b; --red:#a8412c;
+  --green-soft: rgba(90,138,58,.10); --green-line: rgba(90,138,58,.35); --green-glow: rgba(90,138,58,.55);
+  --cyan-soft: rgba(90,138,58,.10); --cyan-line: rgba(90,138,58,.32);
+  --amber-soft: rgba(216,162,59,.12); --amber-line: rgba(216,162,59,.32);
+  --red-soft: rgba(193,89,58,.12); --red-line: rgba(193,89,58,.35);
+  --violet-soft: rgba(127,169,184,.12); --violet-line: rgba(127,169,184,.35);
+}
+
+/* 04 VAPORWAVE — clinical white, neon */
+body.theme-vaporwave {
+  --pink:#ff2d8e; --cyan:#00e0ff; --sun:#ffb000; --violet:#7a2dff;
+  --ink-0:#0a0a0a; --ink-1:#5b5566; --ink-2:#a39ab0; --ink-3:#c5bdd0;
+  --line:#1a1a1a; --line-2:#e6e3ec;
+  --bg-0:#fafafa; --bg-1:#ffffff; --bg-2:#f1eef6; --bg-3:#e8e3f0; --bg-4:#dad3e6;
+  --tx-0:#0a0a0a; --tx-1:#5b5566; --tx-2:#a39ab0; --tx-3:#c5bdd0; --tx-4:#dad3e6;
+  --bg-card:#ffffff; --bg-card-2:#f8f4fc;
+  --line-0: rgba(26,26,26,.08); --line-1: rgba(26,26,26,.18);
+  --green:#00d3a3; --green-2:#00b88a; --amber:#ffb000; --red:#ff2d4a;
+  --green-soft: rgba(255,45,142,.08); --green-line: rgba(255,45,142,.30); --green-glow: rgba(255,45,142,.45);
+  --cyan-soft: rgba(0,224,255,.08); --cyan-line: rgba(0,224,255,.30);
+  --amber-soft: rgba(255,176,0,.10); --amber-line: rgba(255,176,0,.30);
+  --red-soft: rgba(255,45,74,.10); --red-line: rgba(255,45,74,.30);
+  --violet-soft: rgba(122,45,255,.10); --violet-line: rgba(122,45,255,.30);
+}
+
+/* 05 RISOGRAPH — riso paper, blue/red ink */
+body.theme-risograph {
+  --pink:#d23b2a; --cyan:#2b4a8a; --sun:#d8a23b; --violet:#2a8a7a;
+  --ink-0:#1d1a14; --ink-1:#5a5247; --ink-2:#928971; --ink-3:#b0a78c;
+  --line:#1d1a14; --line-2:#c9bf9d;
+  --bg-0:#f1ead7; --bg-1:#f1ead7; --bg-2:#e7dfc6; --bg-3:#dcd2b3; --bg-4:#cfc59f;
+  --tx-0:#1d1a14; --tx-1:#5a5247; --tx-2:#928971; --tx-3:#b0a78c; --tx-4:#cfc59f;
+  --bg-card:#f1ead7; --bg-card-2:#e7dfc6;
+  --line-0: rgba(29,26,20,.10); --line-1: rgba(29,26,20,.22);
+  --green:#2a8a7a; --green-2:#1f6e60; --amber:#d8a23b; --red:#d23b2a;
+  --green-soft: rgba(42,138,122,.10); --green-line: rgba(42,138,122,.35); --green-glow: rgba(42,138,122,.55);
+  --cyan-soft: rgba(43,74,138,.10); --cyan-line: rgba(43,74,138,.32);
+  --amber-soft: rgba(216,162,59,.12); --amber-line: rgba(216,162,59,.32);
+  --red-soft: rgba(210,59,42,.12); --red-line: rgba(210,59,42,.35);
+  --violet-soft: rgba(42,138,122,.12); --violet-line: rgba(42,138,122,.35);
+}
+
+/* 06 CYBERPUNK — neon night */
+body.theme-cyberpunk {
+  --pink:#ff2bd6; --cyan:#00f0ff; --sun:#d4ff00; --violet:#ff3a3a;
+  --ink-0:#e8e6f5; --ink-1:#9b94c4; --ink-2:#5d5680; --ink-3:#3d3858;
+  --line:#2a2942; --line-2:#4a3f6e;
+  --bg-0:#07070c; --bg-1:#0d0d14; --bg-2:#15141f; --bg-3:#1c1a2a; --bg-4:#252238;
+  --tx-0:#e8e6f5; --tx-1:#9b94c4; --tx-2:#5d5680; --tx-3:#3d3858; --tx-4:#252238;
+  --bg-card: rgba(13,13,20,.85); --bg-card-2: rgba(21,20,31,.92);
+  --line-0: rgba(255,43,214,.10); --line-1: rgba(255,43,214,.25);
+  --green:#d4ff00; --green-2:#aacc00; --amber:#d4ff00; --red:#ff3a3a;
+  --green-soft: rgba(255,43,214,.10); --green-line: rgba(255,43,214,.35); --green-glow: rgba(255,43,214,.55);
+  --cyan-soft: rgba(0,240,255,.10); --cyan-line: rgba(0,240,255,.32);
+  --amber-soft: rgba(212,255,0,.12); --amber-line: rgba(212,255,0,.32);
+  --red-soft: rgba(255,58,58,.12); --red-line: rgba(255,58,58,.35);
+  --violet-soft: rgba(255,58,58,.10); --violet-line: rgba(255,58,58,.30);
+}
+
+/* 07 SUMI-E — washi paper, indigo, sakura */
+body.theme-sumie {
+  --pink:#d97a98; --cyan:#1d4670; --sun:#b5832e; --violet:#b3201f;
+  --ink-0:#1f1a14; --ink-1:#3a342c; --ink-2:#7a6f5e; --ink-3:#9d9080;
+  --line:#bfb290; --line-2:#7a6f5e;
+  --bg-0:#f0e8d2; --bg-1:#e6dcc0; --bg-2:#d9cca8; --bg-3:#cdc09a; --bg-4:#b8a983;
+  --tx-0:#1f1a14; --tx-1:#3a342c; --tx-2:#7a6f5e; --tx-3:#9d9080; --tx-4:#b8a983;
+  --bg-card:#e6dcc0; --bg-card-2:#f0e8d2;
+  --line-0: rgba(31,26,20,.10); --line-1: rgba(31,26,20,.22);
+  --green:#4a6b35; --green-2:#3a5429; --amber:#b5832e; --red:#b3201f;
+  --green-soft: rgba(74,107,53,.10); --green-line: rgba(74,107,53,.35); --green-glow: rgba(217,122,152,.50);
+  --cyan-soft: rgba(29,70,112,.10); --cyan-line: rgba(29,70,112,.32);
+  --amber-soft: rgba(181,131,46,.12); --amber-line: rgba(181,131,46,.32);
+  --red-soft: rgba(179,32,31,.12); --red-line: rgba(179,32,31,.35);
+  --violet-soft: rgba(179,32,31,.10); --violet-line: rgba(179,32,31,.30);
+}
+
+/* 08 MANGA — paper, black ink, shock red, burst yellow */
+body.theme-manga {
+  --pink:#ff1f1f; --cyan:#0a0a0a; --sun:#ffd60a; --violet:#666666;
+  --ink-0:#0a0a0a; --ink-1:#2a2a2a; --ink-2:#666666; --ink-3:#999999;
+  --line:#0a0a0a; --line-2:#999999;
+  --bg-0:#f4f1e8; --bg-1:#f4f1e8; --bg-2:#ebe7d8; --bg-3:#dcd6c2; --bg-4:#cdc6ad;
+  --tx-0:#0a0a0a; --tx-1:#2a2a2a; --tx-2:#666666; --tx-3:#999999; --tx-4:#cdc6ad;
+  --bg-card:#f4f1e8; --bg-card-2:#ebe7d8;
+  --line-0: rgba(10,10,10,.10); --line-1: rgba(10,10,10,.25);
+  --green:#0a0a0a; --green-2:#0a0a0a; --amber:#ffd60a; --red:#ff1f1f;
+  --green-soft: rgba(255,31,31,.08); --green-line: rgba(255,31,31,.35); --green-glow: rgba(255,31,31,.50);
+  --cyan-soft: rgba(10,10,10,.06); --cyan-line: rgba(10,10,10,.30);
+  --amber-soft: rgba(255,214,10,.18); --amber-line: rgba(255,214,10,.45);
+  --red-soft: rgba(255,31,31,.12); --red-line: rgba(255,31,31,.40);
+  --violet-soft: rgba(102,102,102,.10); --violet-line: rgba(102,102,102,.30);
+}
+
+/* 09 RAIN — wet asphalt, sodium lamp, neon */
+body.theme-rain {
+  --pink:#e85a5a; --cyan:#7ad8ff; --sun:#f6b35c; --violet:#c46a4a;
+  --ink-0:#dde6ee; --ink-1:#9aacbf; --ink-2:#5d6f82; --ink-3:#3e5266;
+  --line:#1e2e3d; --line-2:#2c3f54;
+  --bg-0:#0a1218; --bg-1:#0f1a23; --bg-2:#142230; --bg-3:#1a2c3d; --bg-4:#1f3548;
+  --tx-0:#dde6ee; --tx-1:#9aacbf; --tx-2:#5d6f82; --tx-3:#3e5266; --tx-4:#1f3548;
+  --bg-card: rgba(15,26,35,.85); --bg-card-2: rgba(20,34,48,.92);
+  --line-0: rgba(122,216,255,.08); --line-1: rgba(122,216,255,.20);
+  --green:#7eb38a; --green-2:#5e9670; --amber:#f6b35c; --red:#e85a5a;
+  --green-soft: rgba(126,179,138,.10); --green-line: rgba(126,179,138,.35); --green-glow: rgba(246,179,92,.45);
+  --cyan-soft: rgba(122,216,255,.10); --cyan-line: rgba(122,216,255,.32);
+  --amber-soft: rgba(246,179,92,.12); --amber-line: rgba(246,179,92,.32);
+  --red-soft: rgba(232,90,90,.12); --red-line: rgba(232,90,90,.35);
+  --violet-soft: rgba(196,106,74,.12); --violet-line: rgba(196,106,74,.35);
+}
+
+/* 10 AKIRA — neo-tokyo indigo, blood red */
+body.theme-akira {
+  --pink:#ff0844; --cyan:#00f0ff; --sun:#fff200; --violet:#ff5e8a;
+  --ink-0:#f1eaff; --ink-1:#a89cd0; --ink-2:#5d4d80; --ink-3:#3e3258;
+  --line:#2a1a4a; --line-2:#4a2a7a;
+  --bg-0:#0a0716; --bg-1:#120c25; --bg-2:#1a1132; --bg-3:#22193e; --bg-4:#2a2148;
+  --tx-0:#f1eaff; --tx-1:#a89cd0; --tx-2:#5d4d80; --tx-3:#3e3258; --tx-4:#2a2148;
+  --bg-card: rgba(18,12,37,.85); --bg-card-2: rgba(26,17,50,.92);
+  --line-0: rgba(255,8,68,.10); --line-1: rgba(255,8,68,.25);
+  --green:#fff200; --green-2:#d4cc00; --amber:#fff200; --red:#ff0844;
+  --green-soft: rgba(255,8,68,.10); --green-line: rgba(255,8,68,.35); --green-glow: rgba(255,8,68,.55);
+  --cyan-soft: rgba(0,240,255,.10); --cyan-line: rgba(0,240,255,.32);
+  --amber-soft: rgba(255,242,0,.12); --amber-line: rgba(255,242,0,.32);
+  --red-soft: rgba(255,8,68,.12); --red-line: rgba(255,8,68,.35);
+  --violet-soft: rgba(255,94,138,.10); --violet-line: rgba(255,94,138,.30);
+}
+
+/* 11 GHOST — netwatch clinical, pure cyan */
+body.theme-ghost {
+  --pink:#ff2d55; --cyan:#00ffd5; --sun:#ff6b00; --violet:#0ab39a;
+  --ink-0:#f4ffff; --ink-1:#8aa6b4; --ink-2:#3f5666; --ink-3:#293a48;
+  --line:#142028; --line-2:#1f3142;
+  --bg-0:#050a0e; --bg-1:#081116; --bg-2:#0d1820; --bg-3:#122029; --bg-4:#172832;
+  --tx-0:#f4ffff; --tx-1:#8aa6b4; --tx-2:#3f5666; --tx-3:#293a48; --tx-4:#172832;
+  --bg-card: rgba(8,17,22,.85); --bg-card-2: rgba(13,24,32,.92);
+  --line-0: rgba(0,255,213,.08); --line-1: rgba(0,255,213,.20);
+  --green:#00ffd5; --green-2:#0ab39a; --amber:#ff6b00; --red:#ff2d55;
+  --green-soft: rgba(0,255,213,.08); --green-line: rgba(0,255,213,.30); --green-glow: rgba(0,255,213,.45);
+  --cyan-soft: rgba(0,255,213,.08); --cyan-line: rgba(0,255,213,.30);
+  --amber-soft: rgba(255,107,0,.10); --amber-line: rgba(255,107,0,.32);
+  --red-soft: rgba(255,45,85,.10); --red-line: rgba(255,45,85,.32);
+  --violet-soft: rgba(10,179,154,.10); --violet-line: rgba(10,179,154,.30);
+}
+
+/* 12 SYNTHWAVE — outrun sunset (default — same as :root) */
+body.theme-synthwave { /* matches :root */ }
+
+/* light themes share — disable synthwave glow + horizon strip */
+body.is-light::before,
+body.is-light::after { display: none !important; }
+body.is-light {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, var(--bg-2) 0%, var(--bg-0) 60%) fixed,
+    var(--bg-0) !important;
+}
+body.is-light .horizon-strip { display: none; }
+/* hide synthwave horizon + sun glow on any non-synthwave theme */
+body:not(.theme-synthwave) .horizon-strip { display: none; }
+body:not(.theme-synthwave)::before,
+body:not(.theme-synthwave)::after { display: none !important; }
+body:not(.theme-synthwave):not(.is-light) {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, var(--bg-2) 0%, var(--bg-0) 60%) fixed,
+    var(--bg-0) !important;
+}
+body.is-light .pcard {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--line-2);
+}
+body.is-light .pcard::before { display: none; }
+body.is-light .pc-name {
+  background: none !important;
+  -webkit-text-fill-color: var(--tx-0) !important;
+  color: var(--tx-0) !important;
+  filter: none !important;
+}
+body.is-light .modal,
+body.is-light .ctx-menu,
+body.is-light .cp { background: var(--bg-1) !important; color: var(--tx-1); }
+body.is-light .modal { border: 1px solid var(--line-2); }
+body.is-light .tb,
+body.is-light .toolbar,
+body.is-light .tabs { background: var(--bg-2); border-color: var(--line-2); }
+body.is-light .main { background: var(--bg-0); }
+body.is-light .pc-stack,
+body.is-light .pc-tags { background: transparent; }
+body.is-light .badge { background: var(--bg-2); }
+body.is-light .chip { background: var(--bg-2); }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1522,6 +1748,25 @@ body.theme-dark::after {
   border-color: var(--pink);
   box-shadow: 0 0 12px rgba(255, 46, 147, .35);
 }
+.theme-select {
+  background: rgba(20, 8, 40, .85);
+  color: var(--ink-0);
+  border: 1px solid var(--line-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 6px 10px;
+  cursor: pointer;
+  min-width: 200px;
+  outline: none;
+  border-radius: 2px;
+  transition: border-color .15s;
+}
+.theme-select:hover,
+.theme-select:focus { border-color: var(--cyan); }
+.theme-select option { background: #0a0418; color: #fff; }
+body.is-light .theme-select { background: var(--bg-2); color: var(--tx-0); }
+body.is-light .theme-select option { background: var(--bg-1); color: var(--tx-0); }
+
 .switch.on::after {
   left: 20px;
   background: #1a0428;
@@ -2537,6 +2782,47 @@ body, .root, .main { max-width: 100vw; }
   }
   window.doAction = doAction
 
+  /* ═════════ Themes ═════════ */
+  const THEMES = [
+    { id: 'synthwave',  label: 'Outrun synthwave',    light: false },
+    { id: 'brutalist',  label: 'Brutalist editorial', light: true  },
+    { id: 'blueprint',  label: 'Cyberdeck blueprint', light: false },
+    { id: 'solarpunk',  label: 'Solarpunk pixel',     light: true  },
+    { id: 'vaporwave',  label: 'Vaporwave clínico',   light: true  },
+    { id: 'risograph',  label: 'Risograph field',     light: true  },
+    { id: 'cyberpunk',  label: 'Cyberpunk neon',      light: false },
+    { id: 'sumie',      label: 'Hanami sumi-e',       light: true  },
+    { id: 'manga',      label: 'Manga halftone',      light: true  },
+    { id: 'rain',       label: 'Petrichor rain',      light: false },
+    { id: 'akira',      label: 'Neo-Tokyo akira',     light: false },
+    { id: 'ghost',      label: 'Netwatch ghost',      light: false },
+  ]
+  function normalizeTheme(t) {
+    if (!t) return 'synthwave'
+    if (t === 'dark') return 'synthwave'
+    if (t === 'light') return 'vaporwave'
+    return THEMES.some(x => x.id === t) ? t : 'synthwave'
+  }
+  function applyTheme(id) {
+    const tid = normalizeTheme(id)
+    const meta = THEMES.find(x => x.id === tid)
+    /* clear all theme-* classes */
+    for (const c of Array.from(document.body.classList)) {
+      if (c.startsWith('theme-') || c === 'is-light') document.body.classList.remove(c)
+    }
+    document.body.classList.add('theme-' + tid)
+    /* synthwave keeps the legacy dark gradient + sun glow */
+    if (tid === 'synthwave') document.body.classList.add('theme-dark')
+    if (meta && meta.light) document.body.classList.add('is-light')
+  }
+  async function setTheme(id) {
+    const tid = normalizeTheme(id)
+    applyTheme(tid)
+    if (config) config.theme = tid
+    await window.asura.setConfig({ theme: tid })
+    toast('tema: ' + (THEMES.find(x => x.id === tid) || {}).label)
+  }
+
   /* ═════════ Always-on-top ═════════ */
   async function toggleAlwaysOnTop() {
     const on = !(config && config.alwaysOnTop)
@@ -2559,10 +2845,12 @@ body, .root, .main { max-width: 100vw; }
       </div>
       <div class="set-row">
         <div class="set-l">
-          <div class="set-name">Tema claro</div>
-          <div class="set-desc">interfaz en modo light</div>
+          <div class="set-name">Tema visual</div>
+          <div class="set-desc">12 direcciones — pruébalas todas</div>
         </div>
-        <div class="switch ${config.theme === 'light' ? 'on' : ''}" data-set="theme"></div>
+        <select id="theme-select" class="theme-select">
+          ${THEMES.map(t => '<option value="' + t.id + '"' + (normalizeTheme(config.theme) === t.id ? ' selected' : '') + '>' + t.label + '</option>').join('')}
+        </select>
       </div>
       <div class="set-row">
         <div class="set-l">
@@ -2602,19 +2890,18 @@ body, .root, .main { max-width: 100vw; }
     `
     openModal('Ajustes', html)
 
+    const themeSel = document.getElementById('theme-select')
+    if (themeSel) {
+      themeSel.addEventListener('change', (e) => setTheme(e.target.value))
+    }
+
     document.querySelectorAll('.modal .switch').forEach(sw => {
       sw.addEventListener('click', async () => {
         const key = sw.dataset.set
         const newVal = !sw.classList.contains('on')
         sw.classList.toggle('on')
 
-        if (key === 'theme') {
-          const theme = newVal ? 'light' : 'dark'
-          document.body.classList.toggle('theme-light', newVal)
-          document.body.classList.toggle('theme-dark', !newVal)
-          await window.asura.setConfig({ theme })
-          config.theme = theme
-        } else if (key === 'alwaysOnTop') {
+        if (key === 'alwaysOnTop') {
           await window.asura.alwaysOnTop(newVal)
           config.alwaysOnTop = newVal
           document.getElementById('aot-btn').classList.toggle('active', newVal)
@@ -2663,7 +2950,8 @@ body, .root, .main { max-width: 100vw; }
       { label: 'Toggle always on top',    hint: 'aot',    run: () => toggleAlwaysOnTop() },
       { label: 'Abrir ajustes',           hint: '',       run: () => openSettings() },
       { label: 'Limpiar alertas',         hint: '',       run: async () => { await window.asura.clearAlerts(); toast('alertas limpiadas') } },
-      { label: 'Cambiar tema (dark/light)', hint: '',     run: () => { const t = config.theme === 'dark' ? 'light' : 'dark'; document.body.classList.toggle('theme-light', t === 'light'); document.body.classList.toggle('theme-dark', t === 'dark'); window.asura.setConfig({ theme: t }); config.theme = t; toast('tema: ' + t) } },
+      { label: 'Siguiente tema visual', hint: '',         run: () => { const idx = THEMES.findIndex(t => t.id === normalizeTheme(config.theme)); setTheme(THEMES[(idx + 1) % THEMES.length].id) } },
+      ...THEMES.map(t => ({ label: 'Tema · ' + t.label, hint: t.id, run: () => setTheme(t.id) })),
       { label: 'Minimizar a tray',        hint: '',       run: () => window.asura.hide() },
     ]
     for (const c of cmds) {
@@ -3449,8 +3737,7 @@ body, .root, .main { max-width: 100vw; }
   }
   function onConfig(c) {
     config = c
-    document.body.classList.toggle('theme-light', config.theme === 'light')
-    document.body.classList.toggle('theme-dark', config.theme !== 'light')
+    applyTheme(config.theme)
     document.getElementById('aot-btn').classList.toggle('active', config.alwaysOnTop)
     if (activeTab === 'alerts') render()
     document.getElementById('cnt-alerts').textContent = (config.alertsHistory || []).length

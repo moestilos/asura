@@ -10,7 +10,7 @@ export interface Config {
   favorites:        string[]              // project names pinned
   hidden:           string[]              // project names hidden
   alwaysOnTop:      boolean
-  theme:            'dark' | 'light'
+  theme:            string   // theme id: synthwave | brutalist | blueprint | … (12 themes)
   soundOnAlert:     boolean
   notifyOnBotDone:  boolean
   notifyOnBotStuck: boolean
@@ -39,7 +39,7 @@ const DEFAULTS: Config = {
   favorites:        [],
   hidden:           [],
   alwaysOnTop:      false,
-  theme:            'dark',
+  theme:            'synthwave',
   soundOnAlert:     false,
   notifyOnBotDone:  true,
   notifyOnBotStuck: true,
