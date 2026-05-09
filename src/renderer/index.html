@@ -959,6 +959,164 @@ body.theme-ghost #theme-fx .fx-c {
 @keyframes ghost-band    { from { top: -80px; } to { top: 100vh; } }
 @keyframes ghost-flicker { 0%,100% { opacity: 1; } 50% { opacity: .96; } 51% { opacity: 1; } }
 
+/* ═════════ ELABORATE THEME FX — fx-d layer additions ═════════ */
+
+/* 01 brutalist · vertical tick marks left edge + corner cursor blink */
+body.theme-brutalist #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 19px, var(--ink-0) 19px 20px) 0 0/3px 100% no-repeat,
+    radial-gradient(circle 6px at calc(100% - 32px) calc(100% - 32px), var(--ink-0) 50%, transparent 51%);
+  animation: brut-cursor 1.1s steps(2) infinite;
+}
+@keyframes brut-cursor {
+  0%,49% { background-color: transparent; }
+  50%,100% { background-color: transparent; opacity: .55; }
+}
+
+/* 02 blueprint · radar sweep + tech blueprint glyphs drifting */
+body.theme-blueprint #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    conic-gradient(from 0deg at 80% 75%, transparent 0deg, rgba(92,242,255,.16) 6deg, transparent 30deg),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><g fill='none' stroke='%235cf2ff' stroke-width='.6' opacity='.20'><circle cx='80' cy='80' r='28'/><circle cx='80' cy='80' r='40'/><line x1='40' y1='80' x2='120' y2='80'/><line x1='80' y1='40' x2='80' y2='120'/><rect x='220' y='160' width='80' height='40'/><line x1='220' y1='180' x2='300' y2='180'/><circle cx='340' cy='340' r='18'/><line x1='320' y1='340' x2='360' y2='340'/></g></svg>");
+  animation: bp-radar 14s linear infinite, bp-glyph 90s linear infinite;
+}
+@keyframes bp-radar { to { background-position: 0 0, 0 0; transform: rotate(0deg); } }
+@keyframes bp-glyph { from { background-position: 0 0, 0 0; } to { background-position: 0 0, 400px 400px; } }
+
+/* 03 solarpunk · pollen specks + 2nd leaf wave */
+body.theme-solarpunk #theme-fx .fx-d {
+  opacity: 1;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='%23d8a23b' opacity='.55'><circle cx='30' cy='40' r='1.2'/><circle cx='110' cy='80' r='1'/><circle cx='200' cy='150' r='1.4'/><circle cx='250' cy='40' r='1'/><circle cx='80' cy='220' r='1.2'/><circle cx='180' cy='270' r='1'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><g fill='%233e6b2c' opacity='.20'><path d='M50 20 Q60 5 75 20 Q60 35 50 20 M180 110 Q190 95 205 110 Q190 125 180 110 M40 180 Q50 165 65 180 Q50 195 40 180'/></g></svg>");
+  animation: sp-pollen 60s linear infinite, sp-drift2 55s linear infinite;
+}
+@keyframes sp-pollen { from { background-position: 0 0, 0 0; } to { background-position: 30px -100vh, 0 0; } }
+@keyframes sp-drift2 { from { background-position: 0 0, 0 0; } to { background-position: 0 0, -150px 240px; } }
+
+/* 04 vaporwave · floating triangles + grain dust */
+body.theme-vaporwave #theme-fx .fx-d {
+  opacity: 1;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='none' stroke='%23ff2d8e' stroke-width='1.2' opacity='.30'><polygon points='40,30 60,70 20,70'/><polygon points='220,80 240,120 200,120'/><polygon points='130,200 150,240 110,240'/></g><g fill='none' stroke='%2300e0ff' stroke-width='1.2' opacity='.30'><polygon points='250,30 270,70 230,70'/><polygon points='60,170 80,210 40,210'/></g></svg>"),
+    radial-gradient(circle, rgba(0,0,0,.04) 1px, transparent 1.5px) 0 0/2px 2px;
+  animation: vw-float 18s ease-in-out infinite, vw-grain 1s steps(3) infinite;
+}
+@keyframes vw-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes vw-grain { 0%{background-position:0 0,0 0;} 33%{background-position:0 0,1px 0;} 66%{background-position:0 0,1px 1px;} 100%{background-position:0 0,0 1px;} }
+
+/* 05 risograph · sun shape rising + offset stamp marks */
+body.theme-risograph #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    radial-gradient(circle 200px at 80% 110%, rgba(216,162,59,.30), rgba(216,162,59,.10) 50%, transparent 65%),
+    radial-gradient(circle 198px at 79.5% 109.5%, rgba(210,59,42,.20), transparent 65%);
+  animation: riso-sun 40s ease-in-out infinite alternate;
+}
+@keyframes riso-sun { from { background-position: 0 0, 0 0; transform: translateY(0); } to { background-position: 0 0, 0 0; transform: translateY(-30px); } }
+
+/* 06 cyberpunk · matrix code columns multi-speed + edge flash */
+body.theme-cyberpunk #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    linear-gradient(180deg, transparent 0%, var(--cyan) 30%, var(--cyan) 70%, transparent 100%) 5%  0/1px 60px  no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--pink) 30%, var(--pink) 70%, transparent 100%) 18% 0/2px 100px no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--cyan) 30%, var(--cyan) 70%, transparent 100%) 28% 0/1px 80px  no-repeat,
+    linear-gradient(180deg, transparent 0%, #d4ff00 30%, #d4ff00 70%, transparent 100%)         45% 0/2px 140px no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--pink) 30%, var(--pink) 70%, transparent 100%) 52% 0/1px 70px  no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--cyan) 30%, var(--cyan) 70%, transparent 100%) 68% 0/2px 110px no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--pink) 30%, var(--pink) 70%, transparent 100%) 78% 0/1px 90px  no-repeat,
+    linear-gradient(180deg, transparent 0%, var(--cyan) 30%, var(--cyan) 70%, transparent 100%) 92% 0/1px 130px no-repeat;
+  animation: cp-matrix 3s linear infinite;
+}
+@keyframes cp-matrix {
+  from { background-position-y: -60px,-100px,-80px,-140px,-70px,-110px,-90px,-130px; }
+  to   { background-position-y: 100vh, 100vh, 100vh, 100vh, 100vh, 100vh, 100vh, 100vh; }
+}
+
+/* 07 sumie · large slow petals + bamboo-stroke verticals + ink bloom */
+body.theme-sumie #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><g fill='%23d97a98' opacity='.55'><path d='M100 80 Q108 70 116 80 Q108 90 100 80 Q92 90 100 100 Q108 90 100 80'/><path d='M380 220 Q388 210 396 220 Q388 230 380 220 Q372 230 380 240 Q388 230 380 220'/><path d='M200 460 Q208 450 216 460 Q208 470 200 460 Q192 470 200 480 Q208 470 200 460'/></g></svg>"),
+    linear-gradient(180deg, transparent 60%, rgba(31,26,20,.06) 90%, rgba(31,26,20,.10));
+  animation: sumi-bigpetal 65s linear infinite;
+}
+@keyframes sumi-bigpetal { from { background-position: 0 -600px, 0 0; } to { background-position: 80px 100vh, 0 0; } }
+
+/* 08 manga · vertical panel slashes + KAPOW burst occasional */
+body.theme-manga #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    repeating-linear-gradient(80deg, transparent 0 60px, rgba(0,0,0,.04) 60px 62px),
+    radial-gradient(circle at 25% 30%, rgba(255,31,31,.18) 0%, transparent 12%),
+    radial-gradient(circle at 75% 70%, rgba(255,214,10,.22) 0%, transparent 14%);
+  animation: manga-slash 18s linear infinite, manga-flash 9s ease-in-out infinite;
+}
+@keyframes manga-slash { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 120px 0, 0 0, 0 0; } }
+@keyframes manga-flash {
+  0%,80% { background-color: transparent; }
+  81%    { filter: brightness(1.4); }
+  84%    { filter: brightness(1); }
+  100%   { filter: brightness(1); }
+}
+
+/* 09 rain · lightning flash periodic + 3rd raindrop wave + puddle ripples bottom */
+body.theme-rain #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 60% 8% at 30% 96%, rgba(122,216,255,.15), transparent 60%),
+    radial-gradient(ellipse 40% 6% at 70% 98%, rgba(246,179,92,.18), transparent 60%),
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,.10) 30%, transparent 100%);
+  animation: rain-lightning 11s ease-in-out infinite, rain-ripple 4s ease-in-out infinite;
+}
+@keyframes rain-lightning {
+  0%,90% { background-color: transparent; opacity: 1; }
+  91%    { background-color: rgba(255,255,255,.18); }
+  92%    { background-color: transparent; }
+  93%    { background-color: rgba(255,255,255,.30); }
+  94%,100% { background-color: transparent; }
+}
+@keyframes rain-ripple { 0%,100% { background-position: 0 0,0 0,0 0; } 50% { background-position: 0 -2px,0 -1px,0 0; } }
+
+/* 10 akira · sparks + light streak horizontal motorbike trails + intense red core */
+body.theme-akira #theme-fx .fx-d {
+  opacity: 1;
+  background-image:
+    linear-gradient(90deg, transparent, var(--cyan) 50%, transparent),
+    linear-gradient(90deg, transparent, var(--pink) 50%, transparent),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><g fill='%23ff0844' opacity='.7'><circle cx='40' cy='80' r='1'/><circle cx='200' cy='150' r='1.2'/><circle cx='340' cy='220' r='1'/><circle cx='80' cy='320' r='1'/><circle cx='280' cy='380' r='1.4'/></g></svg>");
+  background-size: 320px 1px, 240px 2px, 400px 400px;
+  background-position: -320px 35%, -240px 65%, 0 0;
+  background-repeat: no-repeat, no-repeat, repeat;
+  animation: akira-bike 3.5s linear infinite, akira-spark 6s linear infinite;
+}
+@keyframes akira-bike  { from { background-position: -320px 35%, -240px 65%, 0 0; } to { background-position: 100vw 35%, 100vw 65%, 0 0; } }
+@keyframes akira-spark { from { background-position: -320px 35%, -240px 65%, 0 0; } to { background-position: -320px 35%, -240px 65%, 0 -400px; } }
+
+/* 11 ghost · cursor block bottom-left + horizontal glitch slice + boot text */
+body.theme-ghost #theme-fx .fx-d {
+  opacity: 1;
+  background:
+    linear-gradient(transparent, transparent) calc(20px) calc(100% - 36px)/8px 14px no-repeat,
+    radial-gradient(ellipse 100% 4% at 50% 30%, var(--cyan), transparent 70%),
+    radial-gradient(ellipse 100% 2% at 50% 60%, var(--cyan), transparent 70%);
+  animation: ghost-cursor 1s steps(2) infinite, ghost-tear 5s linear infinite;
+}
+@keyframes ghost-cursor {
+  0%   { background-color: transparent; }
+  50%  { box-shadow: inset 20px calc(-36px) 0 0 var(--cyan); }
+  51%  { box-shadow: none; }
+  100% { background-color: transparent; }
+}
+@keyframes ghost-tear {
+  0%,90% { background-position: 20px calc(100% - 36px), 0 30%, 0 60%; opacity: 1; }
+  92%    { background-position: 20px calc(100% - 36px), 0 33%, 0 58%; opacity: .9; }
+  94%    { background-position: 20px calc(100% - 36px), 0 30%, 0 60%; opacity: 1; }
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
