@@ -13,7 +13,8 @@ export type ThemeId =
 
 export interface Config {
   favorites:        string[]              // project names pinned
-  hidden:           string[]              // project names hidden
+  hidden:           string[]              // project names hidden (oculto en cualquier vista)
+  archived:         string[]              // project names archived (oculto en TODOS, visible en ARCHIVADOS)
   alwaysOnTop:      boolean
   theme:            ThemeId
   soundOnAlert:     boolean
@@ -43,6 +44,7 @@ export interface AlertEntry {
 const DEFAULTS: Config = {
   favorites:        [],
   hidden:           [],
+  archived:         [],
   alwaysOnTop:      false,
   theme:            'synthwave',
   soundOnAlert:     false,
@@ -75,6 +77,7 @@ export async function loadConfig(): Promise<Config> {
     cache = { ...DEFAULTS, ...data,
       favorites:        Array.isArray(data.favorites) ? data.favorites : [],
       hidden:           Array.isArray(data.hidden) ? data.hidden : [],
+      archived:         Array.isArray(data.archived) ? data.archived : [],
       workspaceRoots:   Array.isArray(data.workspaceRoots) ? data.workspaceRoots : [],
       alertsHistory:    Array.isArray(data.alertsHistory) ? data.alertsHistory : [],
       projectFirstSeen: data.projectFirstSeen || {},

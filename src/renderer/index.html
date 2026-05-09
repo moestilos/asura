@@ -679,10 +679,13 @@ body.theme-ghost .modal { border: 1px solid var(--cyan); border-radius: 0; box-s
 #theme-fx {
   position: fixed; inset: 0;
   pointer-events: none;
-  z-index: -10;
+  z-index: 0;
   overflow: hidden;
   isolation: isolate;
 }
+/* body bg pinta antes que theme-fx — para no taparlo en is-light */
+body.is-light { background: var(--bg-0) !important; }
+body:not(.theme-synthwave):not(.is-light) { background: var(--bg-0) !important; }
 #theme-fx .fx {
   position: absolute; inset: 0;
   opacity: 0;
