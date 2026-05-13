@@ -3634,6 +3634,13 @@ body, .root, .main { max-width: 100vw; }
         </div>
         <div class="switch ${config.autoStart ? 'on' : ''}" data-set="autoStart"></div>
       </div>
+      <div class="set-row">
+        <div class="set-l">
+          <div class="set-name">AdminMode</div>
+          <div class="set-desc">lanza Claude Code con --dangerously-skip-permissions</div>
+        </div>
+        <div class="switch ${config.adminMode ? 'on' : ''}" data-set="adminMode"></div>
+      </div>
     `
     openModal('Ajustes', html)
 

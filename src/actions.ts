@@ -53,13 +53,16 @@ export async function runAction(
       runShell(`cursor ${quote(projectPath)}`)
       return 'cursor opened'
 
-    case 'open-terminal':
+    case 'open-terminal': {
+      const cfg = getConfig()
+      const claudeCmd = cfg.adminMode ? 'claude --dangerously-skip-permissions' : 'claude'
       try {
-        runShell(`wt -d ${quote(projectPath)} cmd /k claude`)
+        runShell(`wt -d ${quote(projectPath)} cmd /k ${claudeCmd}`)
       } catch {
-        runShell(`start "" cmd /k "cd /d ${quote(projectPath)} && claude"`)
+        runShell(`start "" cmd /k "cd /d ${quote(projectPath)} && ${claudeCmd}"`)
       }
       return 'terminal opened'
+    }
 
     case 'open-folder':
     case 'open-explorer':
