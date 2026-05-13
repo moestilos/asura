@@ -31,6 +31,7 @@ export interface Config {
   snoozedUntil:     Record<string, number> // alertKey -> ts
   installedAt:      number                  // first ever launch ts — projects firstSeen near this aren't "new"
   autoStart:        boolean                  // launch on Windows boot
+  githubToken?:     string                   // GitHub Personal Access Token
 }
 
 export interface AlertEntry {

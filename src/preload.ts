@@ -43,6 +43,12 @@ contextBridge.exposeInMainWorld('asura', {
   action:           (kind: string, project: string, extra?: string) =>
     ipcRenderer.invoke('action', kind, project, extra),
 
+  /* github */
+  requestGithubRefresh: ()         => ipcRenderer.send('request-github-refresh'),
+  onGithubUpdate:       (cb: (g: any) => void) =>
+    ipcRenderer.on('github-update', (_e, data) => cb(data)),
+  markNotificationRead: (id: string) => ipcRenderer.invoke('mark-notification-read', id),
+
   /* window */
   close:            ()        => ipcRenderer.send('close-window'),
   hide:             ()        => ipcRenderer.send('hide-window'),

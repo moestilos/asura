@@ -10,6 +10,10 @@ import {
 import { setNotifyWindow, notify } from './notifications'
 import { getDetail } from './detail'
 import { snapshot as infraSnapshot, containerAction, Runtime as DockerRuntime, Snapshot as InfraSnap } from './docker'
+import {
+  fetchRepoData, fetchNotifications, fetchUserRepos, markNotificationRead,
+  GitHubRepoData, GitHubNotification, GitHubUserRepo,
+} from './github'
 
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..')
 
@@ -20,6 +24,12 @@ let timer:  NodeJS.Timeout | null = null
 let activityTimer: NodeJS.Timeout | null = null
 let infraTimer: NodeJS.Timeout | null = null
 let lastInfra: InfraSnap | null = null
+let githubTimer: NodeJS.Timeout | null = null
+let githubState: {
+  repoData:      Record<string, GitHubRepoData>
+  notifications: GitHubNotification[]
+  userRepos:     GitHubUserRepo[]
+} = { repoData: {}, notifications: [], userRepos: [] }
 
 /* ── Tray icon (16x16 native pixel — Asura Pixel Phantom) ─────────────────── */
 const TRAY_ICON_DATA = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZUlEQVR4nGNgGGjAiMz5//X3f6I0cbPC9TFR6gImSg1gQeaw8wlSZgAI/NRuZ4AB9quVYDrsz2e42CoWXgacgcjGzENUIP76+4WRPrHAzidIMFyYiLERr2sYBlVCYkQyGZ/Y4AIA38QWr1JwKVMAAAAASUVORK5CYII='
@@ -167,6 +177,31 @@ function startInfraPolling() {
   infraTimer = setInterval(sendInfra, 3000)
 }
 
+async function refreshGitHub() {
+  const token = getConfig().githubToken
+  if (!token) return
+
+  const ghRepos = [...new Set(cache.map(p => p.githubRepo).filter((r): r is string => !!r))]
+  const [repoResults, notifications, userRepos] = await Promise.all([
+    Promise.allSettled(ghRepos.map(repo => fetchRepoData(token, repo).then(data => ({ repo, data })))),
+    fetchNotifications(token),
+    fetchUserRepos(token),
+  ])
+
+  for (const r of repoResults) {
+    if (r.status === 'fulfilled') githubState.repoData[r.value.repo] = r.value.data
+  }
+  githubState.notifications = notifications
+  githubState.userRepos     = userRepos
+
+  if (win && !win.isDestroyed()) win.webContents.send('github-update', githubState)
+}
+
+function startGithubPolling() {
+  if (githubTimer) clearInterval(githubTimer)
+  githubTimer = setInterval(refreshGitHub, 5 * 60_000)
+}
+
 /* track time spent per project — simplified: count refreshes where project is "active" */
 function startActivityTracking() {
   let lastTick = Date.now()
@@ -229,6 +264,18 @@ ipcMain.handle('get-detail',     async (_e, projectName: string) => {
   return getDetail(proj.path)
 })
 
+ipcMain.on('request-github-refresh', () => refreshGitHub())
+
+ipcMain.handle('mark-notification-read', async (_e, id: string) => {
+  const token = getConfig().githubToken
+  if (!token) return
+  await markNotificationRead(token, id)
+  githubState.notifications = githubState.notifications.map(n =>
+    n.id === id ? { ...n, unread: false } : n
+  )
+  if (win && !win.isDestroyed()) win.webContents.send('github-update', githubState)
+})
+
 ipcMain.handle('action', async (_e, kind: ActionKind, projectName: string, extra?: string) => {
   const proj = cache.find(p => p.name === projectName)
   if (!proj) return 'project not found'
@@ -263,11 +310,14 @@ app.whenReady().then(async () => {
   startActivityTracking()
   startInfraPolling()
   sendInfra()
+  startGithubPolling()
+  refreshGitHub()
 })
 
 app.on('window-all-closed', () => { /* keep alive in tray */ })
 app.on('before-quit', () => {
   if (timer) clearInterval(timer)
   if (activityTimer) clearInterval(activityTimer)
+  if (githubTimer) clearInterval(githubTimer)
   stopBotDaemon()
 })

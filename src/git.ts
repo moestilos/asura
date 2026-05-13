@@ -11,6 +11,7 @@ export interface GitInfo {
   dirtyCount:    number
   ahead:         number
   behind:        number
+  remoteUrl:     string | null
 }
 
 async function safeExec(cmd: string, cwd: string): Promise<string> {
@@ -25,18 +26,19 @@ async function safeExec(cmd: string, cwd: string): Promise<string> {
 export async function gitInfo(projectPath: string): Promise<GitInfo> {
   const empty: GitInfo = {
     isRepo: false, branch: null, lastCommitTs: null, lastCommitMsg: null,
-    dirtyCount: 0, ahead: 0, behind: 0,
+    dirtyCount: 0, ahead: 0, behind: 0, remoteUrl: null,
   }
 
   const inside = await safeExec('git rev-parse --is-inside-work-tree', projectPath)
   if (inside !== 'true') return empty
 
-  const [branch, lastTs, lastMsg, dirty, aheadBehind] = await Promise.all([
+  const [branch, lastTs, lastMsg, dirty, aheadBehind, remoteUrl] = await Promise.all([
     safeExec('git rev-parse --abbrev-ref HEAD', projectPath),
     safeExec('git log -1 --format=%ct', projectPath),
     safeExec('git log -1 --format=%s', projectPath),
     safeExec('git status --porcelain', projectPath),
     safeExec('git rev-list --left-right --count HEAD...@{upstream}', projectPath),
+    safeExec('git remote get-url origin', projectPath),
   ])
 
   const dirtyCount = dirty ? dirty.split('\n').filter(Boolean).length : 0
@@ -55,5 +57,6 @@ export async function gitInfo(projectPath: string): Promise<GitInfo> {
     dirtyCount,
     ahead,
     behind,
+    remoteUrl:     remoteUrl || null,
   }
 }

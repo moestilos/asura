@@ -3068,6 +3068,84 @@ body, .root, .main { max-width: 100vw; }
   .horizon-strip .sun { width: 70px; height: 70px; bottom: -42px; }
 }
 
+/* ═════ GitHub badges ═════ */
+.badge.gh-ci.ci-ok      { background: var(--green-soft);   border-color: var(--green-line);   color: var(--green); }
+.badge.gh-ci.ci-fail    { background: var(--red-soft);     border-color: var(--red-line);     color: var(--red); }
+.badge.gh-ci.ci-pending { background: var(--amber-soft);   border-color: var(--amber-line);   color: var(--amber); }
+.badge.gh-pr            { background: var(--violet-soft);  border-color: var(--violet-line);  color: var(--violet); }
+.badge.gh-issue         { background: var(--cyan-soft);    border-color: var(--cyan-line);    color: var(--cyan); }
+
+/* ═════ GitHub tab content ═════ */
+.gh-setup {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px; padding: 40px 20px; text-align: center;
+}
+.gh-setup h3 { font-size: 16px; color: var(--tx-0); margin: 0; }
+.gh-setup p  { font-size: 12px; color: var(--tx-2); margin: 0; max-width: 340px; line-height: 1.5; }
+.gh-token-row { display: flex; gap: 8px; width: 100%; max-width: 400px; }
+.gh-token-input {
+  flex: 1; background: var(--bg-2); border: 1px solid var(--line-1);
+  color: var(--tx-0); border-radius: var(--r-sm); padding: 7px 10px;
+  font-size: 12px; font-family: var(--mono);
+}
+.gh-token-input:focus { outline: none; border-color: var(--pink); }
+.gh-help { font-size: 11px; color: var(--tx-3); }
+.gh-help a { color: var(--cyan); text-decoration: none; }
+.gh-help a:hover { text-decoration: underline; }
+
+.gh-panel { display: flex; flex-direction: column; gap: 0; overflow-y: auto; height: 100%; }
+.gh-section { padding: 10px 12px; }
+.gh-section + .gh-section { border-top: 1px solid var(--line-0); }
+.gh-section-hdr {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; color: var(--tx-2);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 8px;
+}
+.gh-section-hdr > span { flex: 1; display: flex; align-items: center; gap: 6px; }
+.gh-section-hdr svg { width: 13px; height: 13px; }
+.gh-unread-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--pink); color: #fff;
+  font-size: 10px; font-weight: 700; padding: 1px 5px;
+  border-radius: 8px; min-width: 18px;
+}
+.gh-empty { font-size: 12px; color: var(--tx-3); padding: 6px 0; }
+
+.gh-notif-list { display: flex; flex-direction: column; gap: 2px; }
+.gh-notif-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 7px 8px; border-radius: var(--r-sm);
+  cursor: pointer; border: 1px solid transparent;
+}
+.gh-notif-row:hover { background: var(--bg-2); border-color: var(--line-0); }
+.gh-notif-row.unread { border-left: 2px solid var(--pink); padding-left: 6px; }
+.gh-notif-type { font-size: 13px; color: var(--tx-2); margin-top: 1px; flex-shrink: 0; }
+.gh-notif-body { flex: 1; min-width: 0; }
+.gh-notif-repo { font-size: 10px; color: var(--tx-3); margin-bottom: 2px; }
+.gh-notif-title { font-size: 12px; color: var(--tx-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gh-notif-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+.gh-notif-reason { font-size: 9px; color: var(--tx-3); text-transform: uppercase; letter-spacing: .04em; }
+.gh-notif-time { font-size: 10px; color: var(--tx-3); }
+
+.gh-repos-list { display: flex; flex-direction: column; gap: 2px; }
+.gh-repo-row {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 7px 8px; border-radius: var(--r-sm);
+  cursor: pointer; border: 1px solid transparent;
+}
+.gh-repo-row:hover { background: var(--bg-2); border-color: var(--line-0); }
+.gh-repo-name { font-size: 12px; font-weight: 600; color: var(--tx-0); display: flex; align-items: center; gap: 6px; }
+.gh-repo-desc { font-size: 11px; color: var(--tx-2); }
+.gh-repo-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.gh-private {
+  font-size: 9px; background: var(--amber-soft); border: 1px solid var(--amber-line);
+  color: var(--amber); border-radius: var(--r-xs); padding: 1px 4px;
+  font-weight: 600; text-transform: uppercase;
+}
+.gh-change-token { font-size: 10px; color: var(--tx-3); cursor: pointer; padding: 0; }
+.gh-change-token:hover { color: var(--pink); }
+
 </style>
 </head>
 <body>
@@ -3197,6 +3275,11 @@ body, .root, .main { max-width: 100vw; }
       <span>Alerts</span>
       <span class="tab-c" id="cnt-alerts">0</span>
     </button>
+    <button class="tab" data-tab="github">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+      <span>GitHub</span>
+      <span class="tab-c" id="cnt-github">0</span>
+    </button>
   </div>
 
   <!-- Toolbar -->
@@ -3273,6 +3356,7 @@ body, .root, .main { max-width: 100vw; }
   let bots = []
   let infra = null    // { ts, runtimes: [{runtime, available, daemonUp, containers}] }
   let config = null
+  let githubState = { repoData: {}, notifications: [], userRepos: [] }
   let activeTab = 'apps'
   let activeFilter = 'all'
   let searchQuery = ''
@@ -3330,7 +3414,9 @@ body, .root, .main { max-width: 100vw; }
     starOutline: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9 12 2"/></svg>',
     eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
     eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
-    trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    trash:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    bell:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
+    github: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>',
   }
 
   /* ═════════ Toast ═════════ */
@@ -4028,6 +4114,18 @@ body, .root, .main { max-width: 100vw; }
     if (p.devPort)            tags.push('<span class="badge dev" title="dev server vivo">DEV :' + p.devPort + '</span>')
     if (p.git.dirtyCount > 0) tags.push('<span class="badge dirty" title="' + p.git.dirtyCount + ' archivos sin commit">' + ICO.diff + p.git.dirtyCount + '</span>')
     if (p.hasBots)            tags.push('<span class="badge bot" title="proyecto con bots">' + ICO.bot + 'BOT</span>')
+    if (p.githubRepo) {
+      const ghd = githubState.repoData[p.githubRepo]
+      if (ghd) {
+        if (ghd.ciStatus !== 'unknown') {
+          const ciCls   = ghd.ciStatus === 'success' ? 'ci-ok' : (ghd.ciStatus === 'failure' ? 'ci-fail' : 'ci-pending')
+          const ciLabel = ghd.ciStatus === 'success' ? '✓ CI' : (ghd.ciStatus === 'failure' ? '✗ CI' : '⋯ CI')
+          tags.unshift('<span class="badge gh-ci ' + ciCls + '" title="CI: ' + ghd.ciStatus + '">' + ciLabel + '</span>')
+        }
+        if (ghd.openPRs > 0)    tags.push('<span class="badge gh-pr"    title="' + ghd.openPRs    + ' PRs abiertos">' + ghd.openPRs    + ' PR</span>')
+        if (ghd.openIssues > 0) tags.push('<span class="badge gh-issue" title="' + ghd.openIssues + ' issues abiertos">' + ghd.openIssues + ' ✦</span>')
+      }
+    }
     for (const s of (p.stack || []).slice(0, 5)) {
       tags.push('<span class="chip" data-s="' + escapeAttr(s) + '">' + escapeHtml(s) + '</span>')
     }
@@ -4107,6 +4205,136 @@ body, .root, .main { max-width: 100vw; }
         '<div class="pc-actions">' + actions.join('') + '</div>' +
       '</div>'
     )
+  }
+
+  /* ═════════ GitHub helpers ═════════ */
+  async function saveGithubToken() {
+    const input = document.getElementById('gh-token-input')
+    const token = input ? input.value.trim() : ''
+    if (!token) return
+    await window.asura.setConfig({ githubToken: token })
+    config = await window.asura.getConfig()
+    window.asura.requestGithubRefresh()
+    render()
+    toast('token de GitHub guardado')
+  }
+  async function changeGithubToken() {
+    await window.asura.setConfig({ githubToken: '' })
+    config = await window.asura.getConfig()
+    render()
+  }
+  async function markGhNotifRead(id) {
+    await window.asura.markNotificationRead(id)
+    githubState.notifications = githubState.notifications.map(n =>
+      n.id === id ? { ...n, unread: false } : n
+    )
+    document.getElementById('cnt-github').textContent = githubState.notifications.filter(n => n.unread).length
+    if (activeTab === 'github') render()
+  }
+  function requestGithubRefresh() {
+    window.asura.requestGithubRefresh()
+    toast('actualizando GitHub…')
+  }
+  window.saveGithubToken      = saveGithubToken
+  window.changeGithubToken    = changeGithubToken
+  window.markGhNotifRead      = markGhNotifRead
+  window.requestGithubRefresh = requestGithubRefresh
+
+  function renderGitHub() {
+    const hasToken = config && config.githubToken
+
+    if (!hasToken) {
+      return (
+        '<div class="gh-setup">' +
+          '<div class="placeholder-icon">' + ICO.github + '</div>' +
+          '<h3>Conectar GitHub</h3>' +
+          '<p>Pega tu Personal Access Token para ver PRs, issues, estado de CI y notificaciones de todos tus repos.</p>' +
+          '<div class="gh-token-row">' +
+            '<input class="gh-token-input" id="gh-token-input" type="password" placeholder="ghp_..." autocomplete="off" onkeydown="if(event.key===\'Enter\')saveGithubToken()"/>' +
+            '<button class="ab primary" onclick="saveGithubToken()">Guardar</button>' +
+          '</div>' +
+          '<p class="gh-help">Scopes necesarios: <code>repo</code> · <code>notifications</code><br>' +
+            '<a href="#" onclick="event.preventDefault();doAction(\'open-dev-url\',\'\',\'https://github.com/settings/tokens/new?scopes=repo,notifications&description=Asura+Dashboard\')">' +
+              '→ github.com/settings/tokens' +
+            '</a>' +
+          '</p>' +
+        '</div>'
+      )
+    }
+
+    const notifs = githubState.notifications || []
+    const unread = notifs.filter(n => n.unread).length
+    const localRepos = new Set(projects.map(p => p.githubRepo).filter(Boolean))
+    const remoteOnly = (githubState.userRepos || []).filter(r => !localRepos.has(r.full_name))
+
+    let html = '<div class="gh-panel">'
+
+    /* Notifications */
+    html += '<div class="gh-section">'
+    html += '<div class="gh-section-hdr">'
+    html +=   '<span>' + ICO.bell + ' Notificaciones' + (unread ? ' <span class="gh-unread-badge">' + unread + '</span>' : '') + '</span>'
+    html +=   '<button class="ab icon-only" onclick="requestGithubRefresh()" title="actualizar">↻</button>'
+    html +=   '<button class="gh-change-token" onclick="changeGithubToken()" title="desconectar token">' + ICO.eyeOff + '</button>'
+    html += '</div>'
+
+    if (!notifs.length) {
+      html += '<div class="gh-empty">Sin notificaciones pendientes</div>'
+    } else {
+      html += '<div class="gh-notif-list">'
+      for (const n of notifs) {
+        const typeIcon = n.subject.type === 'PullRequest' ? '⤴' : (n.subject.type === 'Issue' ? '◉' : '◆')
+        const time = relTime(new Date(n.updated_at).getTime())
+        html += (
+          '<div class="gh-notif-row' + (n.unread ? ' unread' : '') + '" onclick="markGhNotifRead(\'' + escapeAttr(n.id) + '\')">' +
+            '<span class="gh-notif-type">' + typeIcon + '</span>' +
+            '<div class="gh-notif-body">' +
+              '<div class="gh-notif-repo">' + escapeHtml(n.repository.full_name) + '</div>' +
+              '<div class="gh-notif-title">' + escapeHtml(n.subject.title) + '</div>' +
+            '</div>' +
+            '<div class="gh-notif-meta">' +
+              '<span class="gh-notif-reason">' + escapeHtml(n.reason) + '</span>' +
+              '<span class="gh-notif-time">' + time + '</span>' +
+            '</div>' +
+          '</div>'
+        )
+      }
+      html += '</div>'
+    }
+    html += '</div>'
+
+    /* Remote repos not cloned locally */
+    html += '<div class="gh-section">'
+    html += '<div class="gh-section-hdr"><span>' + ICO.github + ' Repos en GitHub · ' + remoteOnly.length + ' sin clonar</span></div>'
+
+    if (!githubState.userRepos.length) {
+      html += '<div class="gh-empty">Cargando repos…</div>'
+    } else if (!remoteOnly.length) {
+      html += '<div class="gh-empty">Todos tus repos están clonados localmente ✓</div>'
+    } else {
+      html += '<div class="gh-repos-list">'
+      for (const r of remoteOnly.slice(0, 25)) {
+        const time = r.pushed_at ? relTime(new Date(r.pushed_at).getTime()) : '—'
+        html += (
+          '<div class="gh-repo-row" onclick="doAction(\'open-dev-url\',\'\',\'' + escapeAttr(r.html_url) + '\')">' +
+            '<div class="gh-repo-name">' +
+              escapeHtml(r.full_name) +
+              (r.private ? ' <span class="gh-private">private</span>' : '') +
+            '</div>' +
+            (r.description ? '<div class="gh-repo-desc">' + escapeHtml(r.description.slice(0, 90)) + '</div>' : '') +
+            '<div class="gh-repo-meta">' +
+              (r.language ? '<span class="chip">' + escapeHtml(r.language) + '</span>' : '') +
+              (r.stargazers_count > 0 ? '<span class="badge">★ ' + r.stargazers_count + '</span>' : '') +
+              '<span class="pc-meta-time">' + time + '</span>' +
+            '</div>' +
+          '</div>'
+        )
+      }
+      html += '</div>'
+    }
+    html += '</div>'
+
+    html += '</div>'
+    return html
   }
 
   /* ═════════ Context menu ═════════ */
@@ -4206,6 +4434,11 @@ body, .root, .main { max-width: 100vw; }
     else if (activeTab === 'infra') {
       toolbar.style.display = 'none'
       main.innerHTML = renderInfra()
+    }
+
+    else if (activeTab === 'github') {
+      toolbar.style.display = 'none'
+      main.innerHTML = renderGitHub()
     }
 
     else if (activeTab === 'alerts') {
@@ -4422,12 +4655,21 @@ body, .root, .main { max-width: 100vw; }
     }
   }
 
+  function onGithubUpdate(g) {
+    githubState = g || { repoData: {}, notifications: [], userRepos: [] }
+    const unread = (githubState.notifications || []).filter(n => n.unread).length
+    document.getElementById('cnt-github').textContent = unread
+    if (activeTab === 'github') render()
+    else if (activeTab === 'apps') render()  // refresh project cards with new CI/PR data
+  }
+
   window.asura.onProjects(onProjects)
   window.asura.onBots(onBots)
   window.asura.onInfra(onInfra)
   window.asura.onConfigUpdate(onConfig)
   window.asura.onAlert(onAlert)
   window.asura.onFocusAlert(onFocusAlert)
+  window.asura.onGithubUpdate(onGithubUpdate)
   window.asura.requestProjects()
   window.asura.requestBots()
   window.asura.requestInfra()

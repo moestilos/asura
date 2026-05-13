@@ -28,6 +28,7 @@ export interface Project {
   firstSeen:    number
   commitsByDay: number[]   // last 14 days
   prodUrl:      string | null   // production URL if detected
+  githubRepo:   string | null   // "owner/repo" for GitHub remotes
 }
 
 const STACK_HINTS: Record<string, string> = {
@@ -290,6 +291,12 @@ async function countScripts(projectPath: string): Promise<number> {
   } catch { return 0 }
 }
 
+function parseGithubRepo(url: string | null): string | null {
+  if (!url) return null
+  const m = url.match(/github\.com[/:]([^/\s]+\/[^/\s.]+?)(?:\.git)?$/)
+  return m ? m[1] : null
+}
+
 const PROD_HOST_RE = /https?:\/\/[\w.-]*?(?:vercel\.app|netlify\.app|netlify\.com|fly\.dev|railway\.app|herokuapp\.com|pages\.dev|onrender\.com|deno\.dev|workers\.dev|github\.io|streamlit\.app|hf\.space|render\.com)[\/\w.\-?=&%#]*/i
 
 function normalizeUrl(u: string): string | null {
@@ -421,6 +428,7 @@ export async function scanWorkspace(workspaceRoot: string): Promise<Project[]> {
       firstSeen,
       commitsByDay: commits,
       prodUrl,
+      githubRepo:   parseGithubRepo(git.remoteUrl),
     }
   }))
 
