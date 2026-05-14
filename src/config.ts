@@ -31,6 +31,8 @@ export interface Config {
   snoozedUntil:     Record<string, number> // alertKey -> ts
   installedAt:      number                  // first ever launch ts — projects firstSeen near this aren't "new"
   autoStart:        boolean                  // launch on Windows boot
+  adminMode:        boolean                  // launch claude with --dangerously-skip-permissions
+  githubToken?:     string                   // GitHub Personal Access Token
 }
 
 export interface AlertEntry {
@@ -61,6 +63,7 @@ const DEFAULTS: Config = {
   snoozedUntil:     {},
   installedAt:      0,
   autoStart:        false,
+  adminMode:        false,
 }
 
 let cache: Config = { ...DEFAULTS }
