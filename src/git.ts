@@ -1,7 +1,13 @@
 import { exec } from 'child_process'
 import { promisify } from 'util'
+import fs from 'fs'
+import path from 'path'
 
 const execp = promisify(exec)
+
+export function isOwnRepo(projectPath: string): boolean {
+  return fs.existsSync(path.join(projectPath, '.git'))
+}
 
 export interface GitInfo {
   isRepo:        boolean
@@ -28,8 +34,7 @@ export async function gitInfo(projectPath: string): Promise<GitInfo> {
     dirtyCount: 0, ahead: 0, behind: 0,
   }
 
-  const inside = await safeExec('git rev-parse --is-inside-work-tree', projectPath)
-  if (inside !== 'true') return empty
+  if (!isOwnRepo(projectPath)) return empty
 
   const [branch, lastTs, lastMsg, dirty, aheadBehind] = await Promise.all([
     safeExec('git rev-parse --abbrev-ref HEAD', projectPath),

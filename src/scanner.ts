@@ -262,6 +262,7 @@ async function findProjectDirs(root: string, maxDepth = 2): Promise<Array<{ name
 
 async function commitsByDay(projectPath: string): Promise<number[]> {
   const buckets = new Array(14).fill(0)
+  if (!fs.existsSync(path.join(projectPath, '.git'))) return buckets
   try {
     const since = Math.floor((Date.now() - 14 * 86_400_000) / 1000)
     const { stdout } = await execp(

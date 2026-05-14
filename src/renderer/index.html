@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Asura</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -701,7 +702,9 @@ body.theme-synthwave #theme-fx { display: none; }
 body.theme-brutalist #theme-fx .fx-a {
   opacity: 1;
   background: radial-gradient(circle, rgba(0,0,0,.04) .8px, transparent 1.2px) 0 0/3px 3px;
+  animation: brut-grain 1.6s steps(4) infinite;
 }
+@keyframes brut-grain { 0% { background-position: 0 0; } 25% { background-position: 1px 0; } 50% { background-position: 1px 1px; } 75% { background-position: 0 1px; } 100% { background-position: 0 0; } }
 body.theme-brutalist #theme-fx .fx-b {
   opacity: 1;
   height: 1px; top: 38%;
@@ -796,7 +799,9 @@ body.theme-risograph #theme-fx .fx-b {
   right: 14%; top: 12%;
   background: radial-gradient(circle, rgba(210,59,42,.30), transparent 70%);
   border-radius: 50%;
+  animation: riso-drift 16s ease-in-out infinite alternate;
 }
+@keyframes riso-drift { 0% { transform: translate(0,0); opacity: .85; } 100% { transform: translate(-12px,8px); opacity: 1; } }
 body.theme-risograph #theme-fx .fx-c { display: none; }
 @keyframes riso-grain { 0% { background-position: 0 0; } 25% { background-position: 1px 0; } 50% { background-position: 1px 1px; } 75% { background-position: 0 1px; } 100% { background-position: 0 0; } }
 
@@ -806,7 +811,10 @@ body.theme-cyberpunk #theme-fx .fx-a {
   background:
     repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,43,214,.025) 2px 3px),
     radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,43,214,.20), transparent 70%);
+  animation: cp-scan 9s linear infinite, cp-glow 5s ease-in-out infinite alternate;
 }
+@keyframes cp-scan { from { background-position: 0 0, 50% 0%; } to { background-position: 0 3px, 50% 0%; } }
+@keyframes cp-glow { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(20deg); } }
 body.theme-cyberpunk #theme-fx .fx-b {
   opacity: 1;
   width: 1px; height: 100vh;
@@ -843,7 +851,9 @@ body.theme-manga #theme-fx .fx-a {
     radial-gradient(circle, rgba(0,0,0,.18) 1px, transparent 1.3px) 0 0/4px 4px;
   -webkit-mask: linear-gradient(135deg, black 0%, transparent 70%);
   mask: linear-gradient(135deg, black 0%, transparent 70%);
+  animation: manga-halftone 12s linear infinite;
 }
+@keyframes manga-halftone { from { background-position: 0 0; } to { background-position: 4px 4px; } }
 body.theme-manga #theme-fx .fx-b { display: none; }
 body.theme-manga #theme-fx .fx-c { display: none; }
 @keyframes manga-spin  { to { transform: rotate(360deg); } }
@@ -900,7 +910,9 @@ body.theme-ghost #theme-fx .fx-b { display: none; }
 body.theme-ghost #theme-fx .fx-c {
   opacity: 1;
   background: radial-gradient(ellipse 100% 60% at 50% 50%, transparent 60%, rgba(0,0,0,.4));
+  animation: ghost-vignette 7s ease-in-out infinite;
 }
+@keyframes ghost-vignette { 0%,100% { opacity: .85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.04); } }
 @keyframes ghost-scan { to { background-position: 0 4px; } }
 
 /* ═════════ ELABORATE THEME FX — fx-d hero scenes per theme ═════════ */
@@ -1007,6 +1019,10 @@ body.theme-dark::after {
   position: relative; z-index: 1;
   display: flex; flex-direction: column;
   height: 100vh;
+  height: 100dvh;
+  min-width: 0;
+  container-type: inline-size;
+  container-name: app;
   box-shadow:
     inset 0 0 0 1px rgba(160, 50, 255, .15),
     inset 0 0 80px -10px rgba(255, 46, 147, .25);
@@ -1021,10 +1037,14 @@ body.theme-dark::after {
   display: flex; align-items: center;
   justify-content: space-between;
   padding: 0 14px 0 18px;
+  gap: 10px;
   flex-shrink: 0;
+  min-width: 0;
   position: relative; z-index: 5;
 }
-.brand { display: flex; align-items: center; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 0 1 auto; overflow: hidden; }
+.brand > div:not(.brand-mark) { min-width: 0; overflow: hidden; }
+.brand-name, .brand-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .brand-mark {
   width: 26px; height: 26px;
   display: grid; place-items: center;
@@ -1131,7 +1151,14 @@ body.theme-dark::after {
   border-bottom: 1px solid var(--line-2);
   flex-shrink: 0;
   position: relative; z-index: 4;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
 }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { scroll-snap-align: start; flex-shrink: 0; }
 .tab {
   padding: 10px 22px;
   display: flex; align-items: center; gap: 10px;
@@ -1186,10 +1213,13 @@ body.theme-dark::after {
   background: rgba(20, 8, 40, .45);
   border-bottom: 1px solid var(--line-2);
   flex-shrink: 0;
+  flex-wrap: wrap;
+  min-width: 0;
   position: relative; z-index: 3;
 }
 .search-wrap {
-  flex: 1;
+  flex: 1 1 220px;
+  min-width: 0;
   display: flex; align-items: center; gap: 8px;
   padding: 6px 12px;
   border: 1px solid var(--line-2);
@@ -1230,6 +1260,8 @@ body.theme-dark::after {
 .filter {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 .fbtn {
   padding: 5px 12px;
@@ -1256,6 +1288,183 @@ body.theme-dark::after {
   box-shadow: 0 0 18px rgba(255, 46, 147, .45);
   text-shadow: 0 0 6px rgba(255, 255, 255, .35);
 }
+.toolbar-extras {
+  display: flex; gap: 6px; align-items: center;
+}
+.sort-sel {
+  padding: 5px 8px;
+  border: 1px solid var(--line-2);
+  background: rgba(20, 8, 40, .5);
+  color: var(--ink-1);
+  font: 600 10.5px/1 'Rajdhani', sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+  outline: none;
+}
+.sort-sel:hover { border-color: var(--cyan); color: var(--cyan); }
+body.is-light .sort-sel { background: var(--bg-2); color: var(--tx-1); }
+.icon-fbtn { padding: 5px 10px; min-width: 30px; }
+.more-menu { position: relative; display: inline-block; }
+.more-menu > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+}
+.more-menu > summary::-webkit-details-marker { display: none; }
+.more-menu[open] > summary { color: var(--cyan); border-color: var(--cyan); }
+.more-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 200px;
+  background: var(--bg-1);
+  border: 1px solid var(--line-2);
+  box-shadow: 0 12px 28px rgba(0,0,0,.55);
+  padding: 6px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+body.is-light .more-pop { background: var(--bg-2); }
+.more-sec {
+  font: 700 9px/1 'Rajdhani', sans-serif;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 8px 8px 4px;
+  opacity: .7;
+}
+.more-item {
+  text-align: left;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 6px 10px;
+}
+.more-item.on { background: linear-gradient(135deg, var(--cyan), var(--violet)); color: #fff; }
+.active-stack-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  color: #fff; font: 700 10px/1 'Rajdhani', sans-serif;
+  letter-spacing: .12em; text-transform: uppercase;
+  border-radius: 4px;
+  cursor: default;
+}
+.active-stack-pill .x {
+  cursor: pointer; padding-left: 4px; font-size: 12px; opacity: .85;
+}
+.active-stack-pill .x:hover { opacity: 1; }
+/* j/k focus highlight */
+.pcard.kb-focus {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 18px rgba(92,255,255,.45);
+}
+/* search match */
+.pc-name mark, .pc-meta-v mark, .chip mark {
+  background: linear-gradient(180deg, transparent 50%, rgba(255,209,102,.55) 50%);
+  color: inherit; padding: 0 1px;
+}
+/* idle warning chip */
+.badge.idle-warn {
+  background: rgba(255,107,139,.18);
+  border: 1px solid rgba(255,107,139,.45);
+  color: #ff8aa3;
+}
+/* density compact mode */
+body.density-compact .pcard { padding-bottom: 4px; }
+body.density-compact .pc-top { padding: 8px 30px 4px 12px; }
+body.density-compact .pc-tags { padding: 0 12px 4px; gap: 3px; }
+body.density-compact .pc-meta { padding: 0 12px; gap: 2px; }
+body.density-compact .pc-meta-row { font-size: 10px; padding: 1px 0; }
+body.density-compact .pc-spark { height: 16px; padding: 2px 12px 4px; }
+body.density-compact .pc-actions { padding: 4px 6px; gap: 4px; }
+body.density-compact .ab { padding: 4px 7px; font-size: 9.5px; }
+body.density-compact .grid { gap: 8px; }
+/* group headers */
+.grp-head {
+  grid-column: 1 / -1;
+  margin: 8px 0 2px;
+  padding: 4px 0 4px 4px;
+  border-left: 3px solid var(--cyan);
+  font: 700 11px/1 'Rajdhani', sans-serif;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-1);
+  display: flex; align-items: baseline; gap: 8px;
+}
+.grp-head .grp-n { color: var(--cyan); font-size: 10px; opacity: .8; }
+/* refresh spin */
+#refresh-btn.spin svg { animation: spin 0.7s linear; }
+/* shortcuts overlay */
+.shortcuts-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,.78);
+  display: none; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+.shortcuts-overlay.on { display: flex; }
+.shortcuts-card {
+  background: var(--bg-1);
+  border: 1px solid var(--line-2);
+  padding: 24px 28px;
+  max-width: 420px; width: 90%;
+  box-shadow: 0 30px 60px rgba(0,0,0,.6);
+}
+.shortcuts-card h3 {
+  margin: 0 0 16px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--cyan);
+}
+.shortcuts-card .row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; font-size: 12px;
+  border-bottom: 1px dashed var(--line-0);
+}
+.shortcuts-card .row:last-child { border-bottom: none; }
+.shortcuts-card kbd {
+  background: var(--bg-3);
+  border: 1px solid var(--line-2);
+  padding: 2px 7px; font-size: 10px;
+  border-radius: 3px; color: var(--cyan);
+}
+/* toast queue */
+.toast-stack {
+  position: fixed; bottom: 30px; right: 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  z-index: 950; pointer-events: none;
+}
+.toast-stack .t {
+  padding: 8px 14px; background: var(--bg-2);
+  border: 1px solid var(--cyan);
+  color: var(--ink-0); font-size: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.4);
+  animation: toastIn .25s ease-out;
+}
+@keyframes toastIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.toast-stack .t.out { animation: toastOut .3s ease-in forwards; }
+@keyframes toastOut { to { transform: translateX(20px); opacity: 0; } }
+/* tab badge pulse */
+.tab-c.pulse { animation: tabPulse .6s ease-out; }
+@keyframes tabPulse { 0% { transform: scale(1); } 50% { transform: scale(1.4); color: var(--cyan); } 100% { transform: scale(1); } }
+/* placeholder upgrades */
+.placeholder .ph-suggest {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin-top: 14px;
+}
+.placeholder .ph-suggest button {
+  background: var(--bg-2); border: 1px solid var(--line-2);
+  color: var(--cyan); font: 600 10px/1 'Rajdhani', sans-serif;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: 6px 12px; cursor: pointer;
+}
+.placeholder .ph-suggest button:hover { border-color: var(--cyan); }
 
 /* ─── Main grid area ───────────────────────────────── */
 .main {
@@ -1596,6 +1805,8 @@ body.theme-dark::after {
   flex: 1;
 }
 .pc-meta:empty { display: none; padding: 0; border: 0; }
+.pc-norepo .pc-meta-v { opacity: .55; font-style: italic; }
+.pc-norepo .pc-meta-icon { opacity: .4; }
 .pc-meta-row {
   display: flex; align-items: center; gap: 8px;
   font-family: 'JetBrains Mono', monospace;
@@ -2625,10 +2836,7 @@ body.theme-light .main { background: transparent; }
 body.theme-light .modal,
 body.theme-light .ctx-menu { background: #fff; color: var(--tx-1); }
 
-@media (max-width: 720px) {
-  .tb-stats { display: none; }
-  .toolbar { flex-wrap: wrap; }
-}
+/* legacy stub — full responsive in section below */
 
 /* ════════════════════════════════════════════════════
    ⚡ ANIMATED BACKGROUND — GPU-only smooth motion
@@ -2896,30 +3104,44 @@ body.theme-dark .root::after {
 .infra-card.k-proxy .pc-name { background: linear-gradient(90deg, var(--ink-0), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 /* ════════════════════════════════════════════════════
-   📐 RESPONSIVE — full coverage 320 → ∞
-   Window resizable from 420×480 (Electron). Web preview wider.
-   Breakpoints: 1100 / 880 / 720 / 560 / 420.
+   📐 RESPONSIVE — fluid 320 → ultra-wide
+   Strategy: container queries on .root for grid + cards,
+   viewport queries for chrome (titlebar/tabs/toolbar/sbar),
+   clamp() for fluid sizing between breakpoints.
+   Electron min: 420×480. Phone min: 320.
    ════════════════════════════════════════════════════ */
 
-/* Generic safety: prevent any element forcing horizontal overflow */
+/* ── Overflow safety nets ── */
+html, body { overflow-x: hidden; }
 body, .root, .main { max-width: 100vw; }
+.main { padding: clamp(10px, 2.4vw, 22px); }
+.tb   { padding: 0 clamp(8px, 1.5vw, 18px); }
+.toolbar { padding: clamp(6px, 1.2vw, 10px) clamp(8px, 1.5vw, 18px); gap: clamp(6px, 1vw, 12px); }
+img, svg, video, canvas { max-width: 100%; }
 
-/* Grid always uses min() trick so 1 col never overflows narrow viewport */
-.grid {
-  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
-  gap: 12px;
+/* ── Grid: container-query driven (adapts to .root width, not viewport) ── */
+.grid, .bots-grid, .skeleton {
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+  gap: clamp(8px, 1.2vw, 14px);
 }
 
-/* ≥ 1100px: comfortable 2-col, generous padding */
-@media (min-width: 1100px) {
-  .grid { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; }
-  .main { padding: 20px; }
+@container app (min-width: 720px) {
+  .grid, .skeleton { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }
+  .bots-grid       { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+}
+@container app (min-width: 1100px) {
+  .grid, .skeleton { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+}
+@container app (min-width: 1500px) {
+  .grid, .skeleton { grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); }
+}
+@container app (max-width: 560px) {
+  .grid, .bots-grid, .skeleton { grid-template-columns: 1fr; gap: 10px; }
 }
 
-/* ≤ 880px — compact titlebar (no stat-mini chips) */
+/* ── ≤ 880px — drop titlebar stat chips, compact chrome ── */
 @media (max-width: 880px) {
   .tb-stats { display: none; }
-  .tb { padding: 0 10px 0 12px; }
   .brand { gap: 9px; }
   .brand-mark { width: 22px; height: 22px; }
   .brand-name { font-size: 13px; letter-spacing: .14em; }
@@ -2932,19 +3154,14 @@ body, .root, .main { max-width: 100vw; }
   .horizon-strip .kana { font-size: 9px; letter-spacing: .22em; left: 12px; bottom: 4px; }
 
   .tab { padding: 9px 16px; font-size: 11px; letter-spacing: .18em; }
-  .toolbar { padding: 8px 12px; gap: 8px; }
-  .filter { gap: 4px; flex-wrap: wrap; }
   .fbtn { padding: 4px 9px; font-size: 10.5px; letter-spacing: .14em; }
 
   .sbar { padding: 0 10px; font-size: 9px; }
   .sbar-l, .sbar-r { gap: 12px; }
 }
 
-/* ≤ 720px — tighter cards, hide non-critical sbar items, narrower grid */
+/* ── ≤ 720px — single col, search full row, compact bot hero ── */
 @media (max-width: 720px) {
-  .grid { grid-template-columns: 1fr; gap: 10px; }
-  .main { padding: 12px; }
-
   .pc-top { padding: 10px 36px 6px 12px; }
   .pc-name { font-size: 19px; }
   .pc-stack { padding: 4px 12px 6px; gap: 4px; }
@@ -2960,22 +3177,24 @@ body, .root, .main { max-width: 100vw; }
   .horizon-strip { height: 48px; }
   .horizon-strip .sun { width: 96px; height: 96px; bottom: -56px; }
 
-  .toolbar { flex-wrap: wrap; padding: 7px 10px; gap: 6px; }
   .search-wrap { flex: 1 1 100%; order: 1; }
   .filter { order: 2; flex: 1 1 100%; }
+  .toolbar-extras { order: 3; flex: 1 1 100%; justify-content: flex-end; }
 
-  /* Bot hero collapses stats grid */
+  /* bot hero stacks */
   .bh-body { flex-direction: column; align-items: stretch; gap: 12px; }
   .bh-stats { grid-template-columns: 1fr 1fr; }
   .bh-name { font-size: 16px; }
-  .bots-grid { grid-template-columns: 1fr; }
 
-  /* Sbar: hide secondary right items */
+  /* sbar: hide secondary items */
   .sbar-r .sbar-item:not(:last-child) { display: none; }
   .sbar-l .sbar-item:nth-child(n+2) { display: none; }
+
+  /* detail modal cols stack */
+  .dt-cols { grid-template-columns: 1fr !important; }
 }
 
-/* ≤ 560px — extra compact, kill non-essential decoration */
+/* ── ≤ 560px — kill decoration, modal becomes sheet ── */
 @media (max-width: 560px) {
   .brand-sub { display: none; }
   .brand-name { font-size: 12px; letter-spacing: .1em; }
@@ -2992,36 +3211,46 @@ body, .root, .main { max-width: 100vw; }
   .pc-name { font-size: 17px; }
   .pcard-fav-star { top: 6px; right: 6px; }
 
-  /* Hide stack chips beyond first 3 */
   .pc-stack .chip:nth-child(n+4) { display: none; }
 
-  /* Actions: kebab into one row, smaller */
   .ab { font-size: 9.5px; padding: 7px 4px; letter-spacing: .1em; gap: 4px; }
   .ab.icon-only { flex: 0 0 30px; padding: 7px 0; }
   .ab svg { width: 10px; height: 10px; }
 
-  /* Modals full-bleed-ish */
-  .modal { width: 96vw; }
-  .modal-hdr { padding: 12px 14px; }
+  /* Modal → bottom sheet */
+  .modal {
+    width: 100vw; max-width: 100vw;
+    height: auto; max-height: 92vh;
+    top: auto; left: 0; bottom: 0;
+    transform: translateY(20px) scale(1);
+    border-radius: 14px 14px 0 0;
+    border-left: 0; border-right: 0; border-bottom: 0;
+  }
+  .modal.on { transform: translateY(0) scale(1); }
+  .modal-hdr { padding: 12px 14px; position: sticky; top: 0; background: inherit; z-index: 2; }
   .modal-hdr h3 { font-size: 14px; }
-  .modal-body { padding: 12px 14px; font-size: 11.5px; }
+  .modal-body { padding: 12px 14px; font-size: 11.5px; -webkit-overflow-scrolling: touch; }
 
-  /* Settings */
   .set-row { padding: 9px 0; }
   .set-name { font-size: 12px; }
   .set-desc { font-size: 9.5px; }
 
-  /* Detail modal stats grid */
   .dt-stats { grid-template-columns: repeat(2, 1fr); gap: 6px; }
 
-  /* Stat-mini already hidden; tighten icon-btns */
   .icon-btn { width: 24px; height: 24px; }
   .tb-actions { gap: 2px; }
+
+  /* toast stack: full width minus margin */
+  .toast-stack { right: 8px; left: 8px; bottom: 12px; }
+  .toast-stack .t { font-size: 11px; padding: 7px 11px; }
+
+  /* ctx menu: keep within viewport */
+  .ctx-menu { max-width: calc(100vw - 16px); }
 }
 
-/* ≤ 420px — emergency mode (Electron min width) */
+/* ── ≤ 420px — Electron min width, ultra compact ── */
 @media (max-width: 420px) {
-  .tb { height: 38px; padding: 0 6px 0 8px; }
+  .tb { height: 38px; padding: 0 6px 0 8px; gap: 6px; }
   .icon-btn { width: 22px; height: 22px; }
   .icon-btn svg { width: 11px; height: 11px; }
   .brand-mark { width: 20px; height: 20px; }
@@ -3031,14 +3260,13 @@ body, .root, .main { max-width: 100vw; }
   .horizon-strip .sun { width: 50px; height: 50px; bottom: -32px; }
   .horizon-strip svg.grid { height: 28px; }
 
-  .tabs .tab { padding: 7px 8px; font-size: 9.5px; letter-spacing: .08em; }
-  .tab > span:not(.tab-c) { display: none; }  /* keep just icon? we already hid svg — show counter */
+  .tabs .tab { padding: 7px 8px; font-size: 9.5px; letter-spacing: .08em; gap: 5px; }
   .tab-c { font-size: 9px; }
 
-  .toolbar { padding: 6px 8px; }
   .search-wrap { padding: 5px 9px; font-size: 10.5px; }
   .fbtn { padding: 3px 7px; font-size: 9.5px; letter-spacing: .08em; }
   .kbd { display: none; }
+  .toolbar-extras .sort-sel { font-size: 9.5px; padding: 4px 6px; }
 
   .pcard { font-size: 11px; }
   .pc-top { padding: 8px 30px 5px 9px; }
@@ -3053,19 +3281,57 @@ body, .root, .main { max-width: 100vw; }
 
   .sbar { height: 22px; font-size: 8.5px; }
 
-  /* Bot hero further compact */
   .bh-stats { grid-template-columns: 1fr; }
   .bh-stat-v { font-size: 14px; }
   .bh-name { font-size: 14px; }
+  .bh-actions { flex-wrap: wrap; }
+  .bh-actions .ab { flex: 1 1 calc(50% - 3px); padding: 6px 8px; }
 
-  /* Horizon mountains/grid SVG too narrow — simplify */
-  .horizon-strip .kana { display: none; }
+  .placeholder { padding: 40px 16px 30px; }
+  .placeholder h3 { font-size: 16px; }
+  .placeholder p { font-size: 10px; }
+
+  .dt-stats { grid-template-columns: 1fr 1fr; }
+  .dt-section { margin-bottom: 12px; }
+  .dt-script-cmd, .dt-file, .dt-commit-msg { font-size: 10px; }
 }
 
-/* Tall but narrow (mobile-emulator preview) — landscape on phones */
-@media (max-height: 480px) {
+/* ── ≤ 340px — emergency floor (small phones / minimum Electron) ── */
+@media (max-width: 340px) {
+  .tb { padding: 0 4px; }
+  .brand-name { font-size: 10px; }
+  .icon-btn { width: 20px; height: 20px; }
+  .tabs .tab { padding: 6px 7px; }
+  .toolbar { padding: 5px 6px; gap: 5px; }
+  .main { padding: 8px; }
+  .dt-stats { grid-template-columns: 1fr; }
+}
+
+/* ── Short viewports (landscape phones, split screens) ── */
+@media (max-height: 560px) {
   .horizon-strip { height: 36px; }
   .horizon-strip .sun { width: 70px; height: 70px; bottom: -42px; }
+  .placeholder { padding: 30px 20px 20px; }
+}
+@media (max-height: 420px) {
+  .horizon-strip { display: none; }
+  .tb { height: 36px; }
+  .tab { padding: 6px 14px; }
+  .toolbar { padding: 5px 10px; }
+  .modal { max-height: 96vh; }
+}
+
+/* ── Wide & ultrawide ── */
+@media (min-width: 1800px) {
+  .main { padding: 24px clamp(24px, 4vw, 60px); }
+}
+
+/* ── Touch devices: bigger hit targets ── */
+@media (hover: none) and (pointer: coarse) {
+  .icon-btn { width: 32px; height: 32px; }
+  .ab { padding: 10px 8px; }
+  .fbtn { padding: 7px 12px; }
+  .tab { padding: 12px 18px; }
 }
 
 </style>
@@ -3075,7 +3341,8 @@ body, .root, .main { max-width: 100vw; }
   try {
     var _t = localStorage.getItem('asura:theme') || 'synthwave';
     var _light = ['brutalist','solarpunk','vaporwave','risograph','sumie','manga'].indexOf(_t) >= 0;
-    document.body.className = 'theme-' + _t + (_t === 'synthwave' ? ' theme-dark' : '') + (_light ? ' is-light' : '');
+    var _d = localStorage.getItem('asura:density') === 'compact' ? ' density-compact' : '';
+    document.body.className = 'theme-' + _t + (_t === 'synthwave' ? ' theme-dark' : '') + (_light ? ' is-light' : '') + _d;
   } catch(e) { document.body.className = 'theme-synthwave theme-dark'; }
 </script>
 <div id="theme-fx" aria-hidden="true">
@@ -3210,7 +3477,32 @@ body, .root, .main { max-width: 100vw; }
       <button class="fbtn on" data-f="all">todos</button>
       <button class="fbtn"    data-f="favorites">★ favoritos</button>
       <button class="fbtn"    data-f="active">activos</button>
-      <button class="fbtn"    data-f="bots">bots</button>
+    </div>
+    <div class="toolbar-extras">
+      <select id="sort-sel" class="sort-sel" title="ordenar">
+        <option value="recent">recientes</option>
+        <option value="name">nombre</option>
+        <option value="commits">commits 14d</option>
+        <option value="dirty">cambios</option>
+        <option value="status">estado</option>
+      </select>
+      <details class="more-menu" id="more-menu">
+        <summary class="fbtn more-btn">más ▾</summary>
+        <div class="more-pop">
+          <div class="more-sec">Filtros</div>
+          <button class="more-item fbtn" data-f="bots">bots</button>
+          <button class="more-item fbtn" data-f="dirty">con cambios</button>
+          <button class="more-item fbtn" data-f="stale">inactivos &gt;30d</button>
+          <div class="more-sec">Vista</div>
+          <button class="more-item fbtn" id="group-btn">agrupar por stack</button>
+          <button class="more-item fbtn" id="density-btn">vista compacta</button>
+          <div class="more-sec" id="more-reset-sec" style="display:none">Acciones</div>
+          <button class="more-item fbtn" id="reset-filters" style="display:none">⟲ reset filtros</button>
+        </div>
+      </details>
+      <span class="active-stack-pill" id="stack-pill" style="display:none">
+        <span id="stack-pill-name"></span><span class="x" id="stack-pill-x">×</span>
+      </span>
     </div>
   </div>
 
@@ -3232,6 +3524,11 @@ body, .root, .main { max-width: 100vw; }
       </div>
     </div>
     <div class="sbar-r">
+      <div class="sbar-item" title="tiempo desde abrir Asura">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span>sesión <b id="session-t">0m</b></span>
+      </div>
+      <div class="sbar-item" title="ayuda"><span style="cursor:pointer" onclick="document.getElementById('shortcuts-overlay').classList.toggle('on')">? atajos</span></div>
       <div class="sbar-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <b id="last-scan">--:--:--</b>
@@ -3243,6 +3540,25 @@ body, .root, .main { max-width: 100vw; }
 
 <!-- Toast -->
 <div class="toast" id="toast">acción ejecutada</div>
+<div class="toast-stack" id="toast-stack"></div>
+
+<!-- Shortcuts overlay -->
+<div class="shortcuts-overlay" id="shortcuts-overlay">
+  <div class="shortcuts-card">
+    <h3>Atajos teclado</h3>
+    <div class="row"><span>Paleta comandos</span><kbd>Ctrl+K</kbd></div>
+    <div class="row"><span>Buscar</span><kbd>/</kbd></div>
+    <div class="row"><span>Refrescar</span><kbd>Ctrl+R</kbd></div>
+    <div class="row"><span>Tabs Apps/Bots/Infra/Alerts</span><kbd>Ctrl+1..4</kbd></div>
+    <div class="row"><span>Navegar cards</span><kbd>j</kbd> / <kbd>k</kbd></div>
+    <div class="row"><span>Abrir card</span><kbd>Enter</kbd></div>
+    <div class="row"><span>Editor de card</span><kbd>e</kbd></div>
+    <div class="row"><span>Terminal de card</span><kbd>t</kbd></div>
+    <div class="row"><span>Favorito card</span><kbd>f</kbd></div>
+    <div class="row"><span>Mostrar atajos</span><kbd>?</kbd></div>
+    <div class="row"><span>Cerrar / Limpiar</span><kbd>Esc</kbd></div>
+  </div>
+</div>
 
 <!-- Modal infrastructure -->
 <div class="modal-bg" id="modal-bg"></div>
@@ -3271,13 +3587,21 @@ body, .root, .main { max-width: 100vw; }
   /* ═════════ State ═════════ */
   let projects = []
   let bots = []
-  let infra = null    // { ts, runtimes: [{runtime, available, daemonUp, containers}] }
+  let infra = null
   let config = null
   let activeTab = 'apps'
   let activeFilter = 'all'
   let searchQuery = ''
   let selectedCpIndex = 0
   let cpItems = []
+  let sortMode = localStorage.getItem('asura:sort') || 'recent'
+  let densityCompact = localStorage.getItem('asura:density') === 'compact'
+  let groupByStack = localStorage.getItem('asura:groupStack') === '1'
+  let activeStackFilter = ''
+  let kbFocusIdx = -1
+  const sessionStartTs = Date.now()
+  let lastScanTs = 0
+  let prevTabCounts = { apps: 0, bots: 0, infra: 0, alerts: 0 }
 
   /* ═════════ Helpers ═════════ */
   function fmtNum(n) {
@@ -3333,15 +3657,56 @@ body, .root, .main { max-width: 100vw; }
     trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
   }
 
-  /* ═════════ Toast ═════════ */
+  /* ═════════ Toast (queue + legacy) ═════════ */
   let toastTimer = null
   function toast(msg) {
+    /* legacy single toast still used for transient feedback */
     const t = document.getElementById('toast')
     t.textContent = msg
     t.classList.add('on')
     if (toastTimer) clearTimeout(toastTimer)
     toastTimer = setTimeout(() => t.classList.remove('on'), 1800)
   }
+  function toastStack(msg, ms) {
+    ms = ms || 2200
+    const stack = document.getElementById('toast-stack')
+    const el = document.createElement('div')
+    el.className = 't'
+    el.textContent = msg
+    stack.appendChild(el)
+    setTimeout(() => {
+      el.classList.add('out')
+      setTimeout(() => el.remove(), 300)
+    }, ms)
+  }
+
+  /* highlight match in text */
+  function hl(text, q) {
+    if (!q) return escapeHtml(text)
+    const t = String(text || '')
+    const i = t.toLowerCase().indexOf(q.toLowerCase())
+    if (i < 0) return escapeHtml(t)
+    return escapeHtml(t.slice(0, i)) +
+      '<mark>' + escapeHtml(t.slice(i, i + q.length)) + '</mark>' +
+      escapeHtml(t.slice(i + q.length))
+  }
+
+  /* days since ms */
+  function daysSince(ms) {
+    if (!ms) return Infinity
+    return Math.floor((Date.now() - ms) / 86400000)
+  }
+
+  /* copy to clipboard with toast */
+  async function copyText(text, label) {
+    try {
+      await navigator.clipboard.writeText(text)
+      toastStack((label || 'copiado') + ' · ' + (text.length > 40 ? text.slice(0, 40) + '…' : text))
+    } catch {
+      toastStack('error copiando')
+    }
+  }
+  window.copyText = copyText
 
   /* ═════════ Modal ═════════ */
   function openModal(title, html) {
@@ -3368,11 +3733,17 @@ body, .root, .main { max-width: 100vw; }
     })
   })
 
-  document.querySelectorAll('#filter-status .fbtn').forEach(b => {
+  function syncFilterButtons() {
+    document.querySelectorAll('[data-f]').forEach(x => {
+      x.classList.toggle('on', x.dataset.f === activeFilter)
+    })
+  }
+  document.querySelectorAll('[data-f]').forEach(b => {
     b.addEventListener('click', () => {
-      document.querySelectorAll('#filter-status .fbtn').forEach(x => x.classList.remove('on'))
-      b.classList.add('on')
       activeFilter = b.dataset.f
+      syncFilterButtons()
+      const m = document.getElementById('more-menu')
+      if (m) m.open = false
       render()
     })
   })
@@ -3383,42 +3754,149 @@ body, .root, .main { max-width: 100vw; }
   })
 
   /* ═════════ Keyboard shortcuts ═════════ */
+  function isTyping() {
+    const a = document.activeElement
+    return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)
+  }
+  function focusedCardName() {
+    const cards = Array.from(document.querySelectorAll('#main .pcard'))
+    if (!cards.length || kbFocusIdx < 0 || kbFocusIdx >= cards.length) return null
+    return cards[kbFocusIdx].dataset.name
+  }
+  function setKbFocus(idx) {
+    const cards = Array.from(document.querySelectorAll('#main .pcard'))
+    cards.forEach(c => c.classList.remove('kb-focus'))
+    if (!cards.length) { kbFocusIdx = -1; return }
+    kbFocusIdx = Math.max(0, Math.min(cards.length - 1, idx))
+    const el = cards[kbFocusIdx]
+    el.classList.add('kb-focus')
+    el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  }
+  function switchTab(name) {
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.dataset.tab === name))
+    activeTab = name
+    kbFocusIdx = -1
+    render()
+  }
+
   document.addEventListener('keydown', (e) => {
-    /* Cmd/Ctrl + R — refresh */
-    if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+    /* Ctrl/Cmd + K — palette */
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
       e.preventDefault()
-      window.asura.requestProjects()
-      window.asura.requestBots()
-      toast('actualizando...')
+      openPalette()
       return
     }
-    /* / focus search */
-    if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+    /* Ctrl/Cmd + R — refresh */
+    if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
       e.preventDefault()
-      document.getElementById('search').focus()
+      doRefresh()
+      return
+    }
+    /* Ctrl + 1..4 — switch tabs */
+    if ((e.ctrlKey || e.metaKey) && /^[1-4]$/.test(e.key)) {
+      e.preventDefault()
+      const tabs = ['apps', 'bots', 'infra', 'alerts']
+      switchTab(tabs[parseInt(e.key, 10) - 1])
       return
     }
     /* Esc */
     if (e.key === 'Escape') {
+      const ov = document.getElementById('shortcuts-overlay')
+      if (ov.classList.contains('on')) { ov.classList.remove('on'); return }
       const isModalOpen = document.getElementById('modal').classList.contains('on') ||
                           document.getElementById('palette').classList.contains('on')
       if (isModalOpen) { closeModal(); return }
       const ctx = document.getElementById('ctx-menu')
       if (ctx.classList.contains('on')) { ctx.classList.remove('on'); return }
       const s = document.getElementById('search')
-      if (s.value) { s.value = ''; searchQuery = ''; render() }
+      if (s.value) { s.value = ''; searchQuery = ''; render(); return }
+      if (kbFocusIdx >= 0) { document.querySelectorAll('#main .pcard').forEach(c => c.classList.remove('kb-focus')); kbFocusIdx = -1; return }
       s.blur()
+      return
+    }
+    if (isTyping()) return
+    /* / focus search */
+    if (e.key === '/') { e.preventDefault(); document.getElementById('search').focus(); return }
+    /* ? shortcuts overlay */
+    if (e.key === '?') { e.preventDefault(); document.getElementById('shortcuts-overlay').classList.toggle('on'); return }
+    /* j / k navigate cards (only on apps tab) */
+    if (activeTab === 'apps' && (e.key === 'j' || e.key === 'k')) {
+      e.preventDefault()
+      const cards = Array.from(document.querySelectorAll('#main .pcard'))
+      if (!cards.length) return
+      if (kbFocusIdx < 0) setKbFocus(0)
+      else setKbFocus(kbFocusIdx + (e.key === 'j' ? 1 : -1))
+      return
+    }
+    /* Enter open focused */
+    if (e.key === 'Enter' && kbFocusIdx >= 0 && activeTab === 'apps') {
+      const n = focusedCardName()
+      if (n) { e.preventDefault(); openDetailModal(n) }
+      return
+    }
+    /* per-card hotkeys when focused */
+    if (kbFocusIdx >= 0 && activeTab === 'apps') {
+      const n = focusedCardName()
+      if (!n) return
+      if (e.key === 'e') { e.preventDefault(); doAction('open-vscode', n); return }
+      if (e.key === 't') { e.preventDefault(); doAction('open-terminal', n); return }
+      if (e.key === 'f') { e.preventDefault(); window.asura.toggleFavorite(n).then(v => toastStack(v ? 'favorito' : 'sin favorito')); return }
+      if (e.key === 'o') { e.preventDefault(); doAction('open-folder', n); return }
     }
   })
 
-  document.getElementById('refresh-btn').addEventListener('click', () => {
+  function doRefresh() {
+    const btn = document.getElementById('refresh-btn')
+    btn.classList.remove('spin')
+    void btn.offsetWidth
+    btn.classList.add('spin')
+    setTimeout(() => btn.classList.remove('spin'), 800)
     window.asura.requestProjects()
     window.asura.requestBots()
-    toast('actualizando...')
-  })
+    window.asura.requestInfra()
+    toastStack('actualizando…', 1100)
+  }
+
+  document.getElementById('refresh-btn').addEventListener('click', doRefresh)
   document.getElementById('hide-btn').addEventListener('click', () => window.asura.hide())
   document.getElementById('aot-btn').addEventListener('click', toggleAlwaysOnTop)
   document.getElementById('settings-btn').addEventListener('click', openSettings)
+
+  /* sort + density + group + reset bindings */
+  const sortSelEl = document.getElementById('sort-sel')
+  sortSelEl.value = sortMode
+  sortSelEl.addEventListener('change', () => {
+    sortMode = sortSelEl.value
+    localStorage.setItem('asura:sort', sortMode)
+    render()
+  })
+  document.getElementById('density-btn').addEventListener('click', () => {
+    densityCompact = !densityCompact
+    localStorage.setItem('asura:density', densityCompact ? 'compact' : 'comfy')
+    document.body.classList.toggle('density-compact', densityCompact)
+    document.getElementById('density-btn').classList.toggle('on', densityCompact)
+    toastStack('densidad ' + (densityCompact ? 'compacta' : 'normal'))
+  })
+  document.getElementById('density-btn').classList.toggle('on', densityCompact)
+  document.getElementById('group-btn').addEventListener('click', () => {
+    groupByStack = !groupByStack
+    localStorage.setItem('asura:groupStack', groupByStack ? '1' : '0')
+    document.getElementById('group-btn').classList.toggle('on', groupByStack)
+    render()
+  })
+  document.getElementById('group-btn').classList.toggle('on', groupByStack)
+  document.getElementById('reset-filters').addEventListener('click', () => {
+    activeFilter = 'all'
+    activeStackFilter = ''
+    searchQuery = ''
+    document.getElementById('search').value = ''
+    syncFilterButtons()
+    render()
+  })
+  document.getElementById('stack-pill-x').addEventListener('click', () => {
+    activeStackFilter = ''
+    render()
+  })
 
   /* ═════════ Actions ═════════ */
   async function doAction(kind, name, extra) {
@@ -3548,12 +4026,41 @@ body, .root, .main { max-width: 100vw; }
         </div>
         <div class="switch ${config.autoStart ? 'on' : ''}" data-set="autoStart"></div>
       </div>
+      <div class="set-row">
+        <div class="set-l">
+          <div class="set-name">Frecuencia auto-scan</div>
+          <div class="set-desc">cada cuánto refresca proyectos</div>
+        </div>
+        <select id="refresh-rate-select" class="theme-select">
+          <option value="10000"${config.refreshRateMs === 10000 ? ' selected' : ''}>10 segundos</option>
+          <option value="30000"${(!config.refreshRateMs || config.refreshRateMs === 30000) ? ' selected' : ''}>30 segundos</option>
+          <option value="60000"${config.refreshRateMs === 60000 ? ' selected' : ''}>1 minuto</option>
+          <option value="300000"${config.refreshRateMs === 300000 ? ' selected' : ''}>5 minutos</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <div class="set-l">
+          <div class="set-name">Densidad compacta</div>
+          <div class="set-desc">cards más pequeñas, más por pantalla</div>
+        </div>
+        <div class="switch ${densityCompact ? 'on' : ''}" data-set="density"></div>
+      </div>
     `
     openModal('Ajustes', html)
 
     const themeSel = document.getElementById('theme-select')
     if (themeSel) {
       themeSel.addEventListener('change', (e) => setTheme(e.target.value))
+    }
+
+    const rrSel = document.getElementById('refresh-rate-select')
+    if (rrSel) {
+      rrSel.addEventListener('change', async (e) => {
+        const v = parseInt(e.target.value, 10)
+        await window.asura.setConfig({ refreshRateMs: v })
+        config.refreshRateMs = v
+        toastStack('frecuencia · ' + (v / 1000) + 's')
+      })
     }
 
     document.querySelectorAll('.modal .switch').forEach(sw => {
@@ -3566,9 +4073,25 @@ body, .root, .main { max-width: 100vw; }
           await window.asura.alwaysOnTop(newVal)
           config.alwaysOnTop = newVal
           document.getElementById('aot-btn').classList.toggle('active', newVal)
+        } else if (key === 'density') {
+          densityCompact = newVal
+          localStorage.setItem('asura:density', densityCompact ? 'compact' : 'comfy')
+          document.body.classList.toggle('density-compact', densityCompact)
+          document.getElementById('density-btn').classList.toggle('on', densityCompact)
         } else {
-          await window.asura.setConfig({ [key]: newVal })
-          config[key] = newVal
+          try {
+            const updated = await window.asura.setConfig({ [key]: newVal })
+            if (updated && typeof updated[key] === 'boolean') {
+              config[key] = updated[key]
+              sw.classList.toggle('on', updated[key])
+            } else {
+              config[key] = newVal
+            }
+            toastStack(key + ': ' + (config[key] ? 'activado' : 'desactivado'))
+          } catch (err) {
+            sw.classList.toggle('on', !newVal)
+            toastStack('error: ' + (err && err.message || 'no se pudo guardar'))
+          }
         }
       })
     })
@@ -4028,8 +4551,12 @@ body, .root, .main { max-width: 100vw; }
     if (p.devPort)            tags.push('<span class="badge dev" title="dev server vivo">DEV :' + p.devPort + '</span>')
     if (p.git.dirtyCount > 0) tags.push('<span class="badge dirty" title="' + p.git.dirtyCount + ' archivos sin commit">' + ICO.diff + p.git.dirtyCount + '</span>')
     if (p.hasBots)            tags.push('<span class="badge bot" title="proyecto con bots">' + ICO.bot + 'BOT</span>')
+    /* idle warning when last commit > 30d AND status not active */
+    if (p.git && p.git.lastCommitTs && daysSince(p.git.lastCommitTs) > 30 && p.status !== 'active') {
+      tags.push('<span class="badge idle-warn" title="sin commits hace ' + daysSince(p.git.lastCommitTs) + 'd">⏱ ' + daysSince(p.git.lastCommitTs) + 'd</span>')
+    }
     for (const s of (p.stack || []).slice(0, 5)) {
-      tags.push('<span class="chip" data-s="' + escapeAttr(s) + '">' + escapeHtml(s) + '</span>')
+      tags.push('<span class="chip" data-s="' + escapeAttr(s) + '" onclick="event.stopPropagation();filterByStack(\'' + escapeAttr(s) + '\')" title="filtrar por ' + escapeAttr(s) + '">' + hl(s, searchQuery) + '</span>')
     }
     const tagsHtml = tags.length ? '<div class="pc-tags">' + tags.join('') + '</div>' : ''
 
@@ -4065,7 +4592,16 @@ body, .root, .main { max-width: 100vw; }
         '</div>')
     }
 
-    const sparkline = commitSparkSvg(p.commitsByDay || new Array(14).fill(0))
+    const buckets = p.commitsByDay || new Array(14).fill(0)
+    const hasCommits = buckets.some(c => c > 0)
+    const sparkline = hasCommits ? commitSparkSvg(buckets) : ''
+    const noRepoHint = !p.git.isRepo
+      ? '<div class="pc-meta-row pc-norepo" title="esta carpeta no es repo git propio">' +
+          '<span class="pc-meta-icon">' + ICO.git + '</span>' +
+          '<span class="pc-meta-v">sin repo git</span>' +
+        '</div>'
+      : ''
+    if (noRepoHint) metaRows.push(noRepoHint)
 
     const actions = []
     /* primary action: prefer live dev > prod > editor */
@@ -4097,7 +4633,7 @@ body, .root, .main { max-width: 100vw; }
         '<div class="pc-top">' +
           '<span class="pc-stat-dot ' + p.status + '" title="' + p.status + '"></span>' +
           '<div class="pc-title">' +
-            '<div class="pc-name">' + escapeHtml(displayName) + newTag + '</div>' +
+            '<div class="pc-name">' + hl(displayName, searchQuery) + newTag + '</div>' +
             pathHtml +
           '</div>' +
         '</div>' +
@@ -4109,6 +4645,14 @@ body, .root, .main { max-width: 100vw; }
     )
   }
 
+  /* filter by stack chip */
+  function filterByStack(stack) {
+    activeStackFilter = stack
+    render()
+    toastStack('filtro · ' + stack)
+  }
+  window.filterByStack = filterByStack
+
   /* ═════════ Context menu ═════════ */
   function showContextMenu(ev, name) {
     const proj = projects.find(p => p.name === name)
@@ -4118,14 +4662,24 @@ body, .root, .main { max-width: 100vw; }
       { icon: ICO.code,   label: 'Abrir en editor',   run: () => doAction('open-vscode', name) },
       { icon: ICO.term,   label: 'Terminal + claude', run: () => doAction('open-terminal', name) },
       { icon: ICO.folder, label: 'Abrir carpeta',     run: () => doAction('open-folder', name) },
+      { icon: ICO.diff,   label: 'Copiar ruta',       run: () => copyText(proj.path || proj.name, 'ruta') },
+      { icon: ICO.commit, label: 'Copiar nombre',     run: () => copyText(proj.name, 'nombre') },
       { sep: true },
       { icon: ICO.star,   label: proj.favorite ? 'Quitar de favoritos' : 'Marcar favorito', run: async () => { await window.asura.toggleFavorite(name); toast(proj.favorite ? 'sin favorito' : 'favorito') } },
       { icon: ICO.eyeOff, label: proj.hidden ? 'Mostrar' : 'Ocultar',                       run: async () => { await window.asura.toggleHidden(name); toast(proj.hidden ? 'mostrando' : 'oculto') } },
     ]
-    ctx.innerHTML = items.map(it => it.sep
+    ctx.innerHTML = items.map((it, i) => it.sep
       ? '<div class="ctx-sep"></div>'
-      : '<div class="ctx-item" onclick="(' + it.run.toString() + ')();document.getElementById(\'ctx-menu\').classList.remove(\'on\')">' + it.icon + '<span>' + escapeHtml(it.label) + '</span></div>'
+      : '<div class="ctx-item" data-i="' + i + '">' + it.icon + '<span>' + escapeHtml(it.label) + '</span></div>'
     ).join('')
+    ctx.querySelectorAll('.ctx-item').forEach(el => {
+      const idx = parseInt(el.dataset.i, 10)
+      el.addEventListener('click', () => {
+        ctx.classList.remove('on')
+        const it = items[idx]
+        if (it && it.run) it.run()
+      })
+    })
     ctx.style.left = Math.min(ev.clientX, window.innerWidth - 220) + 'px'
     ctx.style.top  = Math.min(ev.clientY, window.innerHeight - ctx.offsetHeight - 20) + 'px'
     ctx.classList.add('on')
@@ -4137,6 +4691,40 @@ body, .root, .main { max-width: 100vw; }
   window.showContextMenu = showContextMenu
 
   /* ═════════ Render ═════════ */
+  function pulseTabBadge(name, newCount) {
+    if (prevTabCounts[name] !== undefined && newCount > prevTabCounts[name]) {
+      const el = document.getElementById('cnt-' + name)
+      if (el) {
+        el.classList.remove('pulse')
+        void el.offsetWidth
+        el.classList.add('pulse')
+      }
+    }
+    prevTabCounts[name] = newCount
+  }
+
+  function sortProjects(list, mode) {
+    const arr = list.slice()
+    arr.sort((a, b) => {
+      if (a.favorite !== b.favorite) return a.favorite ? -1 : 1
+      switch (mode) {
+        case 'name':    return a.name.localeCompare(b.name)
+        case 'commits': {
+          const ca = (a.commitsByDay || []).reduce((x, y) => x + y, 0)
+          const cb = (b.commitsByDay || []).reduce((x, y) => x + y, 0)
+          return cb - ca
+        }
+        case 'dirty':   return (b.git?.dirtyCount || 0) - (a.git?.dirtyCount || 0)
+        case 'status': {
+          const rank = { active: 0, dev: 1, recent: 2, stale: 3, archived: 4 }
+          return (rank[a.status] ?? 9) - (rank[b.status] ?? 9)
+        }
+        default:        return (b.git?.lastCommitTs || 0) - (a.git?.lastCommitTs || 0)
+      }
+    })
+    return arr
+  }
+
   function render() {
     const visibleProjects = projects.filter(p => !p.hidden)
     const nApps   = visibleProjects.length
@@ -4153,8 +4741,24 @@ body, .root, .main { max-width: 100vw; }
     document.getElementById('s-bots').textContent     = bots.filter(b => b.status === 'running').length
     document.getElementById('total-projects').textContent = nApps
 
+    pulseTabBadge('bots', nBots)
+    pulseTabBadge('alerts', nAlerts)
+
     const main = document.getElementById('main')
     const toolbar = document.getElementById('toolbar-apps')
+
+    /* update active stack pill + reset btn visibility */
+    const stackPill = document.getElementById('stack-pill')
+    if (activeStackFilter) {
+      stackPill.style.display = ''
+      document.getElementById('stack-pill-name').textContent = activeStackFilter
+    } else {
+      stackPill.style.display = 'none'
+    }
+    const filtersActive = activeFilter !== 'all' || activeStackFilter || searchQuery
+    document.getElementById('reset-filters').style.display = filtersActive ? '' : 'none'
+    const rs = document.getElementById('more-reset-sec')
+    if (rs) rs.style.display = filtersActive ? '' : 'none'
 
     if (activeTab === 'apps') {
       toolbar.style.display = 'flex'
@@ -4162,16 +4766,43 @@ body, .root, .main { max-width: 100vw; }
       if (activeFilter === 'favorites') filtered = filtered.filter(p => p.favorite)
       if (activeFilter === 'active')    filtered = filtered.filter(p => p.status === 'active' || p.devPort)
       if (activeFilter === 'bots')      filtered = filtered.filter(p => p.hasBots)
+      if (activeFilter === 'dirty')     filtered = filtered.filter(p => (p.git?.dirtyCount || 0) > 0)
+      if (activeFilter === 'stale')     filtered = filtered.filter(p => p.git && p.git.lastCommitTs && daysSince(p.git.lastCommitTs) > 30)
+      if (activeStackFilter)            filtered = filtered.filter(p => (p.stack || []).includes(activeStackFilter))
       if (searchQuery) {
         filtered = filtered.filter(p =>
           p.name.toLowerCase().includes(searchQuery) ||
           (p.stack || []).some(s => s.toLowerCase().includes(searchQuery)) ||
           (p.git.branch || '').toLowerCase().includes(searchQuery))
       }
+      filtered = sortProjects(filtered, sortMode)
       if (!filtered.length) {
-        main.innerHTML = '<div class="placeholder"><div class="placeholder-icon">' + ICO.eye + '</div><h3>Sin resultados</h3><p>Ningún proyecto coincide con tu filtro</p></div>'
+        main.innerHTML = '<div class="placeholder">' +
+          '<div class="placeholder-icon">' + ICO.eye + '</div>' +
+          '<h3>Sin resultados</h3>' +
+          '<p>Ningún proyecto coincide. ' + (filtersActive ? 'Reduce filtros.' : '') + '</p>' +
+          (filtersActive ? '<div class="ph-suggest"><button onclick="document.getElementById(\'reset-filters\').click()">⟲ reset filtros</button></div>' : '') +
+          '</div>'
+      } else if (groupByStack) {
+        const groups = {}
+        for (const p of filtered) {
+          const key = (p.stack && p.stack[0]) || '— sin stack —'
+          if (!groups[key]) groups[key] = []
+          groups[key].push(p)
+        }
+        const sorted = Object.keys(groups).sort()
+        main.innerHTML = '<div class="grid">' + sorted.map(k =>
+          '<div class="grp-head">' + escapeHtml(k) + ' <span class="grp-n">' + groups[k].length + '</span></div>' +
+          groups[k].map(projectCard).join('')
+        ).join('') + '</div>'
       } else {
         main.innerHTML = '<div class="grid">' + filtered.map(projectCard).join('') + '</div>'
+      }
+      /* reapply kb-focus highlight if still in range */
+      if (kbFocusIdx >= 0) {
+        const cards = document.querySelectorAll('#main .pcard')
+        if (kbFocusIdx < cards.length) cards[kbFocusIdx].classList.add('kb-focus')
+        else kbFocusIdx = -1
       }
     }
 
@@ -4387,9 +5018,33 @@ body, .root, .main { max-width: 100vw; }
   /* ═════════ Live data ═════════ */
   function onProjects(p) {
     projects = p || []
+    lastScanTs = Date.now()
     document.getElementById('last-scan').textContent = new Date().toLocaleTimeString()
     render()
   }
+  /* live "hace Xs" + session timer tick on statusbar */
+  setInterval(() => {
+    if (lastScanTs) {
+      const sec = Math.floor((Date.now() - lastScanTs) / 1000)
+      const live = document.querySelector('.sbar-l .live span')
+      if (live) {
+        const r = config && config.refreshRateMs ? Math.round(config.refreshRateMs / 1000) : 30
+        live.textContent = 'auto-scan ' + r + 's · hace ' + (sec < 60 ? sec + 's' : Math.floor(sec / 60) + 'm')
+      }
+    }
+    const sessSec = Math.floor((Date.now() - sessionStartTs) / 1000)
+    const sessEl = document.getElementById('session-t')
+    if (sessEl) {
+      const m = Math.floor(sessSec / 60)
+      const h = Math.floor(m / 60)
+      sessEl.textContent = h > 0 ? h + 'h ' + (m % 60) + 'm' : m + 'm'
+    }
+  }, 1000)
+
+  /* shortcuts overlay click-outside */
+  document.getElementById('shortcuts-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'shortcuts-overlay') e.target.classList.remove('on')
+  })
   function onBots(b) {
     bots = b || []
     document.getElementById('cnt-bots').textContent = bots.filter(x => x.status === 'running' || x.status === 'paused' || x.status === 'idle' || x.status === 'stuck').length

@@ -3,6 +3,7 @@ import fs from 'fs'
 import fsp from 'fs/promises'
 import path from 'path'
 import { promisify } from 'util'
+import { isOwnRepo } from './git'
 
 const execp = promisify(exec)
 
@@ -64,8 +65,10 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
     buildArtifact: null,
   }
 
+  const hasGit = isOwnRepo(projectPath)
+
   /* recent commits */
-  const log = await safeExec('git log -8 --pretty=format:%H%x00%ct%x00%an%x00%s', projectPath)
+  const log = hasGit ? await safeExec('git log -8 --pretty=format:%H%x00%ct%x00%an%x00%s', projectPath) : ''
   if (log) {
     detail.recentCommits = log.split('\n').filter(Boolean).map(line => {
       const [hash, ts, author, msg] = line.split('\0')
@@ -81,7 +84,7 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
   /* commits last 14 days bucketed by day */
   const now = Date.now()
   const since = Math.floor((now - 14 * 86_400_000) / 1000)
-  const log14 = await safeExec(`git log --since=${since} --pretty=format:%ct`, projectPath)
+  const log14 = hasGit ? await safeExec(`git log --since=${since} --pretty=format:%ct`, projectPath) : ''
   if (log14) {
     const dayMs = 86_400_000
     const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0)
@@ -94,7 +97,7 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
   }
 
   /* files modified today (uncommitted) */
-  const status = await safeExec('git status --porcelain', projectPath)
+  const status = hasGit ? await safeExec('git status --porcelain', projectPath) : ''
   if (status) {
     detail.filesModifiedToday = status.split('\n')
       .map(l => l.slice(3).trim())
@@ -161,7 +164,7 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
   }
 
   /* git remote origin → https form */
-  const remote = await safeExec('git config --get remote.origin.url', projectPath)
+  const remote = hasGit ? await safeExec('git config --get remote.origin.url', projectPath) : ''
   if (remote) {
     let u = remote
     if (u.startsWith('git@')) {
@@ -173,11 +176,11 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
   }
 
   /* local branch count */
-  const branches = await safeExec('git branch --list', projectPath)
+  const branches = hasGit ? await safeExec('git branch --list', projectPath) : ''
   if (branches) detail.branches = branches.split('\n').filter(Boolean).length
 
   /* last 5 tags with timestamps */
-  const tagsRaw = await safeExec('git for-each-ref --sort=-creatordate --count=5 --format=%(refname:short)%00%(creatordate:unix) refs/tags', projectPath)
+  const tagsRaw = hasGit ? await safeExec('git for-each-ref --sort=-creatordate --count=5 --format=%(refname:short)%00%(creatordate:unix) refs/tags', projectPath) : ''
   if (tagsRaw) {
     detail.tags = tagsRaw.split('\n').filter(Boolean).map(line => {
       const [name, ts] = line.split('\0')
@@ -187,7 +190,7 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
 
   /* top authors last 90d */
   const since90 = Math.floor((now - 90 * 86_400_000) / 1000)
-  const authorsRaw = await safeExec(`git log --since=${since90} --pretty=format:%an`, projectPath)
+  const authorsRaw = hasGit ? await safeExec(`git log --since=${since90} --pretty=format:%an`, projectPath) : ''
   if (authorsRaw) {
     const counts = new Map<string, number>()
     for (const a of authorsRaw.split('\n').filter(Boolean)) {
@@ -201,7 +204,7 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
 
   /* hot files + lines added/removed last 30d via numstat */
   const since30 = Math.floor((now - 30 * 86_400_000) / 1000)
-  const numstat = await safeExec(`git log --since=${since30} --pretty=format: --numstat`, projectPath, 6000)
+  const numstat = hasGit ? await safeExec(`git log --since=${since30} --pretty=format: --numstat`, projectPath, 6000) : ''
   if (numstat) {
     const fileCounts = new Map<string, number>()
     let added = 0, removed = 0
@@ -244,7 +247,7 @@ export async function getDetail(projectPath: string): Promise<ProjectDetail> {
   }
 
   /* repo age — timestamp of first (root) commit reachable from HEAD */
-  const firstCommit = await safeExec('git log --max-parents=0 --format=%ct HEAD', projectPath)
+  const firstCommit = hasGit ? await safeExec('git log --max-parents=0 --format=%ct HEAD', projectPath) : ''
   if (firstCommit) {
     const ts = parseInt(firstCommit.split('\n')[0], 10) * 1000
     if (ts > 0) detail.branchAge = Math.floor((now - ts) / 86_400_000)

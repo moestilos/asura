@@ -209,6 +209,10 @@ ipcMain.handle('set-config',     async (_e, patch) => {
   const c = setConfig(patch)
   rebuildTrayMenu()
   if ('autoStart' in patch) applyAutoStart()
+  if ('refreshRateMs' in patch) {
+    if (timer) clearInterval(timer)
+    timer = setInterval(refresh, c.refreshRateMs || 30_000)
+  }
   return c
 })
 ipcMain.handle('toggle-favorite',async (_e, name: string) => { const v = toggleFavorite(name); refresh(); return v })
@@ -239,10 +243,21 @@ ipcMain.handle('action', async (_e, kind: ActionKind, projectName: string, extra
 function applyAutoStart() {
   try {
     const cfg = getConfig()
-    app.setLoginItemSettings({
+    const opts: Electron.Settings = {
       openAtLogin: !!cfg.autoStart,
-      args:        ['--hidden'],
-    })
+      openAsHidden: true,
+    }
+    if (!app.isPackaged && process.platform === 'win32') {
+      opts.path = process.execPath
+      opts.args = [path.resolve(__dirname, '..'), '--hidden']
+    } else {
+      opts.args = ['--hidden']
+    }
+    app.setLoginItemSettings(opts)
+    const check = app.getLoginItemSettings({ path: opts.path, args: opts.args })
+    if (cfg.autoStart && !check.openAtLogin) {
+      console.error('autostart: setLoginItemSettings did not stick', check)
+    }
   } catch (e) {
     console.error('autostart error:', e)
   }
