@@ -31,7 +31,8 @@ export interface Config {
   snoozedUntil:     Record<string, number> // alertKey -> ts
   installedAt:      number                  // first ever launch ts — projects firstSeen near this aren't "new"
   autoStart:        boolean                  // launch on Windows boot
-  adminMode:        boolean                  // launch codex with --dangerously-bypass-approvals-and-sandbox
+  aiTool:           'claude' | 'codex'        // AI coding tool launched from terminal button
+  adminMode:        boolean                  // launch AI tool in full-auto/no-confirm mode
   githubToken?:     string                   // GitHub Personal Access Token
 }
 
@@ -63,6 +64,7 @@ const DEFAULTS: Config = {
   snoozedUntil:     {},
   installedAt:      0,
   autoStart:        false,
+  aiTool:           'claude',
   adminMode:        false,
 }
 
