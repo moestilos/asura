@@ -13,6 +13,14 @@ export type ActionKind =
   | 'open-cursor'
   | 'open-explorer'
 
+export function cloneRepo(cloneUrl: string, destDir: string): Promise<{ ok: boolean; error?: string }> {
+  return new Promise((resolve) => {
+    const proc = spawn('git', ['clone', cloneUrl, destDir], { shell: false, stdio: 'ignore' })
+    proc.on('close', (code) => resolve(code === 0 ? { ok: true } : { ok: false, error: `exit code ${code}` }))
+    proc.on('error', (err) => resolve({ ok: false, error: err.message }))
+  })
+}
+
 function runShell(cmdLine: string): void {
   spawn(cmdLine, [], {
     shell:    true,

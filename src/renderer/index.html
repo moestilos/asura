@@ -1138,6 +1138,8 @@ body.theme-dark::after {
   background: rgba(255, 46, 147, .1);
   border-color: var(--pink);
 }
+.icon-btn:focus { outline: none; }
+.icon-btn:focus-visible { outline: 1px solid var(--cyan-line); outline-offset: 2px; }
 .icon-btn.close:hover {
   color: #fff;
   background: linear-gradient(135deg, var(--pink), var(--sun));
@@ -3396,21 +3398,36 @@ img, svg, video, canvas { max-width: 100%; }
 
 .gh-repos-list { display: flex; flex-direction: column; gap: 2px; }
 .gh-repo-row {
-  display: flex; flex-direction: column; gap: 4px;
+  display: flex; align-items: center; gap: 8px;
   padding: 7px 8px; border-radius: var(--r-sm);
-  cursor: pointer; border: 1px solid transparent;
+  border: 1px solid transparent;
 }
 .gh-repo-row:hover { background: var(--bg-2); border-color: var(--line-0); }
+.gh-repo-info { display: flex; flex-direction: column; gap: 3px; }
 .gh-repo-name { font-size: 12px; font-weight: 600; color: var(--tx-0); display: flex; align-items: center; gap: 6px; }
 .gh-repo-desc { font-size: 11px; color: var(--tx-2); }
 .gh-repo-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.gh-clone-btn { font-size: 11px; padding: 3px 8px; flex-shrink: 0; white-space: nowrap; }
+.gh-clone-btn.cloning { opacity: .6; }
 .gh-private {
   font-size: 9px; background: var(--amber-soft); border: 1px solid var(--amber-line);
   color: var(--amber); border-radius: var(--r-xs); padding: 1px 4px;
   font-weight: 600; text-transform: uppercase;
 }
+.gh-fork {
+  font-size: 9px; background: rgba(92,255,255,.08); border: 1px solid var(--cyan-line);
+  color: var(--cyan); border-radius: var(--r-xs); padding: 1px 4px;
+  font-weight: 600; text-transform: uppercase;
+}
+.gh-repo-search {
+  background: var(--bg-1); border: 1px solid var(--line-1); border-radius: var(--r-sm);
+  color: var(--tx-0); font-size: 11px; padding: 3px 8px; outline: none; width: 120px;
+}
+.gh-repo-search:focus { border-color: var(--cyan); }
 .gh-change-token { font-size: 10px; color: var(--tx-3); cursor: pointer; padding: 0; }
 .gh-change-token:hover { color: var(--pink); }
+.spin-inline { display: inline-block; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 </style>
 </head>
@@ -3676,6 +3693,7 @@ img, svg, video, canvas { max-width: 100%; }
   let activeTab = 'apps'
   let activeFilter = 'all'
   let searchQuery = ''
+  let cloningRepos = new Set()
   let selectedCpIndex = 0
   let cpItems = []
   let sortMode = localStorage.getItem('asura:sort') || 'recent'
@@ -4050,16 +4068,18 @@ img, svg, video, canvas { max-width: 100%; }
 
   /* ═════════ Always-on-top ═════════ */
   async function toggleAlwaysOnTop() {
-    const on = !(config && config.alwaysOnTop)
+    if (!config) config = await window.asura.getConfig()
+    const on = !config.alwaysOnTop
     await window.asura.alwaysOnTop(on)
-    if (config) config.alwaysOnTop = on
+    config.alwaysOnTop = on
     document.getElementById('aot-btn').classList.toggle('active', on)
     toast(on ? 'always on top: on' : 'always on top: off')
   }
 
   /* ═════════ Settings modal ═════════ */
-  function openSettings() {
-    if (!config) return
+  async function openSettings() {
+    if (!config) config = await window.asura.getConfig()
+    if (!config) { toast('error: config no disponible'); return }
     const html = `
       <div class="set-row">
         <div class="set-l">
@@ -4791,6 +4811,40 @@ img, svg, video, canvas { max-width: 100%; }
   window.markGhNotifRead      = markGhNotifRead
   window.requestGithubRefresh = requestGithubRefresh
 
+  function ghApiToWebUrl(subject) {
+    if (!subject || !subject.url) return null
+    const m = subject.url.match(/api\.github\.com\/repos\/(.+?)\/(pulls|issues|commits)\/(.+)/)
+    if (!m) return null
+    const webType = m[2] === 'pulls' ? 'pull' : m[2]
+    return `https://github.com/${m[1]}/${webType}/${m[3]}`
+  }
+
+  async function cloneRepo(fullName) {
+    if (cloningRepos.has(fullName)) return
+    cloningRepos.add(fullName)
+    render()
+    toast('clonando ' + fullName + '…')
+    const result = await window.asura.cloneRepo(fullName)
+    cloningRepos.delete(fullName)
+    if (result.ok) {
+      toast('✓ clonado en ' + result.path)
+      window.asura.requestProjects()
+    } else {
+      toast('error al clonar: ' + (result.error || 'desconocido'))
+    }
+    render()
+  }
+  window.cloneRepo = cloneRepo
+
+  function filterGhRepos(q) {
+    const rows = document.querySelectorAll('.gh-repo-row')
+    const ql = (q || '').toLowerCase()
+    rows.forEach(row => {
+      row.style.display = (!ql || (row.dataset.repo || '').includes(ql)) ? '' : 'none'
+    })
+  }
+  window.filterGhRepos = filterGhRepos
+
   function renderGitHub() {
     const hasToken = config && config.githubToken
 
@@ -4835,8 +4889,9 @@ img, svg, video, canvas { max-width: 100%; }
       for (const n of notifs) {
         const typeIcon = n.subject.type === 'PullRequest' ? '⤴' : (n.subject.type === 'Issue' ? '◉' : '◆')
         const time = relTime(new Date(n.updated_at).getTime())
+        const webUrl = ghApiToWebUrl(n.subject) || n.repository.html_url
         html += (
-          '<div class="gh-notif-row' + (n.unread ? ' unread' : '') + '" onclick="markGhNotifRead(\'' + escapeAttr(n.id) + '\')">' +
+          '<div class="gh-notif-row' + (n.unread ? ' unread' : '') + '" onclick="markGhNotifRead(\'' + escapeAttr(n.id) + '\');doAction(\'open-dev-url\',\'\',\'' + escapeAttr(webUrl) + '\')">' +
             '<span class="gh-notif-type">' + typeIcon + '</span>' +
             '<div class="gh-notif-body">' +
               '<div class="gh-notif-repo">' + escapeHtml(n.repository.full_name) + '</div>' +
@@ -4855,7 +4910,10 @@ img, svg, video, canvas { max-width: 100%; }
 
     /* Remote repos not cloned locally */
     html += '<div class="gh-section">'
-    html += '<div class="gh-section-hdr"><span>' + ICO.github + ' Repos en GitHub · ' + remoteOnly.length + ' sin clonar</span></div>'
+    html += '<div class="gh-section-hdr">'
+    html +=   '<span>' + ICO.github + ' Repos en GitHub · <b>' + remoteOnly.length + '</b> sin clonar</span>'
+    html +=   '<input class="gh-repo-search" id="gh-repo-search" type="text" placeholder="buscar…" oninput="filterGhRepos(this.value)" autocomplete="off"/>'
+    html += '</div>'
 
     if (!githubState.userRepos.length) {
       html += '<div class="gh-empty">Cargando repos…</div>'
@@ -4863,20 +4921,28 @@ img, svg, video, canvas { max-width: 100%; }
       html += '<div class="gh-empty">Todos tus repos están clonados localmente ✓</div>'
     } else {
       html += '<div class="gh-repos-list">'
-      for (const r of remoteOnly.slice(0, 25)) {
+      for (const r of remoteOnly) {
         const time = r.pushed_at ? relTime(new Date(r.pushed_at).getTime()) : '—'
+        const isCloning = cloningRepos.has(r.full_name)
         html += (
-          '<div class="gh-repo-row" onclick="doAction(\'open-dev-url\',\'\',\'' + escapeAttr(r.html_url) + '\')">' +
-            '<div class="gh-repo-name">' +
-              escapeHtml(r.full_name) +
-              (r.private ? ' <span class="gh-private">private</span>' : '') +
+          '<div class="gh-repo-row" data-repo="' + escapeAttr(r.full_name.toLowerCase()) + '">' +
+            '<div class="gh-repo-info" onclick="doAction(\'open-dev-url\',\'\',\'' + escapeAttr(r.html_url) + '\')" style="flex:1;cursor:pointer;min-width:0">' +
+              '<div class="gh-repo-name">' +
+                escapeHtml(r.full_name) +
+                (r.private ? ' <span class="gh-private">private</span>' : '') +
+                (r.fork    ? ' <span class="gh-fork">fork</span>'        : '') +
+              '</div>' +
+              (r.description ? '<div class="gh-repo-desc">' + escapeHtml(r.description.slice(0, 90)) + '</div>' : '') +
+              '<div class="gh-repo-meta">' +
+                (r.language ? '<span class="chip">' + escapeHtml(r.language) + '</span>' : '') +
+                (r.stargazers_count > 0 ? '<span class="badge">★ ' + r.stargazers_count + '</span>' : '') +
+                '<span class="pc-meta-time">' + time + '</span>' +
+              '</div>' +
             '</div>' +
-            (r.description ? '<div class="gh-repo-desc">' + escapeHtml(r.description.slice(0, 90)) + '</div>' : '') +
-            '<div class="gh-repo-meta">' +
-              (r.language ? '<span class="chip">' + escapeHtml(r.language) + '</span>' : '') +
-              (r.stargazers_count > 0 ? '<span class="badge">★ ' + r.stargazers_count + '</span>' : '') +
-              '<span class="pc-meta-time">' + time + '</span>' +
-            '</div>' +
+            '<button class="ab gh-clone-btn' + (isCloning ? ' cloning' : '') + '" ' +
+              (isCloning ? 'disabled' : 'onclick="cloneRepo(\'' + escapeAttr(r.full_name) + '\')"') + '>' +
+              (isCloning ? '<span class="spin-inline">↻</span> clonando' : '↓ clonar') +
+            '</button>' +
           '</div>'
         )
       }

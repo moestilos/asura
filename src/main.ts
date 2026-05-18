@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } from 'electron'
 import path from 'path'
 import { scanWorkspace, Project } from './scanner'
-import { runAction, ActionKind, setAlwaysOnTop } from './actions'
+import { runAction, cloneRepo, ActionKind, setAlwaysOnTop } from './actions'
 import { startBotDaemon, stopBotDaemon, getBotList, clearBot } from './bots'
 import {
   loadConfig, getConfig, setConfig, toggleFavorite, toggleHidden,
@@ -259,7 +259,21 @@ ipcMain.handle('always-on-top',  async (_e, on: boolean) => {
   if (win) setAlwaysOnTop(win, on)
   setConfig({ alwaysOnTop: on })
   rebuildTrayMenu()
+  win?.webContents.send('config-update', getConfig())
   return on
+})
+
+ipcMain.handle('clone-repo', async (_e, repoFullName: string) => {
+  const cfg = getConfig()
+  const appsDir = cfg.workspaceRoots.length > 0
+    ? cfg.workspaceRoots[0]
+    : path.resolve(__dirname, '..', '..')
+  const repoName = repoFullName.split('/')[1]
+  const destPath = path.join(appsDir, repoName)
+  const cloneUrl = `https://github.com/${repoFullName}.git`
+  const result = await cloneRepo(cloneUrl, destPath)
+  if (result.ok) refresh()
+  return { ...result, path: destPath }
 })
 
 ipcMain.handle('get-detail',     async (_e, projectName: string) => {
