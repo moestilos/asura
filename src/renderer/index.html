@@ -261,6 +261,40 @@ body.theme-ghost {
 /* 12 SYNTHWAVE — outrun sunset (default — same as :root) */
 body.theme-synthwave { /* matches :root */ }
 
+/* 13 ONE DARK PRO — warm carbón azulado */
+body.theme-onedark {
+  --pink:#c678dd; --cyan:#61afef; --sun:#e5c07b; --violet:#56b6c2;
+  --ink-0:#dfe2e7; --ink-1:#abb2bf; --ink-2:#828997; --ink-3:#5c6370;
+  --line:#3e4451; --line-2:#4b5263;
+  --bg-0:#1c1f25; --bg-1:#21252b; --bg-2:#282c34; --bg-3:#2c313c; --bg-4:#353b46;
+  --tx-0:#dfe2e7; --tx-1:#abb2bf; --tx-2:#828997; --tx-3:#5c6370; --tx-4:#3e4451;
+  --bg-card: rgba(40,44,52,.85); --bg-card-2: rgba(44,49,60,.92);
+  --line-0: rgba(198,120,221,.12); --line-1: rgba(198,120,221,.28);
+  --green:#98c379; --green-2:#7ea65d; --amber:#e5c07b; --red:#e06c75;
+  --green-soft: rgba(152,195,121,.10); --green-line: rgba(152,195,121,.35); --green-glow: rgba(152,195,121,.55);
+  --cyan-soft: rgba(97,175,239,.10); --cyan-line: rgba(97,175,239,.32);
+  --amber-soft: rgba(229,192,123,.12); --amber-line: rgba(229,192,123,.32);
+  --red-soft: rgba(224,108,117,.12); --red-line: rgba(224,108,117,.35);
+  --violet-soft: rgba(86,182,194,.12); --violet-line: rgba(86,182,194,.35);
+}
+
+/* 14 GITHUB DARK — frío, minimalista, legible */
+body.theme-github {
+  --pink:#58a6ff; --cyan:#3fb950; --sun:#d29922; --violet:#bc8cff;
+  --ink-0:#f0f6fc; --ink-1:#e6edf3; --ink-2:#8b949e; --ink-3:#6e7681;
+  --line:#30363d; --line-2:#21262d;
+  --bg-0:#010409; --bg-1:#0d1117; --bg-2:#161b22; --bg-3:#21262d; --bg-4:#30363d;
+  --tx-0:#f0f6fc; --tx-1:#e6edf3; --tx-2:#8b949e; --tx-3:#6e7681; --tx-4:#484f58;
+  --bg-card: rgba(22,27,34,.85); --bg-card-2: rgba(33,38,45,.92);
+  --line-0: rgba(88,166,255,.12); --line-1: rgba(88,166,255,.28);
+  --green:#3fb950; --green-2:#2ea043; --amber:#d29922; --red:#f85149;
+  --green-soft: rgba(63,185,80,.10); --green-line: rgba(63,185,80,.35); --green-glow: rgba(63,185,80,.55);
+  --cyan-soft: rgba(63,185,80,.10); --cyan-line: rgba(63,185,80,.32);
+  --amber-soft: rgba(210,153,34,.12); --amber-line: rgba(210,153,34,.32);
+  --red-soft: rgba(248,81,73,.12); --red-line: rgba(248,81,73,.35);
+  --violet-soft: rgba(188,140,255,.12); --violet-line: rgba(188,140,255,.35);
+}
+
 /* light themes share — disable synthwave glow + horizon strip */
 body.is-light::before,
 body.is-light::after { display: none !important; }
@@ -947,6 +981,8 @@ body.theme-rain #theme-fx .fx-d { display: none !important; }
 /* 10 akira fx-d definido arriba como segundo shockwave */
 
 body.theme-ghost #theme-fx .fx-d { display: none !important; }
+body.theme-onedark #theme-fx .fx-d { display: none !important; }
+body.theme-github  #theme-fx .fx-d { display: none !important; }
 .disabled-ghost-d {
   opacity: 1;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800'><g font-family='monospace' font-size='11' fill='%2300ffd5' opacity='.40'><text x='20' y='20'>[boot] init kernel 4.0.7-asura</text><text x='20' y='40'>[ ok ] mounting /dev/sda1</text><text x='20' y='60'>[ ok ] starting daemon: scanner</text><text x='20' y='80'>[ ok ] starting daemon: bot-watcher</text><text x='20' y='100'>[ ok ] starting daemon: docker-bridge</text><text x='20' y='120'>[info] no container runtime</text><text x='20' y='140'>[ ok ] tray icon registered</text><text x='20' y='160'>[ ok ] http server :27315</text><text x='20' y='180'>[ ok ] ipc handler ready</text><text x='20' y='200'>[done] asura phantom online</text><text x='20' y='240'>$ scan workspace</text><text x='20' y='260'>found 15 projects · ok</text><text x='20' y='280'>parsed git logs · ok</text><text x='20' y='300'>cached commits · ok</text><text x='20' y='320'>$ _</text><text x='20' y='400'>[boot] init kernel 4.0.7-asura</text><text x='20' y='420'>[ ok ] mounting /dev/sda1</text><text x='20' y='440'>[ ok ] starting daemon: scanner</text></g></svg>");
@@ -4071,6 +4107,8 @@ img, svg, video, canvas { max-width: 100%; }
     { id: 'rain',       label: 'Petrichor rain',      light: false },
     { id: 'akira',      label: 'Neo-Tokyo akira',     light: false },
     { id: 'ghost',      label: 'Netwatch ghost',      light: false },
+    { id: 'onedark',    label: 'One Dark Pro',        light: false },
+    { id: 'github',     label: 'GitHub Dark',         light: false },
   ]
   function normalizeTheme(t) {
     if (!t) return 'synthwave'

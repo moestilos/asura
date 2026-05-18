@@ -9,7 +9,8 @@ const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json')
 export type ThemeId =
   | 'synthwave' | 'brutalist' | 'blueprint' | 'solarpunk' | 'vaporwave'
   | 'risograph' | 'cyberpunk' | 'sumie'      | 'manga'    | 'rain'
-  | 'akira'     | 'ghost'     | 'dark'       | 'light'
+  | 'akira'     | 'ghost'     | 'onedark'    | 'github'
+  | 'dark'      | 'light'
 
 export interface Config {
   favorites:        string[]              // project names pinned
