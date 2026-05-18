@@ -4047,7 +4047,7 @@ img, svg, video, canvas { max-width: 100%; }
     const labels = {
       'open-vscode':   'editor abierto',
       'open-cursor':   'cursor abierto',
-      'open-terminal': 'terminal + claude',
+      'open-terminal': 'terminal + codex',
       'open-folder':   'carpeta abierta',
       'open-handoff':  'handoff abierto',
       'open-dev-url':  'url abierta',
@@ -4284,7 +4284,7 @@ img, svg, video, canvas { max-width: 100%; }
       <div class="set-row">
         <div class="set-l">
           <div class="set-name">AdminMode</div>
-          <div class="set-desc">lanza Claude Code con --dangerously-skip-permissions</div>
+          <div class="set-desc">lanza Codex con --dangerously-bypass-approvals-and-sandbox</div>
         </div>
         <div class="switch ${config.adminMode ? 'on' : ''}" data-set="adminMode"></div>
       </div>
@@ -4872,7 +4872,7 @@ img, svg, video, canvas { max-width: 100%; }
     if (p.devPort && p.prodUrl) {
       actions.push('<button class="ab icon-only" onclick="event.stopPropagation();doAction(\'open-dev-url\',\'' + escapeAttr(p.name) + '\',\'' + escapeAttr(p.prodUrl) + '\')" title="abrir producción · ' + escapeAttr(p.prodUrl) + '">' + ICO.open + '</button>')
     }
-    actions.push('<button class="ab icon-only" onclick="event.stopPropagation();doAction(\'open-terminal\',\'' + escapeAttr(p.name) + '\')" title="terminal + claude">' + ICO.term + '</button>')
+    actions.push('<button class="ab icon-only" onclick="event.stopPropagation();doAction(\'open-terminal\',\'' + escapeAttr(p.name) + '\')" title="terminal + codex">' + ICO.term + '</button>')
     actions.push('<button class="ab icon-only" onclick="event.stopPropagation();doAction(\'open-folder\',\'' + escapeAttr(p.name) + '\')" title="carpeta">' + ICO.folder + '</button>')
     if (p.hasHandoff) {
       actions.push('<button class="ab icon-only" onclick="event.stopPropagation();doAction(\'open-handoff\',\'' + escapeAttr(p.name) + '\',\'' + escapeAttr(p.handoffPath) + '\')" title="HANDOFF.md">' + ICO.book + '</button>')
@@ -5110,7 +5110,7 @@ img, svg, video, canvas { max-width: 100%; }
     const ctx = document.getElementById('ctx-menu')
     const items = [
       { icon: ICO.code,   label: 'Abrir en editor',   run: () => doAction('open-vscode', name) },
-      { icon: ICO.term,   label: 'Terminal + claude', run: () => doAction('open-terminal', name) },
+      { icon: ICO.term,   label: 'Terminal + codex', run: () => doAction('open-terminal', name) },
       { icon: ICO.folder, label: 'Abrir carpeta',     run: () => doAction('open-folder', name) },
       { icon: ICO.diff,   label: 'Copiar ruta',       run: () => copyText(proj.path || proj.name, 'ruta') },
       { icon: ICO.commit, label: 'Copiar nombre',     run: () => copyText(proj.name, 'nombre') },

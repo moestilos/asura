@@ -63,11 +63,11 @@ export async function runAction(
 
     case 'open-terminal': {
       const cfg = getConfig()
-      const claudeCmd = cfg.adminMode ? 'claude --dangerously-skip-permissions' : 'claude'
+      const codexCmd = cfg.adminMode ? 'codex --dangerously-bypass-approvals-and-sandbox' : 'codex'
       try {
-        runShell(`wt -d ${quote(projectPath)} cmd /k ${claudeCmd}`)
+        runShell(`wt -d ${quote(projectPath)} cmd /k ${codexCmd}`)
       } catch {
-        runShell(`start "" cmd /k "cd /d ${quote(projectPath)} && ${claudeCmd}"`)
+        runShell(`start "" cmd /k "cd /d ${quote(projectPath)} && ${codexCmd}"`)
       }
       return 'terminal opened'
     }

@@ -31,7 +31,7 @@ export interface Config {
   snoozedUntil:     Record<string, number> // alertKey -> ts
   installedAt:      number                  // first ever launch ts — projects firstSeen near this aren't "new"
   autoStart:        boolean                  // launch on Windows boot
-  adminMode:        boolean                  // launch claude with --dangerously-skip-permissions
+  adminMode:        boolean                  // launch codex with --dangerously-bypass-approvals-and-sandbox
   githubToken?:     string                   // GitHub Personal Access Token
 }
 
