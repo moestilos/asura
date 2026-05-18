@@ -49,6 +49,7 @@ contextBridge.exposeInMainWorld('asura', {
     ipcRenderer.on('github-update', (_e, data) => cb(data)),
   markNotificationRead: (id: string) => ipcRenderer.invoke('mark-notification-read', id),
   cloneRepo:            (fullName: string) => ipcRenderer.invoke('clone-repo', fullName),
+  deleteProject:        (projectPath: string) => ipcRenderer.invoke('delete-project', projectPath),
 
   /* window */
   close:            ()        => ipcRenderer.send('close-window'),

@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } from 'electron'
 import path from 'path'
+import fsp from 'fs/promises'
 import { scanWorkspace, Project } from './scanner'
 import { runAction, cloneRepo, ActionKind, setAlwaysOnTop } from './actions'
 import { startBotDaemon, stopBotDaemon, getBotList, clearBot } from './bots'
@@ -274,6 +275,16 @@ ipcMain.handle('clone-repo', async (_e, repoFullName: string) => {
   const result = await cloneRepo(cloneUrl, destPath)
   if (result.ok) refresh()
   return { ...result, path: destPath }
+})
+
+ipcMain.handle('delete-project', async (_e, projectPath: string) => {
+  try {
+    await fsp.rm(projectPath, { recursive: true, force: true })
+    refresh()
+    return { ok: true }
+  } catch (e: any) {
+    return { ok: false, error: e.message }
+  }
 })
 
 ipcMain.handle('get-detail',     async (_e, projectName: string) => {

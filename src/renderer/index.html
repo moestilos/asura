@@ -2717,6 +2717,9 @@ body.is-light .theme-select option { background: var(--bg-1); color: var(--tx-0)
   color: var(--cyan);
 }
 .ctx-item:hover svg { color: var(--cyan); }
+.ctx-item.danger { color: var(--red, #ff4455); }
+.ctx-item.danger svg { color: var(--red, #ff4455); }
+.ctx-item.danger:hover { background: rgba(255, 68, 85, .12); color: var(--red, #ff4455); }
 .ctx-sep {
   height: 1px;
   background: var(--line-2);
@@ -3426,6 +3429,13 @@ img, svg, video, canvas { max-width: 100%; }
 .gh-repo-search:focus { border-color: var(--cyan); }
 .gh-change-token { font-size: 10px; color: var(--tx-3); cursor: pointer; padding: 0; }
 .gh-change-token:hover { color: var(--pink); }
+.badge.gh-link { cursor: pointer; padding: 2px 5px; opacity: .7; }
+.badge.gh-link:hover { opacity: 1; }
+.badge.gh-link svg { width: 10px; height: 10px; }
+.confirm-body { padding: 4px 0 8px; }
+.confirm-msg { color: var(--tx-1); font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
+.confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.confirm-actions .ab { min-width: 80px; justify-content: center; }
 .spin-inline { display: inline-block; animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -4669,6 +4679,7 @@ img, svg, video, canvas { max-width: 100%; }
       tags.push('<span class="badge idle-warn" title="sin commits hace ' + daysSince(p.git.lastCommitTs) + 'd">⏱ ' + daysSince(p.git.lastCommitTs) + 'd</span>')
     }
     if (p.githubRepo) {
+      tags.push('<span class="badge gh-link" title="' + escapeAttr(p.githubRepo) + '" onclick="event.stopPropagation();doAction(\'open-dev-url\',\'\',\'https://github.com/' + escapeAttr(p.githubRepo) + '\')">' + ICO.github + '</span>')
       const ghd = githubState.repoData[p.githubRepo]
       if (ghd) {
         if (ghd.ciStatus !== 'unknown') {
@@ -4811,6 +4822,22 @@ img, svg, video, canvas { max-width: 100%; }
   window.markGhNotifRead      = markGhNotifRead
   window.requestGithubRefresh = requestGithubRefresh
 
+  function confirmDialog(title, message) {
+    return new Promise(resolve => {
+      openModal(title,
+        '<div class="confirm-body">' +
+          '<p class="confirm-msg">' + escapeHtml(message) + '</p>' +
+          '<div class="confirm-actions">' +
+            '<button class="ab" id="confirm-cancel">Cancelar</button>' +
+            '<button class="ab primary" id="confirm-ok">' + escapeHtml(title) + '</button>' +
+          '</div>' +
+        '</div>'
+      )
+      document.getElementById('confirm-ok').addEventListener('click', () => { closeModal(); resolve(true) })
+      document.getElementById('confirm-cancel').addEventListener('click', () => { closeModal(); resolve(false) })
+    })
+  }
+
   function ghApiToWebUrl(subject) {
     if (!subject || !subject.url) return null
     const m = subject.url.match(/api\.github\.com\/repos\/(.+?)\/(pulls|issues|commits)\/(.+)/)
@@ -4821,6 +4848,8 @@ img, svg, video, canvas { max-width: 100%; }
 
   async function cloneRepo(fullName) {
     if (cloningRepos.has(fullName)) return
+    const ok = await confirmDialog('Clonar', '¿Clonar "' + fullName + '" al workspace?')
+    if (!ok) return
     cloningRepos.add(fullName)
     render()
     toast('clonando ' + fullName + '…')
@@ -4968,10 +4997,18 @@ img, svg, video, canvas { max-width: 100%; }
       { sep: true },
       { icon: ICO.star,   label: proj.favorite ? 'Quitar de favoritos' : 'Marcar favorito', run: async () => { await window.asura.toggleFavorite(name); toast(proj.favorite ? 'sin favorito' : 'favorito') } },
       { icon: ICO.eyeOff, label: proj.hidden ? 'Mostrar' : 'Ocultar',                       run: async () => { await window.asura.toggleHidden(name); toast(proj.hidden ? 'mostrando' : 'oculto') } },
+      { sep: true },
+      { icon: ICO.trash,  label: 'Borrar repositorio', danger: true, run: async () => {
+        const ok = await confirmDialog('Borrar', '¿Borrar "' + name + '" del disco? No se puede deshacer.')
+        if (!ok) return
+        const result = await window.asura.deleteProject(proj.path)
+        if (result.ok) toast('repositorio borrado')
+        else toast('error al borrar: ' + (result.error || 'desconocido'))
+      }},
     ]
     ctx.innerHTML = items.map((it, i) => it.sep
       ? '<div class="ctx-sep"></div>'
-      : '<div class="ctx-item" data-i="' + i + '">' + it.icon + '<span>' + escapeHtml(it.label) + '</span></div>'
+      : '<div class="ctx-item' + (it.danger ? ' danger' : '') + '" data-i="' + i + '">' + it.icon + '<span>' + escapeHtml(it.label) + '</span></div>'
     ).join('')
     ctx.querySelectorAll('.ctx-item').forEach(el => {
       const idx = parseInt(el.dataset.i, 10)
