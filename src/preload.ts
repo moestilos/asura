@@ -50,6 +50,10 @@ contextBridge.exposeInMainWorld('asura', {
   markNotificationRead: (id: string) => ipcRenderer.invoke('mark-notification-read', id),
   cloneRepo:            (fullName: string) => ipcRenderer.invoke('clone-repo', fullName),
   deleteProject:        (projectPath: string) => ipcRenderer.invoke('delete-project', projectPath),
+  getSelfStatus:        ()                    => ipcRenderer.invoke('get-self-status'),
+  selfPull:             ()                    => ipcRenderer.invoke('self-pull'),
+  selfPush:             ()                    => ipcRenderer.invoke('self-push'),
+  selfCommit:           (msg: string)         => ipcRenderer.invoke('self-commit', msg),
 
   /* window */
   close:            ()        => ipcRenderer.send('close-window'),

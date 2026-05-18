@@ -17,6 +17,20 @@ import {
 } from './github'
 
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..')
+const SELF_DIR       = path.resolve(__dirname, '..')
+
+/* ── git helper ────────────────────────────────────────────────────────────── */
+function runGit(args: string[], cwd: string): Promise<{ out: string; err: string; code: number }> {
+  return new Promise(resolve => {
+    const { spawn: sp } = require('child_process')
+    let out = '', err = ''
+    const proc = sp('git', args, { cwd, shell: false, stdio: ['ignore', 'pipe', 'pipe'] })
+    proc.stdout.on('data', (d: Buffer) => { out += d.toString() })
+    proc.stderr.on('data', (d: Buffer) => { err += d.toString() })
+    proc.on('close', (code: number) => resolve({ out: out.trim(), err: err.trim(), code: code ?? 1 }))
+    proc.on('error', () => resolve({ out: '', err: 'git not found', code: 1 }))
+  })
+}
 
 let win:    BrowserWindow | null = null
 let tray:   Tray | null = null
@@ -285,6 +299,50 @@ ipcMain.handle('delete-project', async (_e, projectPath: string) => {
   } catch (e: any) {
     return { ok: false, error: e.message }
   }
+})
+
+ipcMain.handle('get-self-status', async () => {
+  const pkg    = JSON.parse(await fsp.readFile(path.join(SELF_DIR, 'package.json'), 'utf-8'))
+  const branch = await runGit(['rev-parse', '--abbrev-ref', 'HEAD'], SELF_DIR)
+  const status = await runGit(['status', '--porcelain'], SELF_DIR)
+  const dirty  = status.out ? status.out.split('\n').filter(Boolean) : []
+  const last   = await runGit(['log', '-1', '--format=%s||%ar||%an', 'HEAD'], SELF_DIR)
+
+  /* fetch to know ahead/behind — best-effort, ignore errors */
+  await runGit(['fetch', 'origin', '--quiet'], SELF_DIR)
+  const ahead  = await runGit(['rev-list', '@{u}..HEAD',  '--count'], SELF_DIR)
+  const behind = await runGit(['rev-list', 'HEAD..@{u}',  '--count'], SELF_DIR)
+
+  const [msg, time, author] = (last.out || '||').split('||')
+  return {
+    version:  pkg.version,
+    branch:   branch.out  || 'unknown',
+    dirty,
+    ahead:    parseInt(ahead.out)  || 0,
+    behind:   parseInt(behind.out) || 0,
+    lastMsg:  msg    || '—',
+    lastTime: time   || '—',
+    lastAuthor: author || '—',
+  }
+})
+
+ipcMain.handle('self-pull', async () => {
+  const r = await runGit(['pull', 'origin', 'main', '--ff-only'], SELF_DIR)
+  if (r.code === 0) {
+    await runGit(['install'], SELF_DIR)  // no-op, just in case
+  }
+  return { ok: r.code === 0, output: r.out || r.err }
+})
+
+ipcMain.handle('self-push', async () => {
+  const r = await runGit(['push', 'origin', 'main'], SELF_DIR)
+  return { ok: r.code === 0, output: r.out || r.err }
+})
+
+ipcMain.handle('self-commit', async (_e, message: string) => {
+  await runGit(['add', '-A'], SELF_DIR)
+  const r = await runGit(['commit', '-m', message || 'chore: update'], SELF_DIR)
+  return { ok: r.code === 0, output: r.out || r.err }
 })
 
 ipcMain.handle('get-detail',     async (_e, projectName: string) => {

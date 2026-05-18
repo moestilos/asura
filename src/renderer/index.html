@@ -3436,6 +3436,31 @@ img, svg, video, canvas { max-width: 100%; }
 .confirm-msg { color: var(--tx-1); font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
 .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
 .confirm-actions .ab { min-width: 80px; justify-content: center; }
+/* self git modal */
+.selfgit-loading { display: flex; align-items: center; gap: 8px; color: var(--tx-2); font-size: 13px; padding: 16px 0; }
+.selfgit-body { display: flex; flex-direction: column; gap: 12px; }
+.sg-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sg-ver { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--cyan); }
+.sg-branch { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--tx-2); }
+.sg-branch svg { width: 12px; height: 12px; }
+.sg-badge { font-size: 11px; padding: 2px 7px; border-radius: var(--r-xs); font-weight: 600; }
+.sg-badge.ahead  { background: rgba(255,46,147,.12); border: 1px solid var(--pink); color: var(--pink); }
+.sg-badge.behind { background: rgba(92,255,255,.10); border: 1px solid var(--cyan-line); color: var(--cyan); }
+.sg-last-commit { background: var(--bg-1); border-radius: var(--r-sm); padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; }
+.sg-lc-msg  { font-size: 12px; color: var(--tx-0); font-weight: 500; }
+.sg-lc-meta { font-size: 11px; color: var(--tx-3); }
+.sg-section-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--tx-3); }
+.sg-clean { font-size: 12px; color: var(--green, #4ade80); padding: 4px 0; }
+.sg-dirty-list { display: flex; flex-direction: column; gap: 2px; max-height: 140px; overflow-y: auto; }
+.sg-dirty-line { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--tx-1); display: flex; gap: 6px; padding: 2px 0; }
+.sg-dirty-sig { color: var(--sun); min-width: 18px; }
+.sg-commit-row { display: flex; gap: 6px; }
+.sg-commit-input { flex: 1; background: var(--bg-1); border: 1px solid var(--line-1); border-radius: var(--r-sm); color: var(--tx-0); font-size: 12px; padding: 5px 10px; outline: none; }
+.sg-commit-input:focus { border-color: var(--cyan); }
+.sg-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.sg-actions .ab { font-size: 12px; }
+.sg-reload-btn { margin-left: auto; color: var(--tx-3) !important; }
+.sg-log { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--bg-0); border: 1px solid var(--line-1); border-radius: var(--r-sm); padding: 8px 10px; color: var(--tx-2); white-space: pre-wrap; max-height: 100px; overflow-y: auto; }
 .spin-inline { display: inline-block; animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -3492,6 +3517,9 @@ img, svg, video, canvas { max-width: 100%; }
       <div class="stat-mini v"><span class="pip"></span><b id="s-bots">0</b><span>bots</span></div>
     </div>
     <div class="tb-actions">
+      <button class="icon-btn" id="selfgit-btn" title="versión · git status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+      </button>
       <button class="icon-btn" id="aot-btn" title="always on top">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="5 9 12 2 19 9"/></svg>
       </button>
@@ -3975,6 +4003,7 @@ img, svg, video, canvas { max-width: 100%; }
   document.getElementById('hide-btn').addEventListener('click', () => window.asura.hide())
   document.getElementById('aot-btn').addEventListener('click', toggleAlwaysOnTop)
   document.getElementById('settings-btn').addEventListener('click', openSettings)
+  document.getElementById('selfgit-btn').addEventListener('click', openSelfGit)
 
   /* sort + density + group + reset bindings */
   const sortSelEl = document.getElementById('sort-sel')
@@ -4084,6 +4113,97 @@ img, svg, video, canvas { max-width: 100%; }
     config.alwaysOnTop = on
     document.getElementById('aot-btn').classList.toggle('active', on)
     toast(on ? 'always on top: on' : 'always on top: off')
+  }
+
+  /* ═════════ Self git modal ═════════ */
+  async function openSelfGit() {
+    openModal('Asura · actualizaciones', '<div class="selfgit-loading"><span class="spin-inline">↻</span> obteniendo estado git…</div>')
+
+    const s = await window.asura.getSelfStatus()
+
+    function buildHtml(s, log) {
+      const dirtyHtml = s.dirty.length
+        ? '<div class="sg-dirty-list">' + s.dirty.map(l =>
+            '<div class="sg-dirty-line"><span class="sg-dirty-sig">' + escapeHtml(l.slice(0,2)) + '</span>' + escapeHtml(l.slice(3)) + '</div>'
+          ).join('') + '</div>'
+        : '<div class="sg-clean">árbol limpio ✓</div>'
+
+      const aheadBadge  = s.ahead  > 0 ? '<span class="sg-badge ahead">↑ ' + s.ahead  + ' por pushear</span>' : ''
+      const behindBadge = s.behind > 0 ? '<span class="sg-badge behind">↓ ' + s.behind + ' por pullear</span>' : ''
+
+      return (
+        '<div class="selfgit-body">' +
+          '<div class="sg-header">' +
+            '<span class="sg-ver">v' + escapeHtml(s.version) + '</span>' +
+            '<span class="sg-branch">' + ICO.git + escapeHtml(s.branch) + '</span>' +
+            aheadBadge + behindBadge +
+          '</div>' +
+          '<div class="sg-last-commit">' +
+            '<span class="sg-lc-msg">' + escapeHtml(s.lastMsg) + '</span>' +
+            '<span class="sg-lc-meta">' + escapeHtml(s.lastAuthor) + ' · ' + escapeHtml(s.lastTime) + '</span>' +
+          '</div>' +
+          '<div class="sg-section-lbl">' + (s.dirty.length ? s.dirty.length + ' cambios sin commit' : 'Cambios locales') + '</div>' +
+          dirtyHtml +
+          (s.dirty.length ? (
+            '<div class="sg-commit-row">' +
+              '<input class="sg-commit-input" id="sg-commit-msg" type="text" placeholder="mensaje del commit…" autocomplete="off"/>' +
+              '<button class="ab primary" id="sg-commit-btn">✓ Commit</button>' +
+            '</div>'
+          ) : '') +
+          '<div class="sg-actions">' +
+            '<button class="ab" id="sg-pull-btn"' + (s.behind === 0 ? ' disabled' : '') + '>↓ Pull</button>' +
+            '<button class="ab" id="sg-push-btn"' + (s.ahead  === 0 ? ' disabled' : '') + '>↑ Push</button>' +
+            '<button class="ab sg-reload-btn" id="sg-reload-btn">↻ refrescar estado</button>' +
+          '</div>' +
+          (log ? '<div class="sg-log">' + escapeHtml(log) + '</div>' : '') +
+        '</div>'
+      )
+    }
+
+    function attachHandlers(s) {
+      const body = document.getElementById('modal-body')
+      if (!body) return
+
+      body.querySelector('#sg-reload-btn')?.addEventListener('click', async () => {
+        body.innerHTML = '<div class="selfgit-loading"><span class="spin-inline">↻</span> actualizando…</div>'
+        const fresh = await window.asura.getSelfStatus()
+        body.innerHTML = buildHtml(fresh, '')
+        attachHandlers(fresh)
+      })
+
+      body.querySelector('#sg-pull-btn')?.addEventListener('click', async () => {
+        body.innerHTML = '<div class="selfgit-loading"><span class="spin-inline">↻</span> ejecutando git pull…</div>'
+        const r = await window.asura.selfPull()
+        const fresh = await window.asura.getSelfStatus()
+        body.innerHTML = buildHtml(fresh, r.output)
+        attachHandlers(fresh)
+        toast(r.ok ? '✓ pull completado' : '✗ pull falló')
+        if (r.ok) toast('reinicia Asura para aplicar cambios')
+      })
+
+      body.querySelector('#sg-push-btn')?.addEventListener('click', async () => {
+        body.innerHTML = '<div class="selfgit-loading"><span class="spin-inline">↻</span> ejecutando git push…</div>'
+        const r = await window.asura.selfPush()
+        const fresh = await window.asura.getSelfStatus()
+        body.innerHTML = buildHtml(fresh, r.output)
+        attachHandlers(fresh)
+        toast(r.ok ? '✓ push completado' : '✗ push falló: ' + r.output)
+      })
+
+      body.querySelector('#sg-commit-btn')?.addEventListener('click', async () => {
+        const input = body.querySelector('#sg-commit-msg')
+        const msg = (input ? input.value.trim() : '') || 'chore: update'
+        body.innerHTML = '<div class="selfgit-loading"><span class="spin-inline">↻</span> commiteando…</div>'
+        const r = await window.asura.selfCommit(msg)
+        const fresh = await window.asura.getSelfStatus()
+        body.innerHTML = buildHtml(fresh, r.output)
+        attachHandlers(fresh)
+        toast(r.ok ? '✓ commit: ' + msg : '✗ commit falló')
+      })
+    }
+
+    document.getElementById('modal-body').innerHTML = buildHtml(s, '')
+    attachHandlers(s)
   }
 
   /* ═════════ Settings modal ═════════ */
